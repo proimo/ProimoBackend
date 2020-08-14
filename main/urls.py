@@ -36,12 +36,11 @@ schema_view = get_schema_view(
 )
 
 router = routers.DefaultRouter()
-router.register('announcement', views.AnnouncementViewSet)
+router.register('announcements', views.AnnouncementViewSet)
 
 urlpatterns = [
-                  path('admin/', admin.site.urls),
-                  path('admin/ckeditor/', include('ckeditor_uploader.urls')),
-                  path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+                  path('api/admin/', admin.site.urls),
+                  path('api/ckeditor/', include('ckeditor_uploader.urls')),
                   path('api/', include(router.urls)),
                   path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger')
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

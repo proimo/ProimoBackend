@@ -6,4 +6,4 @@ from website.models import Announcement
 class AnnouncementSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Announcement
-        fields = ['id', 'title', 'address']
+        fields = '__all__'
