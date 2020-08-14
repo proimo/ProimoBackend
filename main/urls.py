@@ -13,14 +13,35 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import routers, permissions
 
 from main import settings
+from website import views
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Proimo API",
+        default_version='v1',
+        description="https://proimo.ro",
+        contact=openapi.Contact(email="danpercic86@gmail.com"),
+        license=openapi.License(name="MIT"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
+
+router = routers.DefaultRouter()
+router.register('announcement', views.AnnouncementViewSet)
 
 urlpatterns = [
                   path('admin/', admin.site.urls),
-                  url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+                  path('admin/ckeditor/', include('ckeditor_uploader.urls')),
+                  path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+                  path('api/', include(router.urls)),
+                  path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger')
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

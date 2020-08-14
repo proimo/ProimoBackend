@@ -32,6 +32,9 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=Csv())
 INSTALLED_APPS = [
     'website.apps.WebsiteConfig',
 
+    'rest_framework',
+    'rest_framework_swagger',
+    'drf_yasg',
     'ckeditor',
     'ckeditor_uploader',
     'django.contrib.admin',
@@ -142,3 +145,10 @@ CKEDITOR_CONFIGS = {
 }
 
 ###################################
+# REST API Framework config
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 100,
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+}
