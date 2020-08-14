@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from website.models import Announcement, AnnouncementImage
+from website.models import Announcement, AnnouncementImage, Setting
 
 
 class AnnouncementImageInline(admin.TabularInline):
@@ -17,4 +17,10 @@ class AnnouncementAdmin(admin.ModelAdmin):
     inlines = [AnnouncementImageInline]
 
 
+class SettingAdmin(admin.ModelAdmin):
+    list_display = ('slug', 'value', 'image')
+    search_fields = ['slug', 'value']
+
+
 admin.site.register(Announcement, AnnouncementAdmin)
+admin.site.register(Setting, SettingAdmin)

@@ -37,3 +37,21 @@ class AnnouncementImage(models.Model):
 
     def __str__(self):
         return self.image.name
+
+
+class Setting(models.Model):
+    slug = models.CharField(max_length=200)
+    value = models.CharField(max_length=200, null=True)
+    image = models.ImageField(upload_to=get_file_name, null=True, blank=True)
+    created = models.DateTimeField(default=timezone.now)
+    updated = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.slug
+
+    def save(self, *args, **kwargs):
+        """ On save, update timestamps """
+        if not self.id:
+            self.created = timezone.now()
+        self.updated = timezone.now()
+        return super(Setting, self).save(*args, **kwargs)

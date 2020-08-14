@@ -16,4 +16,8 @@ class AnnouncementSerializer(serializers.ModelSerializer):
         model = Announcement
         fields = ['id', 'title', 'region', 'price', 'surface', 'address', 'content', 'images', 'created']
 
+
+class SettingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Setting
         fields = '__all__'

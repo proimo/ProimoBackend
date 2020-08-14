@@ -18,10 +18,11 @@ from django.contrib import admin
 from django.urls import path, include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
-from rest_framework import routers, permissions
+from rest_framework import permissions
 
+import website
 from main import settings
-from website import views
+from website.urls import router
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -35,12 +36,11 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
-router = routers.DefaultRouter()
-router.register('announcements', views.AnnouncementViewSet)
+api_urls = website.urls
 
 urlpatterns = [
                   path('api/admin/', admin.site.urls),
                   path('api/ckeditor/', include('ckeditor_uploader.urls')),
-                  path('api/', include(router.urls)),
+                  path('api/', include(api_urls)),
                   path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
