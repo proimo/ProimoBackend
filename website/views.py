@@ -14,6 +14,6 @@ class AnnouncementViewSet(ReadOnlyModelViewSet):
             Return all announcements, ordered by most recently add.
     """
 
-    queryset = Announcement.objects.all()
+    queryset = Announcement.objects.order_by('-created').filter(published=True)
     serializer_class = AnnouncementSerializer
     permission_classes = [permissions.AllowAny]

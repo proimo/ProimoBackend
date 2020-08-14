@@ -42,5 +42,5 @@ urlpatterns = [
                   path('api/admin/', admin.site.urls),
                   path('api/ckeditor/', include('ckeditor_uploader.urls')),
                   path('api/', include(router.urls)),
-                  path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger')
+                  path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

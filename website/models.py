@@ -15,6 +15,7 @@ class Announcement(models.Model):
     region = models.CharField(max_length=200, null=True)
     price = models.CharField(max_length=15, null=True)
     surface = models.IntegerField(default=0, null=True)
+    published = models.BooleanField(default=False)
     content = RichTextUploadingField(null=True)
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(default=timezone.now)
