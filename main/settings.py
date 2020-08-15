@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 from decouple import config, Csv
+from django.contrib.admin import AdminSite
+
+AdminSite.site_header = 'Proimo administration'
+AdminSite.site_title = 'Proimo site administration'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
