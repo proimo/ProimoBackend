@@ -41,7 +41,7 @@ class AnnouncementImage(models.Model):
 
 class Setting(models.Model):
     slug = models.CharField(max_length=200)
-    value = models.CharField(max_length=200, null=True)
+    value = models.CharField(max_length=200, null=True, blank=True)
     image = models.ImageField(upload_to=get_file_name, null=True, blank=True)
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(default=timezone.now)
