@@ -1,0 +1,10 @@
+.dockerignore
+venv
+.idea
+.gitignore
+README.md
+docker-compose.yml
+makemigrations.sh
+migrate.sh
+run.sh
+.env.template
