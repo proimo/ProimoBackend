@@ -1,20 +1,26 @@
-version: '3'
+version: '2.1'
 
 services:
   web:
     build: .
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8008"
     container_name: proimo-backend
     volumes:
       - ./static:/app/static
+    environment:
+      - DB_HOST=mdb
     env_file:
       - .env
     ports:
       - "8008:8008"
     networks:
       mariadb-net:
+      internal-net:
+        aliases:
+          - backend
 
 networks:
   mariadb-net:
     external:
       name: db-net
+  internal-net:
+      name: internal-net
