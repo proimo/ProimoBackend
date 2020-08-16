@@ -18,7 +18,7 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
         registry: docker.pkg.github.com
-        repository: proimo/ProimoBackend/backend
+        repository: proimo/proimobackend/backend
         tag_with_sha: true
         tags: latest
 
