@@ -8,6 +8,6 @@ router = routers.DefaultRouter()
 router.register('settings', views.SettingViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
-    path('favicon.ico', FaviconView.as_view(), name='favicon-view'),
+    path('api/', include(router.urls)),
+    path('api/favicon.ico', FaviconView.as_view(), name='favicon-view'),
 ]
