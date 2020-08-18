@@ -35,7 +35,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'website.apps.WebsiteConfig',
+    'offers.apps.OffersConfig',
     'administration.apps.AdministrationConfig',
 
     'phonenumber_field',

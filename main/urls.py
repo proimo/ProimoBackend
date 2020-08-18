@@ -21,9 +21,9 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
 import administration
-import website
+import offers
 from main import settings
-from website.urls import router
+from offers.urls import router
 from administration.urls import router
 
 schema_view = get_schema_view(
@@ -44,4 +44,4 @@ urlpatterns = [
                   path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
               + administration.urls.urlpatterns \
-              + website.urls.urlpatterns
+              + offers.urls.urlpatterns

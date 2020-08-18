@@ -1,16 +1,16 @@
 from django.contrib import admin
 
-from website.models import Announcement, AnnouncementImage
+from offers.models import Offer, OfferImage
 
 
-class AnnouncementImageInline(admin.TabularInline):
-    model = AnnouncementImage
+class OfferImageInline(admin.TabularInline):
+    model = OfferImage
     extra = 1
 
 
-@admin.register(Announcement)
-class AnnouncementAdmin(admin.ModelAdmin):
+@admin.register(Offer)
+class OfferAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'region', 'address', 'price', 'surface', 'created', 'updated')
     list_filter = ['region', 'created', 'updated']
     search_fields = ['title', 'address', 'surface']
-    inlines = [AnnouncementImageInline]
+    inlines = [OfferImageInline]
