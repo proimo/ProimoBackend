@@ -16,7 +16,7 @@ class BaseModel(models.Model):
         if not self.id:
             self.created = timezone.now()
         self.updated = timezone.now()
-        return super(self).save(*args, **kwargs)
+        return super(BaseModel, self).save(*args, **kwargs)
 
     class Meta:
         abstract = True
