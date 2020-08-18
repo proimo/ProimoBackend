@@ -36,7 +36,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'website.apps.WebsiteConfig',
-    'backend.apps.BackendConfig',
+    'administration.apps.AdministrationConfig',
 
     'phonenumber_field',
     'rest_framework',
@@ -106,8 +106,8 @@ DATABASES = {
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
-AUTH_USER_MODEL = 'backend.User'
-AUTH_PROFILE_MODULE = 'backend.UserProfile'
+AUTH_USER_MODEL = 'administration.User'
+AUTH_PROFILE_MODULE = 'administration.UserProfile'
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',

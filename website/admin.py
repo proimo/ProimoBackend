@@ -10,6 +10,7 @@ class AnnouncementImageInline(admin.TabularInline):
     extra = 1
 
 
+@admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ('title', 'region', 'address', 'price', 'surface', 'created', 'updated')
     list_filter = ['region', 'created', 'updated']
@@ -17,10 +18,7 @@ class AnnouncementAdmin(admin.ModelAdmin):
     inlines = [AnnouncementImageInline]
 
 
+@admin.register(Setting)
 class SettingAdmin(admin.ModelAdmin):
     list_display = ('slug', 'value', 'image')
     search_fields = ['slug', 'value']
-
-
-admin.site.register(Announcement, AnnouncementAdmin)
-admin.site.register(Setting, SettingAdmin)
