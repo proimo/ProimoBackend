@@ -14,7 +14,17 @@ class User(AbstractUser):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
-    phone_number = PhoneNumberField()
+    phone_number = PhoneNumberField(verbose_name='Număr de telefon')
+    image = models.ImageField('Imagine profil', default=None, upload_to='profile_pics')
+
+    def __str__(self):
+        return (f'{self.user.first_name} {self.user.last_name}' or f'{self.user.username}') + ' Profile'
+
+    def save(self, *args, **kwargs):
+        """ On save, update timestamps """
+        if not self.id and not self.image:
+            self.image = Setting.objects.get(slug='default-profile-pic').image
+        return super(self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Profil'
@@ -34,8 +44,8 @@ class Group(BaseGroup):
 
 
 class Setting(BaseModel):
-    value = models.CharField(max_length=200, null=True, blank=True)
-    image = models.ImageField(upload_to=get_file_name, null=True, blank=True)
+    value = models.CharField('Valoare', max_length=200, null=True, blank=True)
+    image = models.ImageField('Imagine', upload_to=get_file_name, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Setare'
