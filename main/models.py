@@ -4,7 +4,6 @@ from django.utils import timezone
 
 class BaseModel(models.Model):
     name = models.CharField('Nume', max_length=500, default=None)
-    slug = models.CharField(max_length=500, default=None)
     created = models.DateTimeField('Creat', default=timezone.now)
     updated = models.DateTimeField('Ultima modificare', default=timezone.now)
 

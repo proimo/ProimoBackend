@@ -37,6 +37,7 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'offers.apps.OffersConfig',
     'administration.apps.AdministrationConfig',
+    'crm.apps.CrmConfig',
 
     'phonenumber_field',
     'rest_framework',
