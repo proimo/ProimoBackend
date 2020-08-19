@@ -14,6 +14,7 @@ def get_app_list(self, request):
     if request.user.is_active and request.user.is_superuser:
         return app_list
 
+    # Return all but 'Administration' app if it's not superuser
     return [j for i, j in enumerate(app_list) if not j['app_label'].__eq__('administration')]
 
 
