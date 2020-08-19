@@ -6,6 +6,17 @@ from main.models import BaseModel
 from main.utils import get_file_name
 
 
+def get_default_profile_pic():
+    try:
+        default_pic_setting = Setting.objects.filter(slug='default-profile-pic').first()
+        if default_pic_setting.image:
+            return default_pic_setting.image.name
+        return 'Setarea "Default profile pic" nu are o imagine atribuită'
+
+    except Exception:
+        return 'Nu a fost setată o poză implicită de profil'
+
+
 class User(AbstractUser):
     class Meta:
         verbose_name = 'Utilizator'
@@ -15,11 +26,22 @@ class User(AbstractUser):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
     phone_number = PhoneNumberField(verbose_name='Număr de telefon', default=None, blank=True)
-    image = models.ImageField('Imagine profil', default=None, blank=True, upload_to='profile_pics')
+    image = models.ImageField('Imagine profil', default=get_default_profile_pic, blank=True, upload_to='profile_pics')
     description = models.TextField('Descriere', default=None, blank=True)
 
     def __str__(self):
-        return (f'{self.user.first_name} {self.user.last_name}' or f'{self.user.username}') + ' Profile'
+        return f'{self.user.first_name} {self.user.last_name}' or f'{self.user.username}'
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        if not self.image:
+            try:
+                default_pic_setting = Setting.objects.filter(slug='default-profile-pic').first()
+                if default_pic_setting.image:
+                    self.image = default_pic_setting.image
+                else:
+                    self.image.name = 'Setarea "Default profile pic" nu are o imagine atribuită'
+            except Exception:
+                self.image.name = "Nu a fost setată o poză implicită de profil"
 
     class Meta:
         verbose_name = 'Profil'
