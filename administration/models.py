@@ -15,7 +15,7 @@ class User(AbstractUser):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
     phone_number = PhoneNumberField(verbose_name='Număr de telefon')
-    image = models.ImageField('Imagine profil', default=None, upload_to='profile_pics')
+    image = models.ImageField('Imagine profil', default=None, blank=True, upload_to='profile_pics')
 
     def __str__(self):
         return (f'{self.user.first_name} {self.user.last_name}' or f'{self.user.username}') + ' Profile'
