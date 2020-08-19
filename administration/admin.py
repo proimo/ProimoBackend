@@ -1,9 +1,6 @@
-import re
-
 from django.contrib import admin
 from django.contrib.admin import StackedInline, ModelAdmin, site
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin, GroupAdmin, Group as BaseGroup
-from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect
 
 from administration.models import User, UserProfile, Group, Setting
@@ -53,7 +50,7 @@ class UserAdmin(BaseUserAdmin):
         if request.user.is_active and request.user.is_superuser:
             return super(UserAdmin, self).get_fieldsets(request, obj)
 
-        return [(None, {'fields': ('username', 'password',)}),
+        return [(None, {'fields': ('username',)}),
                 ('Personal info', {'fields': ('first_name', 'last_name', 'email')}), ]
 
     def response_change(self, request, obj):
