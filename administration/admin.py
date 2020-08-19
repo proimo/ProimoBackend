@@ -6,14 +6,27 @@ from django.shortcuts import redirect
 from administration.models import User, UserProfile, Group, Setting
 
 
+def remove_user_model(app):
+    for model in app['models']:
+        if model['object_name'].__eq__('User'):
+            app['models'].remove(model)
+
+
 def get_app_list(self, request):
     app_dict = self._build_app_dict(request)
     app_list = sorted(app_dict.values(), key=lambda x: x['name'].lower())
+
     if request.user.is_active and request.user.is_superuser:
         return app_list
 
-    # Return all but 'Administration' app if it's not superuser
-    return [j for i, j in enumerate(app_list) if not j['app_label'].__eq__('administration')]
+    # If it's not superuser, remove 'User' model from de model list
+    for app in app_list:
+        if app['app_label'].__eq__('administration'):
+            remove_user_model(app)
+            if len(app['models']) == 0:
+                app_list.remove(app)
+
+    return app_list
 
 
 admin.AdminSite.get_app_list = get_app_list
