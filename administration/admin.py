@@ -41,16 +41,17 @@ class UserAdmin(BaseUserAdmin):
             return redirect('/api/admin/')
         return super(UserAdmin, self).changelist_view(request, extra_context)
 
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        if request.user.is_active and request.user.is_superuser:
+            return super(UserAdmin, self).change_view(request, object_id, form_url, extra_context)
+
+        if not str(request.user.id).__eq__(object_id):
+            return redirect('/api/admin/')
+        return super(UserAdmin, self).change_view(request, object_id, form_url, extra_context)
+
     def get_fieldsets(self, request, obj=None):
         if request.user.is_active and request.user.is_superuser:
             return super(UserAdmin, self).get_fieldsets(request, obj)
-
-        try:
-            user_id = re.findall(r'user/(\d+)/change', str(request))[0]
-        except IndexError:
-            raise HttpResponseBadRequest("You ran into troubles, gangsta!")
-        if not str(request.user.id).__eq__(user_id):
-            raise HttpResponseBadRequest("You're not allowed to do that, bad boy!")
 
         return [(None, {'fields': ('username', 'password',)}),
                 ('Personal info', {'fields': ('first_name', 'last_name', 'email')}), ]
