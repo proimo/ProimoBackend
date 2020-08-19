@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib.admin import StackedInline, ModelAdmin, site
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin, GroupAdmin, Group as BaseGroup
 from django.http import HttpResponseBadRequest
+from django.shortcuts import redirect
 
 from administration.models import User, UserProfile, Group, Setting
 
@@ -48,6 +49,13 @@ class UserAdmin(BaseUserAdmin):
 
         return [(None, {'fields': ('username', 'password',)}),
                 ('Personal info', {'fields': ('first_name', 'last_name', 'email')}), ]
+
+    def response_change(self, request, obj):
+        if request.user.is_active and request.user.is_superuser:
+            return super(UserAdmin, self).response_change(request, obj)
+
+        # Redirect user that is not superuser to index page
+        return redirect('/api/admin/')
 
 
 site.unregister(BaseGroup)
