@@ -36,6 +36,11 @@ class UserProfileInline(StackedInline):
 class UserAdmin(BaseUserAdmin):
     inlines = (UserProfileInline,)
 
+    def changelist_view(self, request, extra_context=None):
+        if not request.user.is_superuser:
+            return redirect('/api/admin/')
+        return super(UserAdmin, self).changelist_view(request, extra_context)
+
     def get_fieldsets(self, request, obj=None):
         if request.user.is_active and request.user.is_superuser:
             return super(UserAdmin, self).get_fieldsets(request, obj)
