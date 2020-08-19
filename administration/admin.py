@@ -48,7 +48,11 @@ class UserAdmin(BaseUserAdmin):
 
     def get_fieldsets(self, request, obj=None):
         if request.user.is_active and request.user.is_superuser:
-            return super(UserAdmin, self).get_fieldsets(request, obj)
+            fieldsets = super(UserAdmin, self).get_fieldsets(request, obj)
+            for fieldset in fieldsets:
+                if fieldset[0].__eq__('Important dates') and fieldset[0] is not None:
+                    fieldset[1]['classes'] = ('collapse',)
+            return fieldsets
 
         return [(None, {'fields': ('username',)}),
                 ('Personal info', {'fields': ('first_name', 'last_name', 'email')}), ]
