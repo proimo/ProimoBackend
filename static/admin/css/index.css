@@ -1,0 +1,8 @@
+.link, a.link {
+    padding: 10px 15px;
+    display: inline-block;
+}
+
+.dashboard {
+    margin-bottom: 10px;
+}

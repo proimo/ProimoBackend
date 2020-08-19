@@ -1,0 +1,59 @@
+{#{% extends 'admin/base.html' %}#}
+{#{% load static %}#}
+{#{% block head %}#}
+{#<title>Profile</title>#}
+{#{% endblock %}#}
+{##}
+{#{% block body %}#}
+{#    <div class="container">#}
+{#        <form method="post" enctype="multipart/form-data">#}
+{#            {% csrf_token %}#}
+{#            <table>#}
+{#                {% block field_sets %}#}
+{#                    {% for fieldset in form %}#}
+{#                        {% include "admin/includes/fieldset.html" %}#}
+{#                    {% endfor %}#}
+{#                    {% for fieldset in profile_form %}#}
+{#                        {% include "admin/includes/fieldset.html" %}#}
+{#                    {% endfor %}#}
+{#                {% endblock %}#}
+{#                                {{ form.as_table }}#}
+{#                                {{ profile_form.as_table }}#}
+{#            </table>#}
+{#            <button type="submit">Submit</button>#}
+{#        </form>#}
+{#        <br>#}
+{#    </div>#}
+{##}
+{#{% endblock %}#}
+{##}
+{#{% extends 'admin/base.html' %}#}
+{##}
+{##}
+{#{% block head %}#}
+{#<title>Profile</title>#}
+{#{% endblock %}#}
+{##}
+{#{% block body %}#}
+{#<div class="container">#}
+{#    <form method="post">#}
+{#        {% csrf_token %}#}
+{#        {{ form.as_p }}#}
+{#        {{ profile_form.as_p }}#}
+{#        <button type="submit">Submit</button>#}
+{#    </form>#}
+{#    <br>#}
+{#</div>#}
+{##}
+{#{% endblock %}#}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block title %}<title>Local Library</title>{% endblock %}
+</head>
+<body>
+  {% block sidebar %}<!-- insert default navigation text for every page -->{% endblock %}
+  {% block content %}<!-- default content text (typically empty) -->{% endblock %}
+</body>
+</html>

@@ -1,10 +1,13 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, Http404
+from django.shortcuts import redirect, render
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import renderers, permissions
 from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from administration.models import Setting
+from administration.forms import EditProfileForm, ProfileForm
+from administration.models import Setting, User
 from administration.serializers import SettingSerializer
 
 
@@ -49,3 +52,23 @@ class FaviconView(APIView):
             pass
 
         raise Http404()
+
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, instance=request.user)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+
+        if form.is_valid() and profile_form.is_valid():
+            user_form = form.save()
+            custom_form = profile_form.save(False)
+            custom_form.user = user_form
+            custom_form.save()
+            return redirect('admin:index')
+    else:
+        form = EditProfileForm(instance=request.user)
+        profile_form = ProfileForm(instance=request.user.profile)
+        args = {'form': form, 'profile_form': profile_form}
+        # args.update(csrf(request))
+        return render(request, 'admin/edit_profile.html', args)

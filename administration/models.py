@@ -20,11 +20,11 @@ class UserProfile(models.Model):
     def __str__(self):
         return (f'{self.user.first_name} {self.user.last_name}' or f'{self.user.username}') + ' Profile'
 
-    def save(self, *args, **kwargs):
-        """ On save, update timestamps """
-        if not self.id and not self.image:
-            self.image = Setting.objects.get(slug='default-profile-pic').image
-        return super(self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     """ On save, update timestamps """
+    #     if not self.id and not self.image:
+    #         self.image = Setting.objects.get(slug='default-profile-pic').image
+    #     return super(self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Profil'

@@ -1,0 +1,14 @@
+{% extends 'admin/index.html' %}
+{% load static %}
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/index.css" %}">
+{% endblock %}
+{% block content %}
+    <div class="dashboard">
+        <a href="/api/admin/edit-profile" class="button link">Profilul meu</a>
+    </div>
+
+    <h1></h1>
+    {{ block.super }}
+{% endblock %}
