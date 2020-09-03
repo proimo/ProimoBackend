@@ -1,4 +1,5 @@
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.contrib.gis.db.models import PointField
 from django.db import models
 
 from main.models import BaseModel
@@ -9,9 +10,9 @@ class Offer(BaseModel):
         FOR_SELLING = 'selling', 'Voi vinde'
         FOR_RENT = 'rent', 'Voi închiria'
 
-    is_for_sale = models.CharField('', choices=IsForSale.choices, max_length=10, default=IsForSale.FOR_RENT)
-    slug = models.CharField(max_length=500, default=None)
-    address = models.CharField('Adresă', max_length=200, blank=True, default=None)
+    is_for_sale = models.CharField('', choices=IsForSale.choices, max_length=10, default=IsForSale.FOR_RENT, null=True)
+    slug = models.CharField(max_length=500, default=None, null=True)
+    address = PointField('Adresă', max_length=200, null=True)
     region = models.CharField('Regiune', max_length=200, blank=True, default=None)
     price = models.CharField('Preţ', max_length=15, blank=True, default=None)
     is_published = models.BooleanField('Publicat?', default=False)

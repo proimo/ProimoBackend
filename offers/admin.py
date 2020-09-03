@@ -1,4 +1,8 @@
 from django.contrib import admin
+from django.contrib.gis.db.models import PointField
+from django_google_maps import widgets as map_widgets
+from django_google_maps import fields as map_fields
+from mapwidgets import GooglePointFieldInlineWidget
 
 from offers.models import Apartment, House, Land, CommercialSpace, Office, SpecialProperty, IndustrialSpace, Offer
 
@@ -16,6 +20,10 @@ class OfferAdmin(admin.ModelAdmin):
         'classes': ('collapse',),
         'fields': ('created', 'updated',)
     })
+
+    formfield_overrides = {
+        PointField: {'widget': GooglePointFieldInlineWidget},
+    }
 
     fieldsets = (
         basic_info_fieldsets,

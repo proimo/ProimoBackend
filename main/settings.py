@@ -46,13 +46,15 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'corsheaders',
-    
+    'mapwidgets',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
 ]
 
 MIDDLEWARE = [
@@ -95,12 +97,12 @@ WSGI_APPLICATION = 'main.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': config('DB_NAME'),
         'USER': config('DB_USER'),
         'PASSWORD': config('DB_PASSWORD'),
         'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT', default='3306')
+        'PORT': config('DB_PORT', default='5432')
     }
 }
 
@@ -166,3 +168,15 @@ CKEDITOR_CONFIGS = {
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
+
+MAP_WIDGETS = {
+    "GOOGLE_MAP_API_KEY": config('GMAPS_API_KEY'),
+    "GooglePointFieldWidget": (
+        ("zoom", 15),
+        ("mapCenterLocationName", "bucharest"),
+        ("GooglePlaceAutocompleteOptions", {'componentRestrictions': {'country': 'ro'}}),
+        ("markerFitZoom", 12),
+    ),
+}
+
+GOOGLE_MAPS_API_KEY = config('GMAPS_API_KEY')

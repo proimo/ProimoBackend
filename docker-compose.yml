@@ -1,26 +1,26 @@
 version: '2.1'
 
 services:
-  web:
+  backend:
     build: .
     container_name: proimo-backend
     volumes:
       - ./static:/app/static
     environment:
-      - DB_HOST=mdb
+      - DB_HOST=pdb
     env_file:
       - .env
     ports:
       - "8008:8008"
     networks:
-      mariadb-net:
+      postgresdb:
       internal-net:
         aliases:
           - backend
 
 networks:
-  mariadb-net:
+  postgresdb:
     external:
-      name: db-net
+      name: pdb
   internal-net:
       name: internal-net
