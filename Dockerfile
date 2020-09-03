@@ -10,11 +10,11 @@ RUN apk add --no-cache \
     --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
     --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
     --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-    --virtual .build-deps build-base linux-headers python3-dev postgresql-dev jpeg-dev zlib-dev libmaxminddb gdal-dev
+    --virtual .build-deps build-base linux-headers python3-dev postgresql-dev jpeg-dev zlib-dev gdal-dev
 
+RUN apk add gdal libpq
 RUN pip install --upgrade pip
 
-#
 #RUN apk update && apk add --no-cache \
 #    --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
 #    --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
@@ -30,8 +30,7 @@ WORKDIR /app
 ADD . /app/
 
 # Install any needed packages specified in requirements.txt
-RUN pip install -r requirements.txt --global-option=build_ext --global-option="-I/usr/include/gdal"
-RUN pip install gdal
+RUN pip install -r requirements.txt
 RUN apk del .build-deps
 
 CMD python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8008
