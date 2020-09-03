@@ -6,14 +6,13 @@ FROM python:3.6-alpine3.6
 # to the terminal with out buffering it first
 ENV PYTHONUNBUFFERED 1
 
-RUN apk add --virtual .build-deps build-base linux-headers python3-dev postgresql-dev gdal-dev jpeg-dev zlib-dev alpine-sdk
-
 RUN apk update && apk add --no-cache \
     --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
     --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
     --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
     gdal binutils libpq
 
+RUN apk add --virtual .build-deps build-base linux-headers python3-dev postgresql-dev gdal-dev jpeg-dev zlib-dev alpine-sdk
 #RUN apt install binutils libproj-dev gdal-bin
 
 
