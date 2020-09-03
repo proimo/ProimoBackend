@@ -31,6 +31,7 @@ ADD . /app/
 
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt --global-option=build_ext --global-option="-I/usr/include/gdal"
+RUN pip install gdal
 RUN apk del .build-deps
 
 CMD python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8008
