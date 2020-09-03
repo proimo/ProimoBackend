@@ -10,7 +10,7 @@ RUN apk update && apk add --no-cache \
     --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
     --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
     --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-    gdal binutils
+    gdal binutils libpq
 
 RUN apk add --virtual .build-deps build-base linux-headers python3-dev postgresql-dev jpeg-dev zlib-dev
 
