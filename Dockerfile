@@ -6,7 +6,7 @@ FROM python:3.8-slim
 # to the terminal with out buffering it first
 ENV PYTHONUNBUFFERED 1
 RUN apt-get -y update
-RUN apt-get install -y binutils libproj-dev gdal-bin libpq-dev gcc musl-dev python3-dev
+RUN apt-get install -y binutils libproj-dev gdal-bin libgdal-dev libpq-dev gcc musl-dev python3-dev python3-gdal
 #RUN apk add --no-cache \
 #    --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
 #    --repository http://dl-cdn.alpinelinux.org/alpine/edge/community \
@@ -31,8 +31,8 @@ WORKDIR /app
 ADD . /app/
 
 # Install any needed packages specified in requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install -r requirements.txt --no-cache-dir
 #RUN apk del .build-deps
-RUN apt-get clean
+#RUN apt-get clean
 
 CMD python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8008
