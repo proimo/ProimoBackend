@@ -1,6 +1,8 @@
 import admin_thumbnails
 from django.contrib.admin import TabularInline, ModelAdmin
 from django.db import models
+from rest_framework import permissions
+from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from administration.models import UserProfile
 from main.models import BaseModel
@@ -62,9 +64,25 @@ class OfferImages(models.Model):
         verbose_name_plural = 'imagini'
 
 
+#######################################
+# Offer images admin register with thumbnails
 @admin_thumbnails.thumbnail('image', background=True)
 class OfferImageInline(TabularInline):
     extra = 0
 
     class Meta:
         abstract = True
+
+
+#######################################
+# Base serializers class
+class BaseReadOnlyOfferViewSet(ReadOnlyModelViewSet):
+    """
+        retrieve:
+            Return an offer instance.
+
+        list:
+            Return all offers, ordered by most recently add.
+    """
+
+    permission_classes = [permissions.AllowAny]

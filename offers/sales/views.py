@@ -1,54 +1,40 @@
-from rest_framework import permissions
-from rest_framework.viewsets import ReadOnlyModelViewSet
-
+from offers.models import BaseReadOnlyOfferViewSet
 from offers.sales.models import ApartmentSale, HouseSale, LandSale, CommercialSpaceSale, OfficeSale, \
     SpecialPropertySale, IndustrialSpaceSale
 from offers.sales.serializers import ApartmentSaleSerializer, HouseSaleSerializer, LandSaleSerializer, \
     CommercialSpaceSaleSerializer, OfficeSaleSerializer, SpecialPropertySaleSerializer, IndustrialSpaceSaleSerializer
 
 
-class BaseReadOnlyOfferViewSet(ReadOnlyModelViewSet):
-    """
-        retrieve:
-            Return an offer instance.
-
-        list:
-            Return all offers, ordered by most recently add.
-    """
-
-    permission_classes = [permissions.AllowAny]
-
-
-class ApartmentSaleViewSet(ReadOnlyModelViewSet):
+class ApartmentSaleViewSet(BaseReadOnlyOfferViewSet):
     queryset = ApartmentSale.objects.order_by('-created').filter(is_published=True)
     serializer_class = ApartmentSaleSerializer
 
 
-class HouseSaleViewSet(ReadOnlyModelViewSet):
+class HouseSaleViewSet(BaseReadOnlyOfferViewSet):
     queryset = HouseSale.objects.order_by('-created').filter(is_published=True)
     serializer_class = HouseSaleSerializer
 
 
-class LandSaleViewSet(ReadOnlyModelViewSet):
+class LandSaleViewSet(BaseReadOnlyOfferViewSet):
     queryset = LandSale.objects.order_by('-created').filter(is_published=True)
     serializer_class = LandSaleSerializer
 
 
-class CommercialSpaceSaleViewSet(ReadOnlyModelViewSet):
+class CommercialSpaceSaleViewSet(BaseReadOnlyOfferViewSet):
     queryset = CommercialSpaceSale.objects.order_by('-created').filter(is_published=True)
     serializer_class = CommercialSpaceSaleSerializer
 
 
-class OfficeSaleViewSet(ReadOnlyModelViewSet):
+class OfficeSaleViewSet(BaseReadOnlyOfferViewSet):
     queryset = OfficeSale.objects.order_by('-created').filter(is_published=True)
     serializer_class = OfficeSaleSerializer
 
 
-class SpecialPropertySaleViewSet(ReadOnlyModelViewSet):
+class SpecialPropertySaleViewSet(BaseReadOnlyOfferViewSet):
     queryset = SpecialPropertySale.objects.order_by('-created').filter(is_published=True)
     serializer_class = SpecialPropertySaleSerializer
 
 
-class IndustrialSpaceSaleViewSet(ReadOnlyModelViewSet):
+class IndustrialSpaceSaleViewSet(BaseReadOnlyOfferViewSet):
     queryset = IndustrialSpaceSale.objects.order_by('-created').filter(is_published=True)
     serializer_class = IndustrialSpaceSaleSerializer

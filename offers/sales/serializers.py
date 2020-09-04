@@ -1,41 +1,12 @@
-from rest_framework import serializers
-
-from administration.models import UserProfile, User
 from offers.sales.models import ApartmentSale, ApartmentSaleImages, HouseSaleImages, LandSaleImages, \
     CommercialSpaceSaleImages, OfficeSaleImages, SpecialPropertySaleImages, IndustrialSpaceSaleImages, LandSale, \
     HouseSale, SpecialPropertySale, OfficeSale, CommercialSpaceSale, IndustrialSpaceSale
 
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = '__all__'
-
-
-class AgentSerializer(serializers.ModelSerializer):
-    user = UserSerializer(read_only=True)
-
-    class Meta:
-        model = UserProfile
-        fields = '__all__'
-
-
-class BaseOfferSerializer(serializers.ModelSerializer):
-    agent = AgentSerializer(read_only=True)
-
-    class Meta:
-        abstract = True
-        fields = '__all__'
+from offers.serializers import BaseImagesSerializers, BaseOfferSerializer
 
 
 #######################################
 # Images serializers
-class BaseImagesSerializers(serializers.ModelSerializer):
-    class Meta:
-        abstract = True
-        fields = '__all__'
-
-
 class ApartmentSaleImagesSerializer(BaseImagesSerializers):
     class Meta(BaseImagesSerializers.Meta):
         model = ApartmentSaleImages
