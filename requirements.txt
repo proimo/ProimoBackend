@@ -11,3 +11,4 @@ Pillow==7.2.0
 psycopg2==2.8.5
 python-decouple==3.3
 django-google-maps==0.12.2
+django-admin-thumbnails==0.2.5

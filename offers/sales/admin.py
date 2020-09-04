@@ -1,3 +1,4 @@
+import admin_thumbnails
 from django.contrib import admin
 from django.contrib.gis.db.models import PointField
 from mapwidgets import GooglePointFieldInlineWidget
@@ -6,6 +7,7 @@ from offers.sales.models import ApartmentSale, HouseSale, LandSale, CommercialSp
     SpecialPropertySale, IndustrialSpaceSale, ApartmentSaleImages
 
 
+@admin_thumbnails.thumbnail('image', background=True)
 class OfferImageInline(admin.TabularInline):
     extra = 0
 

@@ -141,8 +141,8 @@ TIME_ZONE = 'Europe/Athens'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-# LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 
+####################################
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
@@ -154,7 +154,6 @@ MEDIA_URL = '/media/'
 
 ####################################
 #    CKEDITOR CONFIGURATION
-####################################
 
 CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
 
@@ -167,12 +166,14 @@ CKEDITOR_CONFIGS = {
     },
 }
 
-###################################
+#######################################
 # REST API Framework config
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
 }
 
+#######################################
+# MAP CONFIGS
 MAP_WIDGETS = {
     "GOOGLE_MAP_API_KEY": config('GMAPS_API_KEY'),
     "GooglePointFieldWidget": (
@@ -184,3 +185,9 @@ MAP_WIDGETS = {
 }
 
 GOOGLE_MAPS_API_KEY = config('GMAPS_API_KEY')
+
+#######################################
+# THUMBNAIL CONFIGS
+ADMIN_THUMBNAIL_DEFAULT_LABEL = 'Previzualizare'
+ADMIN_THUMBNAIL_STYLE = {'display': 'block', 'width': '200px', 'height': 'auto'}
+ADMIN_THUMBNAIL_BACKGROUND_STYLE = {'background': '#808080'}
