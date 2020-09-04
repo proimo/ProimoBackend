@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.admin import StackedInline, ModelAdmin, site
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin, GroupAdmin, Group as BaseGroup
 from django.shortcuts import redirect
+from django.utils.translation import gettext as _
 
 from administration.models import User, UserProfile, Group, Setting
 
@@ -63,12 +64,12 @@ class UserAdmin(BaseUserAdmin):
         if request.user.is_active and request.user.is_superuser:
             fieldsets = super(UserAdmin, self).get_fieldsets(request, obj)
             for fieldset in fieldsets:
-                if (fieldset[0].__eq__('Important dates') or fieldset[0].__eq__('Permissions')) and fieldset[0] is not None:
+                if (fieldset[0].__eq__(_('Important dates')) or fieldset[0].__eq__(_('Permissions'))) and fieldset[0] is not None:
                     fieldset[1]['classes'] = ('collapse',)
             return fieldsets
 
         return [(None, {'fields': ('username',)}),
-                ('Personal info', {'fields': ('first_name', 'last_name', 'email')}), ]
+                (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}), ]
 
     def response_change(self, request, obj):
         if request.user.is_active and request.user.is_superuser:
