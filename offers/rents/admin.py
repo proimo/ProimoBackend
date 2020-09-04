@@ -2,15 +2,14 @@ from django.contrib import admin
 from django.contrib.gis.db.models import PointField
 from mapwidgets import GooglePointFieldInlineWidget
 
+from offers.models import OfferImageInline
 from offers.rents.models import ApartmentRent, HouseRent, LandRent, CommercialSpaceRent, OfficeRent, \
-    SpecialPropertyRent, IndustrialSpaceRent
+    SpecialPropertyRent, IndustrialSpaceRent, ApartmentRentImages, HouseRentImages, LandRentImages, \
+    CommercialSpaceRentImages, OfficeRentImages, SpecialPropertyRentImages, IndustrialSpaceRentImages
 
 
-# class OfferImageInline(admin.TabularInline):
-#     model = OfferImage
-#     extra = 0
-
-
+#######################################
+# Model's base admin inline / model
 class RentOfferAdmin(admin.ModelAdmin):
     basic_info_fieldsets = (None, {'fields': ('name', 'slug')})
     other_fieldsets = (None, {'fields': ('price', 'content')})
@@ -37,11 +36,41 @@ class RentOfferAdmin(admin.ModelAdmin):
     search_fields = ['name', 'slug', 'address']
 
 
-#     inlines = [OfferImageInline]
+#######################################
+# Model's inlines
+class ApartmentRentImagesInline(OfferImageInline):
+    model = ApartmentRentImages
 
 
+class HouseRentImagesInline(OfferImageInline):
+    model = HouseRentImages
+
+
+class LandRentImagesInline(OfferImageInline):
+    model = LandRentImages
+
+
+class CommercialSpaceRentImagesInline(OfferImageInline):
+    model = CommercialSpaceRentImages
+
+
+class OfficeRentImagesInline(OfferImageInline):
+    model = OfficeRentImages
+
+
+class SpecialPropertyRentImagesInline(OfferImageInline):
+    model = SpecialPropertyRentImages
+
+
+class IndustrialSpaceRentImagesInline(OfferImageInline):
+    model = IndustrialSpaceRentImages
+
+
+#######################################
+# Model's admin configs
 @admin.register(ApartmentRent)
 class ApartmentRentAdmin(RentOfferAdmin):
+    inlines = (ApartmentRentImagesInline,)
     fieldsets = (
         RentOfferAdmin.basic_info_fieldsets,
         RentOfferAdmin.location_fieldsets,
@@ -52,29 +81,29 @@ class ApartmentRentAdmin(RentOfferAdmin):
 
 @admin.register(HouseRent)
 class HouseRentAdmin(RentOfferAdmin):
-    pass
+    inlines = (HouseRentImagesInline,)
 
 
 @admin.register(LandRent)
 class LandRentAdmin(RentOfferAdmin):
-    pass
+    inlines = (LandRentImagesInline,)
 
 
 @admin.register(CommercialSpaceRent)
 class CommercialSpaceRentAdmin(RentOfferAdmin):
-    pass
+    inlines = (CommercialSpaceRentImagesInline,)
 
 
 @admin.register(OfficeRent)
 class OfficeRentAdmin(RentOfferAdmin):
-    pass
+    inlines = (OfficeRentImagesInline,)
 
 
 @admin.register(SpecialPropertyRent)
 class SpecialPropertyRentAdmin(RentOfferAdmin):
-    pass
+    inlines = (SpecialPropertyRentImagesInline,)
 
 
 @admin.register(IndustrialSpaceRent)
 class IndustrialSpaceRentAdmin(RentOfferAdmin):
-    pass
+    inlines = (IndustrialSpaceRentImagesInline,)

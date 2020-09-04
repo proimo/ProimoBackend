@@ -3,8 +3,11 @@ from django.contrib.gis.db.models import PointField
 from django.db import models
 
 from main.models import BaseModel
+from offers.models import OfferImages
 
 
+#######################################
+# Base classes
 class RentOffer(BaseModel):
     slug = models.CharField(max_length=500, default=None, null=True)
     address = PointField('adresă', max_length=200, null=True)
@@ -19,14 +22,8 @@ class RentOffer(BaseModel):
         verbose_name_plural = 'oferte închiriere'
 
 
-# class OfferImage(models.Model):
-#     offer = models.ForeignKey(Offer, related_name='images', on_delete=models.CASCADE)
-#     image = models.ImageField('Imagine', upload_to=get_file_name, blank=True, default=None)
-#
-#     def __str__(self):
-#         return self.image.name
-
-
+#######################################
+# Model classes
 class ApartmentRent(RentOffer):
     class Meta:
         verbose_name = 'apartament'
@@ -67,3 +64,33 @@ class IndustrialSpaceRent(RentOffer):
     class Meta:
         verbose_name = 'spaţiu industrial'
         verbose_name_plural = 'spaţii industriale'
+
+
+#######################################
+# Model classes' images tables
+class ApartmentRentImages(OfferImages):
+    offer = models.ForeignKey(ApartmentRent, related_name='images', on_delete=models.CASCADE)
+
+
+class HouseRentImages(OfferImages):
+    offer = models.ForeignKey(HouseRent, related_name='images', on_delete=models.CASCADE)
+
+
+class LandRentImages(OfferImages):
+    offer = models.ForeignKey(LandRent, related_name='images', on_delete=models.CASCADE)
+
+
+class CommercialSpaceRentImages(OfferImages):
+    offer = models.ForeignKey(CommercialSpaceRent, related_name='images', on_delete=models.CASCADE)
+
+
+class OfficeRentImages(OfferImages):
+    offer = models.ForeignKey(OfficeRent, related_name='images', on_delete=models.CASCADE)
+
+
+class SpecialPropertyRentImages(OfferImages):
+    offer = models.ForeignKey(SpecialPropertyRent, related_name='images', on_delete=models.CASCADE)
+
+
+class IndustrialSpaceRentImages(OfferImages):
+    offer = models.ForeignKey(IndustrialSpaceRent, related_name='images', on_delete=models.CASCADE)

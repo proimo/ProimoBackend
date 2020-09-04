@@ -1,8 +1,8 @@
-import admin_thumbnails
 from django.contrib import admin
 from django.contrib.gis.db.models import PointField
 from mapwidgets import GooglePointFieldInlineWidget
 
+from offers.models import OfferImageInline
 from offers.sales.models import ApartmentSale, HouseSale, LandSale, CommercialSpaceSale, OfficeSale, \
     SpecialPropertySale, IndustrialSpaceSale, ApartmentSaleImages, HouseSaleImages, LandSaleImages, \
     CommercialSpaceSaleImages, SpecialPropertySaleImages, IndustrialSpaceSaleImages, OfficeSaleImages
@@ -10,14 +10,6 @@ from offers.sales.models import ApartmentSale, HouseSale, LandSale, CommercialSp
 
 #######################################
 # Model's base admin inline / model
-@admin_thumbnails.thumbnail('image', background=True)
-class OfferImageInline(admin.TabularInline):
-    extra = 0
-
-    class Meta:
-        abstract = True
-
-
 class SaleOfferAdmin(admin.ModelAdmin):
     basic_info_fieldsets = (None, {'fields': ('name', 'slug')})
     other_fieldsets = (None, {'fields': ('price', 'content',)})

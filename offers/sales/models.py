@@ -3,11 +3,12 @@ from django.contrib.gis.db.models import PointField
 from django.db import models
 
 from main.models import BaseModel
-from main.utils import get_upload_path
-
 
 #######################################
 # Base classes
+from offers.models import OfferImages
+
+
 class SaleOffer(BaseModel):
     slug = models.CharField(max_length=500, default=None, null=True)
     address = PointField('adresă', max_length=200, null=True)
@@ -20,18 +21,6 @@ class SaleOffer(BaseModel):
         abstract = True
         verbose_name = 'ofertă vânzare'
         verbose_name_plural = 'oferte vânzare'
-
-
-class OfferImages(models.Model):
-    image = models.ImageField('imagine', upload_to=get_upload_path, blank=True, default=None)
-
-    def __str__(self):
-        return self.image.name
-
-    class Meta:
-        abstract = True
-        verbose_name = 'imagine'
-        verbose_name_plural = 'imagini'
 
 
 #######################################
