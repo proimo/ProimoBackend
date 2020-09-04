@@ -191,3 +191,26 @@ GOOGLE_MAPS_API_KEY = config('GMAPS_API_KEY')
 ADMIN_THUMBNAIL_DEFAULT_LABEL = 'Previzualizare'
 ADMIN_THUMBNAIL_STYLE = {'display': 'block', 'width': '200px', 'height': 'auto'}
 ADMIN_THUMBNAIL_BACKGROUND_STYLE = {'background': '#808080'}
+
+#######################################
+# LOGGING CONFIGS
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': False,
+        },
+    },
+}
