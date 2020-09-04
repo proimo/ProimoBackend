@@ -12,7 +12,7 @@ from offers.sales.models import ApartmentSale, HouseSale, LandSale, CommercialSp
 # Model's base admin inline / model
 class SaleOfferAdmin(admin.ModelAdmin):
     basic_info_fieldsets = (None, {'fields': ('name', 'slug')})
-    other_fieldsets = (None, {'fields': ('price', 'content',)})
+    other_fieldsets = (None, {'fields': ('price', 'content', 'is_published',)})
     location_fieldsets = ('Localizare', {'fields': ('region', 'address')})
     time_fieldsets = ('Creat/Modificat', {
         'classes': ('collapse',),
