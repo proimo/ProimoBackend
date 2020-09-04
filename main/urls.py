@@ -42,11 +42,12 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = i18n_patterns(
-                  path('', RedirectView.as_view(url='/api/admin/')),
-                  path('api/admin/', admin.site.urls, name='index'),
-                  path('api/ckeditor/', include('ckeditor_uploader.urls')),
-                  path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger'),
-              ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
+    path('', RedirectView.as_view(url='/api/admin/')),
+    path('api/admin/', admin.site.urls, name='index'),
+    path('api/ckeditor/', include('ckeditor_uploader.urls')),
+    path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger'),
+    prefix_default_language=False,
+) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
               + administration.urls.urlpatterns \
               + sales.urls.urlpatterns \
               + rents.urls.urlpatterns
