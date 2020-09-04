@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from offers.models import Offer, OfferImage
+from offers.sales.models import OfferImage
 
 
 class OfferImageSerializer(serializers.ModelSerializer):

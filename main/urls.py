@@ -22,10 +22,11 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 
 import administration
-import offers
 from main import settings
-from offers.urls import router
 from administration.urls import router
+from offers import sales, rents
+from offers.sales import urls
+from offers.rents import urls
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -46,4 +47,5 @@ urlpatterns = [
                   path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
               + administration.urls.urlpatterns \
-              + offers.urls.urlpatterns
+              + sales.urls.urlpatterns \
+              + rents.urls.urlpatterns
