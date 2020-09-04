@@ -77,6 +77,11 @@ class UserAdmin(BaseUserAdmin):
         # Redirect user that is not superuser to index page
         return redirect('/api/admin/')
 
+    def get_inline_instances(self, request, obj=None):
+        if not obj:
+            return list()
+        return super(UserAdmin, self).get_inline_instances(request, obj)
+
 
 site.unregister(BaseGroup)
 site.register(Group, GroupAdmin)
