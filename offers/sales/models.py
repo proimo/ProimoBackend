@@ -6,6 +6,8 @@ from main.models import BaseModel
 from main.utils import get_upload_path
 
 
+#######################################
+# Base classes
 class SaleOffer(BaseModel):
     slug = models.CharField(max_length=500, default=None, null=True)
     address = PointField('adresă', max_length=200, null=True)
@@ -20,6 +22,20 @@ class SaleOffer(BaseModel):
         verbose_name_plural = 'oferte vânzare'
 
 
+class OfferImages(models.Model):
+    image = models.ImageField('imagine', upload_to=get_upload_path, blank=True, default=None)
+
+    def __str__(self):
+        return self.image.name
+
+    class Meta:
+        abstract = True
+        verbose_name = 'imagine'
+        verbose_name_plural = 'imagini'
+
+
+#######################################
+# Model classes
 class ApartmentSale(SaleOffer):
     class Meta:
         verbose_name = 'apartament'
@@ -62,17 +78,31 @@ class IndustrialSpaceSale(SaleOffer):
         verbose_name_plural = 'spaţii industriale'
 
 
-class OfferImages(models.Model):
-    image = models.ImageField('imagine', upload_to=get_upload_path, blank=True, default=None)
-
-    def __str__(self):
-        return self.image.name
-
-    class Meta:
-        abstract = True
-        verbose_name = 'imagine'
-        verbose_name_plural = 'imagini'
-
-
+#######################################
+# Model classes' images tables
 class ApartmentSaleImages(OfferImages):
     offer = models.ForeignKey(ApartmentSale, related_name='images', on_delete=models.CASCADE)
+
+
+class HouseSaleImages(OfferImages):
+    offer = models.ForeignKey(HouseSale, related_name='images', on_delete=models.CASCADE)
+
+
+class LandSaleImages(OfferImages):
+    offer = models.ForeignKey(LandSale, related_name='images', on_delete=models.CASCADE)
+
+
+class CommercialSpaceSaleImages(OfferImages):
+    offer = models.ForeignKey(CommercialSpaceSale, related_name='images', on_delete=models.CASCADE)
+
+
+class OfficeSaleImages(OfferImages):
+    offer = models.ForeignKey(OfficeSale, related_name='images', on_delete=models.CASCADE)
+
+
+class SpecialPropertySaleImages(OfferImages):
+    offer = models.ForeignKey(SpecialPropertySale, related_name='images', on_delete=models.CASCADE)
+
+
+class IndustrialSpaceSaleImages(OfferImages):
+    offer = models.ForeignKey(IndustrialSpaceSale, related_name='images', on_delete=models.CASCADE)

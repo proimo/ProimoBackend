@@ -4,19 +4,18 @@ from django.contrib.gis.db.models import PointField
 from mapwidgets import GooglePointFieldInlineWidget
 
 from offers.sales.models import ApartmentSale, HouseSale, LandSale, CommercialSpaceSale, OfficeSale, \
-    SpecialPropertySale, IndustrialSpaceSale, ApartmentSaleImages
+    SpecialPropertySale, IndustrialSpaceSale, ApartmentSaleImages, HouseSaleImages, LandSaleImages, \
+    CommercialSpaceSaleImages, SpecialPropertySaleImages, IndustrialSpaceSaleImages, OfficeSaleImages
 
 
+#######################################
+# Model's base admin inline / model
 @admin_thumbnails.thumbnail('image', background=True)
 class OfferImageInline(admin.TabularInline):
     extra = 0
 
     class Meta:
         abstract = True
-
-
-class ApartmentSaleImageInline(OfferImageInline):
-    model = ApartmentSaleImages
 
 
 class SaleOfferAdmin(admin.ModelAdmin):
@@ -38,16 +37,52 @@ class SaleOfferAdmin(admin.ModelAdmin):
         other_fieldsets,
         time_fieldsets
     )
+
     list_display = ('name', 'slug', 'region', 'address', 'price')
     list_display_links = ['name']
     prepopulated_fields = {'slug': ['name', ]}
     list_filter = ['region', 'created', 'updated']
     search_fields = ['name', 'slug', 'address']
 
+    class Meta:
+        abstract = True
 
+
+#######################################
+# Model's inlines
+class ApartmentSaleImagesInline(OfferImageInline):
+    model = ApartmentSaleImages
+
+
+class HouseSaleImagesInline(OfferImageInline):
+    model = HouseSaleImages
+
+
+class LandSaleImagesInline(OfferImageInline):
+    model = LandSaleImages
+
+
+class CommercialSpaceSaleImagesInline(OfferImageInline):
+    model = CommercialSpaceSaleImages
+
+
+class OfficeSaleImagesInline(OfferImageInline):
+    model = OfficeSaleImages
+
+
+class SpecialPropertySaleImagesInline(OfferImageInline):
+    model = SpecialPropertySaleImages
+
+
+class IndustrialSpaceSaleImagesInline(OfferImageInline):
+    model = IndustrialSpaceSaleImages
+
+
+#######################################
+# Model's admin configs
 @admin.register(ApartmentSale)
 class ApartmentSaleAdmin(SaleOfferAdmin):
-    inlines = (ApartmentSaleImageInline,)
+    inlines = (ApartmentSaleImagesInline,)
     fieldsets = (
         SaleOfferAdmin.basic_info_fieldsets,
         SaleOfferAdmin.location_fieldsets,
@@ -58,29 +93,29 @@ class ApartmentSaleAdmin(SaleOfferAdmin):
 
 @admin.register(HouseSale)
 class HouseSaleAdmin(SaleOfferAdmin):
-    pass
+    inlines = (HouseSaleImagesInline,)
 
 
 @admin.register(LandSale)
 class LandSaleAdmin(SaleOfferAdmin):
-    pass
+    inlines = (LandSaleImagesInline,)
 
 
 @admin.register(CommercialSpaceSale)
 class CommercialSpaceSaleAdmin(SaleOfferAdmin):
-    pass
+    inlines = (CommercialSpaceSaleImagesInline,)
 
 
 @admin.register(OfficeSale)
 class OfficeSaleAdmin(SaleOfferAdmin):
-    pass
+    inlines = (OfficeSaleImagesInline,)
 
 
 @admin.register(SpecialPropertySale)
 class SpecialPropertySaleAdmin(SaleOfferAdmin):
-    pass
+    inlines = (SpecialPropertySaleImagesInline,)
 
 
 @admin.register(IndustrialSpaceSale)
 class IndustrialSpaceSaleAdmin(SaleOfferAdmin):
-    pass
+    inlines = (IndustrialSpaceSaleImagesInline,)
