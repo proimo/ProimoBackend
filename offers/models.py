@@ -17,7 +17,7 @@ def remove_agent_field_from(fieldsets):
 #######################################
 # Base classes both for models and admin
 class BaseOfferModel(BaseModel):
-    agent = models.ForeignKey(UserProfile, on_delete=models.DO_NOTHING, null=True, blank=True)
+    agent = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, blank=True)
     slug = models.CharField(max_length=500, default=None, null=True)
     is_published = models.BooleanField('publicat?', default=False)
 
