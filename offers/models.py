@@ -13,8 +13,6 @@ def remove_agent_field_from(fieldsets):
     for fieldset in fieldsets:
         fieldset[1]['fields'] = [field for field in fieldset[1]['fields'] if not field.__eq__('agent')]
 
-    return fieldsets
-
 
 #######################################
 # Base classes both for models and admin
@@ -37,10 +35,17 @@ class BaseOfferAdmin(ModelAdmin):
     list_display_links = ['name']
     prepopulated_fields = {'slug': ['name', ]}
 
+    def get_queryset(self, request):
+        queryset = super(BaseOfferAdmin, self).get_queryset(request)
+        if request.user.is_superuser:
+            return queryset
+        user_profile = UserProfile.objects.get(user=request.user)
+        return queryset.filter(agent=user_profile)
+
     def get_fieldsets(self, request, obj=None):
         fieldsets = super(BaseOfferAdmin, self).get_fieldsets(request, obj)
         if request.user.is_superuser is not True:
-            fieldsets = remove_agent_field_from(fieldsets)
+            remove_agent_field_from(fieldsets)
         return fieldsets
 
     def save_model(self, request, obj, form, change):
