@@ -7,16 +7,16 @@ from main.models import BaseModel
 
 class SaleOffer(BaseModel):
     slug = models.CharField(max_length=500, default=None, null=True)
-    address = PointField('Adresă', max_length=200, null=True)
-    region = models.CharField('Regiune', max_length=200, blank=True, default=None)
-    price = models.CharField('Preţ', max_length=15, blank=True, default=None)
-    is_published = models.BooleanField('Publicat?', default=False)
-    content = RichTextUploadingField('Conţinut', default=None, blank=True)
+    address = PointField('adresă', max_length=200, null=True)
+    region = models.CharField('regiune', max_length=200, blank=True, default=None)
+    price = models.CharField('preţ', max_length=15, blank=True, default=None)
+    is_published = models.BooleanField('publicat?', default=False)
+    content = RichTextUploadingField('conţinut', default=None, blank=True)
 
     class Meta:
         abstract = True
-        verbose_name = 'Ofertă vânzare'
-        verbose_name_plural = 'Oferte vânzare'
+        verbose_name = 'ofertă vânzare'
+        verbose_name_plural = 'oferte vânzare'
 
 
 # class OfferImage(models.Model):
@@ -29,41 +29,41 @@ class SaleOffer(BaseModel):
 
 class ApartmentSale(SaleOffer):
     class Meta:
-        verbose_name = 'Apartament'
-        verbose_name_plural = 'Apartamente'
+        verbose_name = 'apartament'
+        verbose_name_plural = 'apartamente'
 
 
 class HouseSale(SaleOffer):
     class Meta:
-        verbose_name = 'Casă'
-        verbose_name_plural = 'Case'
+        verbose_name = 'casă'
+        verbose_name_plural = 'case'
 
 
 class LandSale(SaleOffer):
     class Meta:
-        verbose_name = 'Teren'
-        verbose_name_plural = 'Terenuri'
+        verbose_name = 'teren'
+        verbose_name_plural = 'terenuri'
 
 
 class CommercialSpaceSale(SaleOffer):
     class Meta:
-        verbose_name = 'Spaţiu comercial'
-        verbose_name_plural = 'Spaţii comerciale'
+        verbose_name = 'spaţiu comercial'
+        verbose_name_plural = 'spaţii comerciale'
 
 
 class OfficeSale(SaleOffer):
     class Meta:
-        verbose_name = 'Birou'
-        verbose_name_plural = 'Birouri'
+        verbose_name = 'birou'
+        verbose_name_plural = 'birouri'
 
 
 class SpecialPropertySale(SaleOffer):
     class Meta:
-        verbose_name = 'Proprietate specială'
-        verbose_name_plural = 'Proprietăţi speciale'
+        verbose_name = 'proprietate specială'
+        verbose_name_plural = 'proprietăţi speciale'
 
 
 class IndustrialSpaceSale(SaleOffer):
     class Meta:
-        verbose_name = 'Spaţiu industrial'
-        verbose_name_plural = 'Spaţii industriale'
+        verbose_name = 'spaţiu industrial'
+        verbose_name_plural = 'spaţii industriale'

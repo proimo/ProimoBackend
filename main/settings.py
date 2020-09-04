@@ -15,9 +15,10 @@ from pathlib import Path
 from corsheaders.defaults import default_methods, default_headers
 from decouple import config
 from django.contrib.admin import AdminSite
+from django.utils.translation import gettext_lazy as _
 
-AdminSite.site_header = 'Proimo administration'
-AdminSite.site_title = 'Proimo site administration'
+AdminSite.site_header = 'Proimo - panoul de administrare'
+AdminSite.site_title = 'Proimo - panoul de administrare'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -65,8 +66,9 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -130,11 +132,16 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ro'
+LANGUAGES = [
+    ('ro', _('Romanian')),
+]
+
 TIME_ZONE = 'Europe/Athens'
-USE_I18N = False
+USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+# LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale')]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/

@@ -19,15 +19,15 @@ def get_default_profile_pic():
 
 class User(AbstractUser):
     class Meta:
-        verbose_name = 'Utilizator'
-        verbose_name_plural = 'Utilizatori'
+        verbose_name = 'utilizator'
+        verbose_name_plural = 'utilizatori'
 
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
-    phone_number = PhoneNumberField(verbose_name='Număr de telefon', default=None, blank=True)
-    image = models.ImageField('Imagine profil', default=get_default_profile_pic, blank=True, upload_to='profile_pics')
-    description = models.TextField('Descriere', default=None, blank=True)
+    phone_number = PhoneNumberField(verbose_name='număr de telefon', default=None, blank=True)
+    image = models.ImageField('imagine profil', default=get_default_profile_pic, blank=True, upload_to='profile_pics')
+    description = models.TextField('descriere', default=None, blank=True)
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}' or f'{self.user.username}'
@@ -44,8 +44,8 @@ class UserProfile(models.Model):
                 self.image.name = "Nu a fost setată o poză implicită de profil"
 
     class Meta:
-        verbose_name = 'Profil'
-        verbose_name_plural = 'Profile'
+        verbose_name = 'profil'
+        verbose_name_plural = 'profiluri'
 
 
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
@@ -56,15 +56,15 @@ class Group(BaseGroup):
         return self.name
 
     class Meta:
-        verbose_name = 'Grup'
-        verbose_name_plural = 'Grupuri'
+        verbose_name = 'grup'
+        verbose_name_plural = 'grupuri'
 
 
 class Setting(BaseModel):
     slug = models.CharField(max_length=500, default=None)
-    value = models.CharField('Valoare', max_length=200, default=None, blank=True)
-    image = models.ImageField('Imagine', upload_to=get_file_name, default=None, blank=True)
+    value = models.CharField('valoare', max_length=200, default=None, blank=True)
+    image = models.ImageField('imagine', upload_to=get_file_name, default=None, blank=True)
 
     class Meta:
-        verbose_name = 'Setare'
-        verbose_name_plural = 'Setări'
+        verbose_name = 'setare'
+        verbose_name_plural = 'setări'

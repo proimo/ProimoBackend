@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.i18n import i18n_patterns
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
@@ -40,12 +41,12 @@ schema_view = get_schema_view(
     permission_classes=(permissions.AllowAny,),
 )
 
-urlpatterns = [
+urlpatterns = i18n_patterns(
                   path('', RedirectView.as_view(url='/api/admin/')),
                   path('api/admin/', admin.site.urls, name='index'),
                   path('api/ckeditor/', include('ckeditor_uploader.urls')),
                   path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger'),
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
+              ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
               + administration.urls.urlpatterns \
               + sales.urls.urlpatterns \
               + rents.urls.urlpatterns
