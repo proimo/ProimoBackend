@@ -2,18 +2,15 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.gis.db.models import PointField
 from django.db import models
 
-from main.models import BaseModel
-from offers.models import OfferImages
+from offers.models import OfferImages, BaseOfferModel
 
 
 #######################################
 # Base classes
-class RentOffer(BaseModel):
-    slug = models.CharField(max_length=500, default=None, null=True)
+class RentOffer(BaseOfferModel):
     address = PointField('adresă', max_length=200, null=True)
     region = models.CharField('regiune', max_length=200, blank=True, default=None)
     price = models.CharField('preţ', max_length=15, blank=True, default=None)
-    is_published = models.BooleanField('publicat?', default=False)
     content = RichTextUploadingField('conţinut', default=None, blank=True)
 
     class Meta:

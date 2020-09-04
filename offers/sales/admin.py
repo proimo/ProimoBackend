@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.gis.db.models import PointField
 from mapwidgets import GooglePointFieldInlineWidget
 
-from offers.models import OfferImageInline
+from offers.models import OfferImageInline, BaseOfferAdmin
 from offers.sales.models import ApartmentSale, HouseSale, LandSale, CommercialSpaceSale, OfficeSale, \
     SpecialPropertySale, IndustrialSpaceSale, ApartmentSaleImages, HouseSaleImages, LandSaleImages, \
     CommercialSpaceSaleImages, SpecialPropertySaleImages, IndustrialSpaceSaleImages, OfficeSaleImages
@@ -10,29 +10,22 @@ from offers.sales.models import ApartmentSale, HouseSale, LandSale, CommercialSp
 
 #######################################
 # Model's base admin inline / model
-class SaleOfferAdmin(admin.ModelAdmin):
-    basic_info_fieldsets = (None, {'fields': ('name', 'slug')})
+class SaleOfferAdmin(BaseOfferAdmin):
     other_fieldsets = (None, {'fields': ('price', 'content', 'is_published',)})
     location_fieldsets = ('Localizare', {'fields': ('region', 'address')})
-    time_fieldsets = ('Creat/Modificat', {
-        'classes': ('collapse',),
-        'fields': ('created', 'updated',)
-    })
 
     formfield_overrides = {
         PointField: {'widget': GooglePointFieldInlineWidget},
     }
 
     fieldsets = (
-        basic_info_fieldsets,
+        BaseOfferAdmin.basic_info_fieldsets,
         location_fieldsets,
         other_fieldsets,
-        time_fieldsets
+        BaseOfferAdmin.time_fieldsets
     )
 
     list_display = ('name', 'slug', 'region', 'address', 'price')
-    list_display_links = ['name']
-    prepopulated_fields = {'slug': ['name', ]}
     list_filter = ['region', 'created', 'updated']
     search_fields = ['name', 'slug', 'address']
 
