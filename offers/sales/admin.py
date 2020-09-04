@@ -3,17 +3,23 @@ from django.contrib.gis.db.models import PointField
 from mapwidgets import GooglePointFieldInlineWidget
 
 from offers.sales.models import ApartmentSale, HouseSale, LandSale, CommercialSpaceSale, OfficeSale, \
-    SpecialPropertySale, IndustrialSpaceSale
+    SpecialPropertySale, IndustrialSpaceSale, ApartmentSaleImages
 
 
-# class OfferImageInline(admin.TabularInline):
-#     model = OfferImage
-#     extra = 0
+class OfferImageInline(admin.TabularInline):
+    extra = 0
+
+    class Meta:
+        abstract = True
+
+
+class ApartmentSaleImageInline(OfferImageInline):
+    model = ApartmentSaleImages
 
 
 class SaleOfferAdmin(admin.ModelAdmin):
     basic_info_fieldsets = (None, {'fields': ('name', 'slug')})
-    other_fieldsets = (None, {'fields': ('price', 'content')})
+    other_fieldsets = (None, {'fields': ('price', 'content',)})
     location_fieldsets = ('Localizare', {'fields': ('region', 'address')})
     time_fieldsets = ('Creat/Modificat', {
         'classes': ('collapse',),
@@ -37,11 +43,9 @@ class SaleOfferAdmin(admin.ModelAdmin):
     search_fields = ['name', 'slug', 'address']
 
 
-#     inlines = [OfferImageInline]
-
-
 @admin.register(ApartmentSale)
 class ApartmentSaleAdmin(SaleOfferAdmin):
+    inlines = (ApartmentSaleImageInline,)
     fieldsets = (
         SaleOfferAdmin.basic_info_fieldsets,
         SaleOfferAdmin.location_fieldsets,

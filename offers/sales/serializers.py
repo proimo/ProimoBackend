@@ -1,11 +1,11 @@
 from rest_framework import serializers
 
-from offers.sales.models import OfferImage
+from offers.sales.models import OfferImages
 
 
 class OfferImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = OfferImage
+        model = OfferImages
         fields = '__all__'
 
 

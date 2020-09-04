@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='setting',
             name='image',
-            field=models.ImageField(blank=True, default=None, upload_to=main.utils.get_file_name, verbose_name='imagine'),
+            field=models.ImageField(blank=True, default=None, upload_to=main.utils.get_upload_path, verbose_name='imagine'),
         ),
         migrations.AlterField(
             model_name='setting',

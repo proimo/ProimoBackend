@@ -3,7 +3,7 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from main.models import BaseModel
-from main.utils import get_file_name
+from main.utils import get_upload_path
 
 
 def get_default_profile_pic():
@@ -63,7 +63,7 @@ class Group(BaseGroup):
 class Setting(BaseModel):
     slug = models.CharField(max_length=500, default=None)
     value = models.CharField('valoare', max_length=200, default=None, blank=True)
-    image = models.ImageField('imagine', upload_to=get_file_name, default=None, blank=True)
+    image = models.ImageField('imagine', upload_to=get_upload_path, default=None, blank=True)
 
     class Meta:
         verbose_name = 'setare'

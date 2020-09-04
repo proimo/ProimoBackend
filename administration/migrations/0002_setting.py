@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(default=django.utils.timezone.now)),
                 ('updated', models.DateTimeField(default=django.utils.timezone.now)),
                 ('value', models.CharField(blank=True, max_length=200, null=True)),
-                ('image', models.ImageField(blank=True, null=True, upload_to=main.utils.get_file_name)),
+                ('image', models.ImageField(blank=True, null=True, upload_to=main.utils.get_upload_path)),
             ],
             options={
                 'ordering': ['created'],
