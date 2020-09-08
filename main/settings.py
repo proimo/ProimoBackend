@@ -216,3 +216,8 @@ LOGGING = {
         },
     },
 }
+
+
+if not DEBUG:
+    GDAL_LIBRARY_PATH = '/usr/lib/libgdal.so.27'
+    GEOS_LIBRARY_PATH = '/usr/lib/libgeos_c.so.1'
