@@ -1,5 +1,4 @@
 from ckeditor_uploader.fields import RichTextUploadingField
-from django.contrib.gis.db.models import PointField
 from django.db import models
 
 from offers.models import OfferImages, BaseOfferModel
@@ -8,9 +7,6 @@ from offers.models import OfferImages, BaseOfferModel
 #######################################
 # Base classes
 class RentOffer(BaseOfferModel):
-    address = PointField('adresă', max_length=200, null=True)
-    region = models.CharField('regiune', max_length=200, blank=True, default=None)
-    price = models.CharField('preţ', max_length=15, blank=True, default=None)
     content = RichTextUploadingField('conţinut', default=None, blank=True)
 
     class Meta:

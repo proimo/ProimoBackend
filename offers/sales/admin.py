@@ -12,7 +12,7 @@ from offers.sales.models import ApartmentSale, HouseSale, LandSale, CommercialSp
 # Model's base admin inline / model
 class SaleOfferAdmin(BaseOfferAdmin):
     other_fieldsets = (None, {'fields': ('price', 'content', 'is_published',)})
-    location_fieldsets = ('Localizare', {'fields': ('region', 'address')})
+    location_fieldsets = ('Localizare', {'fields': ('county', 'locality', 'address',)})
 
     formfield_overrides = {
         PointField: {'widget': GooglePointFieldInlineWidget},
@@ -25,8 +25,8 @@ class SaleOfferAdmin(BaseOfferAdmin):
         BaseOfferAdmin.time_fieldsets
     )
 
-    list_display = ('name', 'slug', 'region', 'address', 'price')
-    list_filter = ['region', 'created', 'updated']
+    list_display = ('name', 'slug', 'address', 'price')
+    list_filter = ['created', 'updated']
     search_fields = ['name', 'slug', 'address']
 
     class Meta:

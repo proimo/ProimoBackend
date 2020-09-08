@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from phonenumber_field.modelfields import PhoneNumberField
 
-from main.models import BaseModel
+from common.models import BaseModel
 from main.utils import get_upload_path
 
 

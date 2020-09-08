@@ -1,11 +1,13 @@
 import admin_thumbnails
 from django.contrib.admin import TabularInline, ModelAdmin
+from django.contrib.gis.db.models import PointField, ForeignKey, CharField, BooleanField, SET_NULL
 from django.db import models
 from rest_framework import permissions
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from administration.models import UserProfile
-from main.models import BaseModel
+from common.models import County, Locality
+from common.models import BaseModel
 from main.utils import get_upload_path
 
 
@@ -17,9 +19,14 @@ def remove_agent_field_from(fieldsets):
 #######################################
 # Base classes both for models and admin
 class BaseOfferModel(BaseModel):
-    agent = models.ForeignKey(UserProfile, on_delete=models.SET_NULL, null=True, blank=True)
-    slug = models.CharField(max_length=500, default=None, null=True)
-    is_published = models.BooleanField('publicat?', default=False)
+    agent = ForeignKey(UserProfile, on_delete=SET_NULL, null=True)
+    is_published = BooleanField('publicat?', default=False)
+    address = PointField('adresă', max_length=200, null=True)
+    county = ForeignKey(County, related_name='%(class)ss', related_query_name='%(class)s', on_delete=SET_NULL,
+                        null=True, verbose_name='judeţ')
+    locality = ForeignKey(Locality, related_name='%(class)ss', related_query_name='%(class)s', on_delete=SET_NULL,
+                          null=True, verbose_name='localitate')
+    price = CharField('preţ', max_length=15, blank=True, default=None)
 
     class Meta:
         abstract = True
@@ -27,6 +34,7 @@ class BaseOfferModel(BaseModel):
 
 class BaseOfferAdmin(ModelAdmin):
     basic_info_fieldsets = (None, {'fields': ('name', 'slug', 'agent',)})
+    location_fieldsets = ('Localizare', {'fields': ('county', 'locality', 'address')})
     time_fieldsets = ('Creat/Modificat', {
         'classes': ('collapse',),
         'fields': ('created', 'updated',)

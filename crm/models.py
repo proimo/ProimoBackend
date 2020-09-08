@@ -1,6 +1,6 @@
 from phonenumber_field.modelfields import PhoneNumberField
 
-from main.models import BaseModel
+from common.models import BaseModel
 
 
 class Lead(BaseModel):

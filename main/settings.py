@@ -36,10 +36,11 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'offers.sales.apps.SalesConfig',
-    'offers.rents.apps.RentsConfig',
-    'administration.apps.AdministrationConfig',
-    'crm.apps.CrmConfig',
+    'offers.sales',
+    'offers.rents',
+    'administration',
+    'crm',
+    'common',
 
     'phonenumber_field',
     'rest_framework',
