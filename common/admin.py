@@ -20,7 +20,11 @@ class BaseModelAdmin(ModelAdmin):
 
 @admin.register(Locality)
 class LocalityAdmin(BaseModelAdmin):
-    pass
+    basic_info_fieldsets = (None, {'fields': ('name', 'slug', 'county')})
+    fieldsets = (basic_info_fieldsets, BaseModelAdmin.time_fieldsets)
+    list_display = BaseModelAdmin.list_display + ('county',)
+    list_filter = BaseModelAdmin.list_filter + ('county',)
+    autocomplete_fields = ('county',)
 
 
 class LocalityInline(TabularInline):
