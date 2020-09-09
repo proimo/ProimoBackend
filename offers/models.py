@@ -1,7 +1,6 @@
 import admin_thumbnails
-from django.contrib.admin import TabularInline, ModelAdmin
+from django.contrib.admin import TabularInline
 from django.contrib.gis.db.models import PointField, ForeignKey, CharField, BooleanField, SET_NULL, ImageField, CASCADE
-from django.core.exceptions import FieldDoesNotExist
 from django.db import models
 from django.db.models.base import ModelBase
 from rest_framework import permissions
@@ -63,13 +62,11 @@ class BaseOfferAdmin(BaseModelAdmin):
         abstract = True
 
 
-class OfferImagesCreator(ModelBase):
-    """
-    The model extending OfferImages should get a foreign key to the model
-    """
+class OfferImagesMetaclass(ModelBase):
+    """The class extending OfferImages should get a foreign key to the model"""
 
     def __new__(mcs, name, bases, attrs):
-        model = super(OfferImagesCreator, mcs).__new__(mcs, name, bases, attrs)
+        model = super(OfferImagesMetaclass, mcs).__new__(mcs, name, bases, attrs)
         for b in bases:
             if b.__name__ == "OfferImages":
                 foreign_key_name = attrs.pop('foreign_key_name', None)
@@ -83,7 +80,7 @@ class OfferImagesCreator(ModelBase):
         return model
 
 
-class OfferImages(models.Model, metaclass=OfferImagesCreator):
+class OfferImages(models.Model, metaclass=OfferImagesMetaclass):
     image = ImageField('imagine', upload_to=get_upload_path, blank=True, default=None)
 
     def __str__(self):
