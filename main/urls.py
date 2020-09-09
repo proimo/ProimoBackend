@@ -43,11 +43,14 @@ schema_view = get_schema_view(
 
 urlpatterns = i18n_patterns(
     path('', RedirectView.as_view(url='/api/admin/')),
+    path('api/', include(administration.urls)),
+    path('api/sales/', include(sales.urls)),
+    path('api/rents/', include(rents.urls)),
     path('api/admin/', admin.site.urls, name='index'),
     path('api/ckeditor/', include('ckeditor_uploader.urls')),
     path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger'),
     prefix_default_language=False,
-) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
-              + administration.urls.urlpatterns \
-              + sales.urls.urlpatterns \
-              + rents.urls.urlpatterns
+)
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

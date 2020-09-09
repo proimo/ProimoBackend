@@ -8,6 +8,9 @@ router = routers.DefaultRouter()
 router.register('settings', views.SettingViewSet)
 
 urlpatterns = [
-    path('api/', include(router.urls)),
-    path('api/favicon.ico', FaviconView.as_view(), name='favicon-view'),
+    path('', include(router.urls)),
+    path('favicon.ico', FaviconView.as_view(), name='favicon-view'),
+    path('dumpdata/', views.generate_seed),
+    path('loaddata/', views.load_seed),
+    path('downloaddata/', views.download_seed),
 ]

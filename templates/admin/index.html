@@ -3,6 +3,12 @@
 {% block content %}
     <div class="dashboard">
         <a href="/api/admin/administration/user/{{ user.id }}/change" class="button link">Profilul meu</a>
+        {% if perms.is_superuser %}
+            <a href="/api/dumpdata/" class="button link">Generează seed</a>
+            <a href="/api/loaddata/" class="button link">Adaugă seed în baza de date</a>
+            <a href="/api/downloaddata/" class="button link">Descarcă seed</a>
+            <a href="/api/swagger/" class="button link">Swagger</a>
+        {% endif %}
     </div>
 
     <h1></h1>
