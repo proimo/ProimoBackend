@@ -5,7 +5,7 @@ from django.utils import timezone
 
 class BaseModel(models.Model):
     name = CharField('nume', max_length=500, default=None)
-    slug = CharField(max_length=500, default=None, null=True, db_index=True)
+    slug = CharField('alias', max_length=500, default=None, null=True, db_index=True)
     created = DateTimeField('creat', default=timezone.now)
     updated = DateTimeField('ultima modificare', default=timezone.now)
 
