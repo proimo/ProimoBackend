@@ -1,12 +1,11 @@
 from ckeditor_uploader.fields import RichTextUploadingField
-from django.db import models
 
 #######################################
 # Base classes
 from offers.models import OfferImages, BaseOfferModel
 
 
-class SaleOffer(BaseOfferModel):
+class SaleOfferModel(BaseOfferModel):
     content = RichTextUploadingField('conţinut', default=None, blank=True)
 
     class Meta:
@@ -17,43 +16,43 @@ class SaleOffer(BaseOfferModel):
 
 #######################################
 # Model classes
-class ApartmentSale(SaleOffer):
+class ApartmentSale(SaleOfferModel):
     class Meta:
         verbose_name = 'apartament'
         verbose_name_plural = 'apartamente'
 
 
-class HouseSale(SaleOffer):
+class HouseSale(SaleOfferModel):
     class Meta:
         verbose_name = 'casă'
         verbose_name_plural = 'case'
 
 
-class LandSale(SaleOffer):
+class LandSale(SaleOfferModel):
     class Meta:
         verbose_name = 'teren'
         verbose_name_plural = 'terenuri'
 
 
-class CommercialSpaceSale(SaleOffer):
+class CommercialSpaceSale(SaleOfferModel):
     class Meta:
         verbose_name = 'spaţiu comercial'
         verbose_name_plural = 'spaţii comerciale'
 
 
-class OfficeSale(SaleOffer):
+class OfficeSale(SaleOfferModel):
     class Meta:
         verbose_name = 'birou'
         verbose_name_plural = 'birouri'
 
 
-class SpecialPropertySale(SaleOffer):
+class SpecialPropertySale(SaleOfferModel):
     class Meta:
         verbose_name = 'proprietate specială'
         verbose_name_plural = 'proprietăţi speciale'
 
 
-class IndustrialSpaceSale(SaleOffer):
+class IndustrialSpaceSale(SaleOfferModel):
     class Meta:
         verbose_name = 'spaţiu industrial'
         verbose_name_plural = 'spaţii industriale'

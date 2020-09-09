@@ -1,11 +1,14 @@
 import admin_thumbnails
 from django.contrib.admin import TabularInline, ModelAdmin
-from django.contrib.gis.db.models import PointField, ForeignKey, CharField, BooleanField, SET_NULL
+from django.contrib.gis.db.models import PointField, ForeignKey, CharField, BooleanField, SET_NULL, ImageField, CASCADE
+from django.core.exceptions import FieldDoesNotExist
 from django.db import models
+from django.db.models.base import ModelBase
 from rest_framework import permissions
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from administration.models import UserProfile
+from common.admin import BaseModelAdmin
 from common.models import County, Locality
 from common.models import BaseModel
 from main.utils import get_upload_path
@@ -32,18 +35,12 @@ class BaseOfferModel(BaseModel):
         abstract = True
 
 
-class BaseOfferAdmin(ModelAdmin):
+class BaseOfferAdmin(BaseModelAdmin):
     basic_info_fieldsets = (None, {'fields': ('name', 'slug', 'agent',)})
     location_fieldsets = ('Localizare', {'fields': ('county', 'locality', 'address')})
-    time_fieldsets = ('Creat/Modificat', {
-        'classes': ('collapse',),
-        'fields': ('created', 'updated',)
-    })
-
-    list_display_links = ['name']
-    prepopulated_fields = {'slug': ['name', ]}
 
     def get_queryset(self, request):
+        """if it's not superuser get only current agent's offers"""
         queryset = super(BaseOfferAdmin, self).get_queryset(request)
         if request.user.is_superuser:
             return queryset
@@ -51,6 +48,7 @@ class BaseOfferAdmin(ModelAdmin):
         return queryset.filter(agent=user_profile)
 
     def get_fieldsets(self, request, obj=None):
+        """if it's not superuser remove 'agent' field"""
         fieldsets = super(BaseOfferAdmin, self).get_fieldsets(request, obj)
         if request.user.is_superuser is not True:
             remove_agent_field_from(fieldsets)
