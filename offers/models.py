@@ -37,6 +37,7 @@ class BaseOfferModel(BaseModel):
 class BaseOfferAdmin(BaseModelAdmin):
     basic_info_fieldsets = (None, {'fields': ('name', 'slug', 'agent',)})
     location_fieldsets = ('Localizare', {'fields': ('county', 'locality', 'address')})
+    autocomplete_fields = ('agent', 'county', 'locality')
 
     def get_queryset(self, request):
         """if it's not superuser get only current agent's offers"""

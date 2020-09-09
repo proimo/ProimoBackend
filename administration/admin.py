@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from django.contrib import admin
 from django.contrib.admin import StackedInline, ModelAdmin, site
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin, GroupAdmin, Group as BaseGroup
@@ -13,6 +15,11 @@ def remove_user_model(app):
             app['models'].remove(model)
 
 
+def should_collapse(fieldset: Tuple) -> bool:
+    has_big_widgets = fieldset[0].__eq__(_('Important dates')) or fieldset[0].__eq__(_('Permissions'))
+    return has_big_widgets and fieldset[0] is not None
+
+
 def get_app_list(self, request):
     app_dict = self._build_app_dict(request)
     app_list = sorted(app_dict.values(), key=lambda x: x['name'].lower())
@@ -24,7 +31,7 @@ def get_app_list(self, request):
     for app in app_list:
         if app['app_label'].__eq__('administration'):
             remove_user_model(app)
-            if len(app['models']) == 0:
+            if not app['models']:
                 app_list.remove(app)
 
     return app_list
@@ -33,6 +40,7 @@ def get_app_list(self, request):
 admin.AdminSite.get_app_list = get_app_list
 
 
+@admin.register(Setting)
 class SettingAdmin(ModelAdmin):
     list_display = ('name', 'slug', 'value', 'image')
     search_fields = ['name', 'slug', 'value']
@@ -44,8 +52,15 @@ class UserProfileInline(StackedInline):
     can_delete = False
 
 
+@admin.register(UserProfile)
+class UserProfileAdmin(ModelAdmin):
+    search_fields = ('username', 'first_name', 'last_name')
+    autocomplete_fields = ('user',)
+
+
 class UserAdmin(BaseUserAdmin):
     inlines = (UserProfileInline,)
+    search_fields = ('username', 'first_name', 'last_name')
 
     def changelist_view(self, request, extra_context=None):
         if not request.user.is_superuser:
@@ -64,7 +79,7 @@ class UserAdmin(BaseUserAdmin):
         if request.user.is_active and request.user.is_superuser:
             fieldsets = super(UserAdmin, self).get_fieldsets(request, obj)
             for fieldset in fieldsets:
-                if (fieldset[0].__eq__(_('Important dates')) or fieldset[0].__eq__(_('Permissions'))) and fieldset[0] is not None:
+                if should_collapse(fieldset):
                     fieldset[1]['classes'] = ('collapse',)
             return fieldsets
 
@@ -86,5 +101,4 @@ class UserAdmin(BaseUserAdmin):
 
 site.unregister(BaseGroup)
 site.register(Group, GroupAdmin)
-site.register(Setting, SettingAdmin)
 site.register(User, UserAdmin)

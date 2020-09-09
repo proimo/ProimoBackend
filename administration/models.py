@@ -51,6 +51,7 @@ class UserProfile(models.Model):
 
     class Meta:
         verbose_name = 'profil'
+        verbose_name_plural = 'profiluri utilizatori'
 
 
 @receiver(post_save, sender=User)
