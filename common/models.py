@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import CharField, DateTimeField, CASCADE, ForeignKey
+from django.db.models import CharField, DateTimeField, CASCADE, ForeignKey, Index
 from django.utils import timezone
 
 
@@ -26,6 +26,11 @@ class BaseModel(models.Model):
 
 class County(BaseModel):
     class Meta:
+        ordering = ['name']
+        indexes = [
+            Index(fields=('id',)),
+            Index(fields=('name',))
+        ]
         verbose_name = 'judeţ'
         verbose_name_plural = 'judeţe'
 
@@ -35,5 +40,12 @@ class Locality(BaseModel):
                         verbose_name='judeţ')
 
     class Meta:
+        ordering = ['name']
+        indexes = [
+            Index(fields=('id',)),
+            Index(fields=('county',)),
+            Index(fields=('county', 'id')),
+            Index(fields=('name',))
+        ]
         verbose_name = 'localitate'
         verbose_name_plural = 'localităţi'
