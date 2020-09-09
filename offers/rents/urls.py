@@ -13,5 +13,5 @@ router.register('special-properties', views.SpecialPropertyRentViewSet)
 router.register('industrial-spaces', views.IndustrialSpaceRentViewSet)
 
 urlpatterns = [
-    path('api/rents/', include(router.urls)),
+    path('', include(router.urls)),
 ]
