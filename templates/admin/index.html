@@ -1,5 +1,11 @@
 {% extends 'admin/index.html' %}
 {% load static %}
+{#{% block extrahead %}#}
+{#    {{ block.super }}#}
+{#    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.min.js' %}"></script>#}
+{#    <script type="text/javascript" src="{% static 'admin/js/jquery.init.js' %}"></script>#}
+{#    <script src="{% static 'common/js/show-hide.js' %}"></script>#}
+{#{% endblock %}#}
 {% block content %}
     <div class="dashboard">
         <a href="/api/admin/administration/user/{{ user.id }}/change" class="button link">Profilul meu</a>

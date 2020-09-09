@@ -70,10 +70,14 @@ class ApartmentSaleAdmin(SaleOfferAdmin):
     inlines = (ApartmentSaleImagesInline,)
     fieldsets = (
         SaleOfferAdmin.basic_info_fieldsets,
+        (None, {'fields': ('is_residential_complex', 'residential_complex_link')}),
         SaleOfferAdmin.location_fieldsets,
         SaleOfferAdmin.other_fieldsets,
         SaleOfferAdmin.time_fieldsets
     )
+
+    # class Media:
+    #     js = ['/static/common/js/show-hide.js']
 
 
 @admin.register(HouseSale)

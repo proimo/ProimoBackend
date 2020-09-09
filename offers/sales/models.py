@@ -2,6 +2,8 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 #######################################
 # Base classes
+from django.db.models import BooleanField, URLField
+
 from offers.models import OfferImages, BaseOfferModel
 
 
@@ -17,6 +19,10 @@ class SaleOfferModel(BaseOfferModel):
 #######################################
 # Model classes
 class ApartmentSale(SaleOfferModel):
+    is_residential_complex = BooleanField('Ansamblu rezidenţial', default=False)
+    residential_complex_link = URLField(verbose_name="Link", blank=True, null=True,
+                                        help_text='pagina detalii ansamblu rezidential promovat pe imobiliare.ro')
+
     class Meta:
         verbose_name = 'apartament'
         verbose_name_plural = 'apartamente'
