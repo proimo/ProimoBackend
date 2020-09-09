@@ -62,28 +62,28 @@ class IndustrialSpaceRent(RentOffer):
 #######################################
 # Model classes' images tables
 class ApartmentRentImages(OfferImages):
-    offer = models.ForeignKey(ApartmentRent, related_name='images', on_delete=models.CASCADE)
+    pass
 
 
 class HouseRentImages(OfferImages):
-    offer = models.ForeignKey(HouseRent, related_name='images', on_delete=models.CASCADE)
+    pass
 
 
 class LandRentImages(OfferImages):
-    offer = models.ForeignKey(LandRent, related_name='images', on_delete=models.CASCADE)
+    pass
 
 
 class CommercialSpaceRentImages(OfferImages):
-    offer = models.ForeignKey(CommercialSpaceRent, related_name='images', on_delete=models.CASCADE)
+    pass
 
 
 class OfficeRentImages(OfferImages):
-    offer = models.ForeignKey(OfficeRent, related_name='images', on_delete=models.CASCADE)
+    pass
 
 
 class SpecialPropertyRentImages(OfferImages):
-    offer = models.ForeignKey(SpecialPropertyRent, related_name='images', on_delete=models.CASCADE)
+    pass
 
 
 class IndustrialSpaceRentImages(OfferImages):
-    offer = models.ForeignKey(IndustrialSpaceRent, related_name='images', on_delete=models.CASCADE)
+    pass

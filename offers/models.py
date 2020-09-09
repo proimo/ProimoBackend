@@ -65,8 +65,28 @@ class BaseOfferAdmin(ModelAdmin):
         abstract = True
 
 
-class OfferImages(models.Model):
-    image = models.ImageField('imagine', upload_to=get_upload_path, blank=True, default=None)
+class OfferImagesCreator(ModelBase):
+    """
+    The model extending OfferImages should get a foreign key to the model
+    """
+
+    def __new__(mcs, name, bases, attrs):
+        model = super(OfferImagesCreator, mcs).__new__(mcs, name, bases, attrs)
+        for b in bases:
+            if b.__name__ == "OfferImages":
+                foreign_key_name = attrs.pop('foreign_key_name', None)
+                if not foreign_key_name:
+                    image_index = name.index('Images')
+                    foreign_key_name = name[:image_index]
+                has_offer = attrs.pop('offer', None)
+                if not has_offer:
+                    model.add_to_class('offer', ForeignKey(foreign_key_name, related_name='images', on_delete=CASCADE))
+
+        return model
+
+
+class OfferImages(models.Model, metaclass=OfferImagesCreator):
+    image = ImageField('imagine', upload_to=get_upload_path, blank=True, default=None)
 
     def __str__(self):
         return self.image.name
