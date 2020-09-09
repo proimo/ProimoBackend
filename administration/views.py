@@ -1,4 +1,5 @@
-from django.http import HttpResponseRedirect, Http404
+from django.contrib.auth.models import AnonymousUser
+from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import renderers, permissions
 from rest_framework.views import APIView
@@ -41,10 +42,7 @@ class FaviconRenderer(renderers.BaseRenderer):
 class FaviconView(APIView):
     renderer_classes = (FaviconRenderer,)
 
-    @swagger_auto_schema(
-        operation_id='favicon',
-        operation_description='Get favicon from panel settings',
-    )
+    @swagger_auto_schema(operation_id='favicon', operation_description='Get favicon from panel settings', )
     def get(self, request):
         try:
             favicon = Setting.objects.get(slug='favicon')
@@ -57,6 +55,13 @@ class FaviconView(APIView):
 
 
 def generate_seed(request: HttpRequest):
+    if str(request.user).__eq__("AnonymousUser"):
+        return HttpResponseBadRequest()
+
+    if not request.user.is_superuser:
+        message_error(request, "You're not allowed to do that, little burglar!")
+        return redirect('/api/admin/')
+
     try:
         with open('data.json', 'w') as f:
             call_command(dumpdata.Command(), '--natural-foreign', '--natural-primary', '--indent=4', stdout=f)
@@ -69,6 +74,13 @@ def generate_seed(request: HttpRequest):
 
 
 def load_seed(request: HttpRequest):
+    if str(request.user).__eq__("AnonymousUser"):
+        return HttpResponseBadRequest()
+
+    if not request.user.is_superuser:
+        message_error(request, "You're not allowed to do that, little burglar!")
+        return redirect('/api/admin/')
+
     try:
         call_command(loaddata.Command(), 'data.json')
         message_info(request, 'Infromaţiile au fost încărcate în baza de date!')
@@ -79,6 +91,9 @@ def load_seed(request: HttpRequest):
 
 
 def download_seed(request: HttpRequest):
+    if str(request.user).__eq__("AnonymousUser"):
+        return HttpResponseBadRequest()
+
     if not request.user.is_superuser:
         message_error(request, "You're not allowed to do that, little burglar!")
         return redirect('/api/admin/')
