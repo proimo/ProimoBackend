@@ -1,4 +1,3 @@
-from django.contrib.auth.models import AnonymousUser
 from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import renderers, permissions
