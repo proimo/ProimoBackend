@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import main.utils
+import common.utils
 
 
 class Migration(migrations.Migration):
@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             name='SpecialPropertyRentImages',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(blank=True, default=None, upload_to=main.utils.get_upload_path, verbose_name='imagine')),
+                ('image', models.ImageField(blank=True, default=None, upload_to=common.utils.get_upload_path, verbose_name='imagine')),
                 ('offer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='rents.specialpropertyrent')),
             ],
             options={
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
             name='OfficeRentImages',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(blank=True, default=None, upload_to=main.utils.get_upload_path, verbose_name='imagine')),
+                ('image', models.ImageField(blank=True, default=None, upload_to=common.utils.get_upload_path, verbose_name='imagine')),
                 ('offer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='rents.officerent')),
             ],
             options={
@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
             name='LandRentImages',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(blank=True, default=None, upload_to=main.utils.get_upload_path, verbose_name='imagine')),
+                ('image', models.ImageField(blank=True, default=None, upload_to=common.utils.get_upload_path, verbose_name='imagine')),
                 ('offer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='rents.landrent')),
             ],
             options={
@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
             name='IndustrialSpaceRentImages',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(blank=True, default=None, upload_to=main.utils.get_upload_path, verbose_name='imagine')),
+                ('image', models.ImageField(blank=True, default=None, upload_to=common.utils.get_upload_path, verbose_name='imagine')),
                 ('offer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='rents.industrialspacerent')),
             ],
             options={
@@ -68,7 +68,7 @@ class Migration(migrations.Migration):
             name='HouseRentImages',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(blank=True, default=None, upload_to=main.utils.get_upload_path, verbose_name='imagine')),
+                ('image', models.ImageField(blank=True, default=None, upload_to=common.utils.get_upload_path, verbose_name='imagine')),
                 ('offer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='rents.houserent')),
             ],
             options={
@@ -81,7 +81,7 @@ class Migration(migrations.Migration):
             name='CommercialSpaceRentImages',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(blank=True, default=None, upload_to=main.utils.get_upload_path, verbose_name='imagine')),
+                ('image', models.ImageField(blank=True, default=None, upload_to=common.utils.get_upload_path, verbose_name='imagine')),
                 ('offer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='rents.commercialspacerent')),
             ],
             options={
@@ -94,7 +94,7 @@ class Migration(migrations.Migration):
             name='ApartmentRentImages',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(blank=True, default=None, upload_to=main.utils.get_upload_path, verbose_name='imagine')),
+                ('image', models.ImageField(blank=True, default=None, upload_to=common.utils.get_upload_path, verbose_name='imagine')),
                 ('offer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='rents.apartmentrent')),
             ],
             options={

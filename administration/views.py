@@ -8,7 +8,7 @@ from django.core.management.commands import dumpdata, loaddata
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import redirect
 
-from main.utils import message_info, message_error
+from common.utils import message_info, message_error
 from administration.models import Setting
 from administration.serializers import SettingSerializer
 

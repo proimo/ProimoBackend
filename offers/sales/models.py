@@ -1,12 +1,11 @@
 from ckeditor_uploader.fields import RichTextUploadingField
-
-#######################################
-# Base classes
 from django.db.models import BooleanField, URLField
 
 from offers.models import OfferImages, BaseOfferModel
 
 
+#######################################
+# Base classes
 class SaleOfferModel(BaseOfferModel):
     content = RichTextUploadingField('conţinut', default=None, blank=True)
 

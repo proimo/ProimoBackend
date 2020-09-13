@@ -1,7 +1,7 @@
 import admin_thumbnails
 from django.contrib.admin import TabularInline
-from django.contrib.gis.db.models import PointField, ForeignKey, CharField, BooleanField, SET_NULL, ImageField, CASCADE
-from django.db import models
+from django.contrib.gis.db.models import PointField, ForeignKey, CharField, BooleanField, SET_NULL, ImageField, CASCADE, \
+    Model
 from django.db.models.base import ModelBase
 from rest_framework import permissions
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -10,7 +10,7 @@ from administration.models import UserProfile
 from common.admin import BaseModelAdmin
 from common.models import County, Locality
 from common.models import BaseModel
-from main.utils import get_upload_path
+from common.utils import get_upload_path
 
 
 def remove_agent_field_from(fieldsets):
@@ -81,7 +81,7 @@ class OfferImagesMetaclass(ModelBase):
         return model
 
 
-class OfferImages(models.Model, metaclass=OfferImagesMetaclass):
+class OfferImages(Model, metaclass=OfferImagesMetaclass):
     image = ImageField('imagine', upload_to=get_upload_path, blank=True, default=None)
 
     def __str__(self):

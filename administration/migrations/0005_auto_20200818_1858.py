@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 import django.utils.timezone
-import main.utils
+import common.utils
 import phonenumber_field.modelfields
 
 
@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='setting',
             name='image',
-            field=models.ImageField(blank=True, null=True, upload_to=main.utils.get_upload_path, verbose_name='Imagine'),
+            field=models.ImageField(blank=True, null=True, upload_to=common.utils.get_upload_path, verbose_name='Imagine'),
         ),
         migrations.AlterField(
             model_name='setting',

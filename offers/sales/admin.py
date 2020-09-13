@@ -76,9 +76,6 @@ class ApartmentSaleAdmin(SaleOfferAdmin):
         SaleOfferAdmin.time_fieldsets
     )
 
-    # class Media:
-    #     js = ['/static/common/js/show-hide.js']
-
 
 @admin.register(HouseSale)
 class HouseSaleAdmin(SaleOfferAdmin):

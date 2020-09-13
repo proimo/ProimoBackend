@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import main.utils
+import common.utils
 
 
 class Migration(migrations.Migration):
@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             name='SpecialPropertySaleImages',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(blank=True, default=None, upload_to=main.utils.get_upload_path, verbose_name='imagine')),
+                ('image', models.ImageField(blank=True, default=None, upload_to=common.utils.get_upload_path, verbose_name='imagine')),
                 ('offer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='sales.specialpropertysale')),
             ],
             options={
@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
             name='OfficeSaleImages',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(blank=True, default=None, upload_to=main.utils.get_upload_path, verbose_name='imagine')),
+                ('image', models.ImageField(blank=True, default=None, upload_to=common.utils.get_upload_path, verbose_name='imagine')),
                 ('offer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='sales.officesale')),
             ],
             options={
@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
             name='LandSaleImages',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(blank=True, default=None, upload_to=main.utils.get_upload_path, verbose_name='imagine')),
+                ('image', models.ImageField(blank=True, default=None, upload_to=common.utils.get_upload_path, verbose_name='imagine')),
                 ('offer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='sales.landsale')),
             ],
             options={
@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
             name='IndustrialSpaceSaleImages',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(blank=True, default=None, upload_to=main.utils.get_upload_path, verbose_name='imagine')),
+                ('image', models.ImageField(blank=True, default=None, upload_to=common.utils.get_upload_path, verbose_name='imagine')),
                 ('offer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='sales.industrialspacesale')),
             ],
             options={
@@ -68,7 +68,7 @@ class Migration(migrations.Migration):
             name='HouseSaleImages',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(blank=True, default=None, upload_to=main.utils.get_upload_path, verbose_name='imagine')),
+                ('image', models.ImageField(blank=True, default=None, upload_to=common.utils.get_upload_path, verbose_name='imagine')),
                 ('offer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='sales.housesale')),
             ],
             options={
@@ -81,7 +81,7 @@ class Migration(migrations.Migration):
             name='CommercialSpaceSaleImages',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(blank=True, default=None, upload_to=main.utils.get_upload_path, verbose_name='imagine')),
+                ('image', models.ImageField(blank=True, default=None, upload_to=common.utils.get_upload_path, verbose_name='imagine')),
                 ('offer', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images', to='sales.commercialspacesale')),
             ],
             options={
