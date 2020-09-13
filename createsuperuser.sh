@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 
-username='admin'
-email='admin@proimo.ro'
-password='admin'
-
 imports='from administration.models import User;'
-create_superuser='User.objects.create_superuser('$username', '$email', '$password')'
+create_superuser='User.objects.create_superuser("admin", "admin@proimo.ro", "admin")'
 
 echo "$imports $create_superuser" | python manage.py shell
