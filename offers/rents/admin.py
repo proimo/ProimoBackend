@@ -63,10 +63,17 @@ class IndustrialSpaceRentImagesInline(OfferImageInline):
 @admin.register(ApartmentRent)
 class ApartmentRentAdmin(RentOfferAdmin):
     inlines = (ApartmentRentImagesInline,)
+    rent_fieldset = ('Chirie', {'fields': (('rent_cost', 'rent_currency'), 'zero_commission', 'buyer_commission')})
+    characteristics_fieldset = ('Caracteristici principale', {'fields': (
+        'rooms_nr', 'util_surface', 'constructed_surface', 'level', 'levels_nr', 'building_type', 'bathrooms_nr',
+        'partitioning_type', 'comfort')})
+    other_details_fieldset = ('Detalii suplimentare', {'fields': ('other_details',)})
     fieldsets = (
         RentOfferAdmin.basic_info_fieldsets,
         RentOfferAdmin.location_fieldsets,
-        RentOfferAdmin.other_fieldsets,
+        rent_fieldset,
+        characteristics_fieldset,
+        other_details_fieldset,
         RentOfferAdmin.time_fieldsets
     )
 

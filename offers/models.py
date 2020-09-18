@@ -47,7 +47,9 @@ class WithPrice(Model):
 
 class BaseOfferAdmin(BaseModelAdmin):
     basic_info_fieldsets = (None, {'fields': ('name', 'slug', 'agent',)})
-    location_fieldsets = ('Localizare', {'fields': ('county', 'locality', 'hide_address_on_imobiliare', 'address')})
+    location_fieldsets = (
+        'Localizare şi poziţionare pe hartă',
+        {'fields': ('county', 'locality', 'hide_address_on_imobiliare', 'address')})
     autocomplete_fields = ('agent', 'county', 'locality')
 
     def get_queryset(self, request):

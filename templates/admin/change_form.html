@@ -5,3 +5,8 @@
     <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'common/js/show-hide.js' %}"></script>
 {% endblock %}
+{% block field_sets %}
+    {% for fieldset in adminform %}
+        {% include "admin/fieldset.html" %}
+    {% endfor %}
+{% endblock %}

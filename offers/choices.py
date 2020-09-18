@@ -45,6 +45,12 @@ class ResistanceStructure(TextChoices):
     ALTELE = 'altele'
 
 
+class Currencies(TextChoices):
+    EUR = 'eur', 'EUR'
+    RON = 'ron', 'RON'
+    USD = 'usd', 'USD'
+
+
 class Level(TextChoices):
     DEMISOL = 'demisol'
     PARTER = 'parter'
