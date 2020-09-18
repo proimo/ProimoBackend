@@ -11,7 +11,7 @@ from offers.sales.models import ApartmentSale, HouseSale, LandSale, CommercialSp
 #######################################
 # Model's base admin inline / model
 class SaleOfferAdmin(BaseOfferAdmin):
-    other_fieldsets = (None, {'fields': ('price', 'content', 'is_published',)})
+    other_fieldsets = (None, {'fields': ('content', 'is_published',)})
     location_fieldsets = ('Localizare', {'fields': ('county', 'locality', 'address',)})
 
     formfield_overrides = {
@@ -25,7 +25,7 @@ class SaleOfferAdmin(BaseOfferAdmin):
         BaseOfferAdmin.time_fieldsets
     )
 
-    list_display = ('name', 'slug', 'address', 'price')
+    list_display = ('name', 'slug', 'address')
     list_filter = ['created', 'updated']
     search_fields = ['name', 'slug', 'address']
 

@@ -1,7 +1,7 @@
 import admin_thumbnails
 from django.contrib.admin import TabularInline
 from django.contrib.gis.db.models import PointField, ForeignKey, CharField, BooleanField, SET_NULL, ImageField, CASCADE, \
-    Model
+    Model, TextField
 from django.db.models.base import ModelBase
 from rest_framework import permissions
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -24,11 +24,22 @@ class BaseOfferModel(BaseModel):
     agent = ForeignKey(UserProfile, on_delete=SET_NULL, null=True)
     is_published = BooleanField('publicat?', default=False)
     address = PointField('adresă', max_length=200, null=True)
+    hide_address_on_imobiliare = BooleanField('ascunde adresa în imobiliare.ro', default=False)
     county = ForeignKey(County, related_name='%(class)ss', related_query_name='%(class)s', on_delete=SET_NULL,
                         null=True, verbose_name='judeţ')
     locality = ForeignKey(Locality, related_name='%(class)ss', related_query_name='%(class)s', on_delete=SET_NULL,
                           null=True, verbose_name='localitate')
+
+    class Meta:
+        abstract = True
+
+
+class WithPrice(Model):
     price = CharField('preţ', max_length=15, blank=True, default=None)
+    not_include_vat = BooleanField('nu include TVA', default=False)
+    price_details = TextField('alte detalii preţ', blank=True, default=None)
+    zero_commission = BooleanField('comision 0%', default=False)
+    buyer_commission = CharField('comision cumpărător', max_length=50, blank=True, default=None)
 
     class Meta:
         abstract = True
@@ -36,7 +47,7 @@ class BaseOfferModel(BaseModel):
 
 class BaseOfferAdmin(BaseModelAdmin):
     basic_info_fieldsets = (None, {'fields': ('name', 'slug', 'agent',)})
-    location_fieldsets = ('Localizare', {'fields': ('county', 'locality', 'address')})
+    location_fieldsets = ('Localizare', {'fields': ('county', 'locality', 'hide_address_on_imobiliare', 'address')})
     autocomplete_fields = ('agent', 'county', 'locality')
 
     def get_queryset(self, request):
