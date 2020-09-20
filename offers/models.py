@@ -1,7 +1,7 @@
 import admin_thumbnails
 from django.contrib.admin import TabularInline
 from django.contrib.gis.db.models import PointField, ForeignKey, CharField, BooleanField, SET_NULL, ImageField, CASCADE, \
-    Model, TextField
+    Model, TextField, DateTimeField, PositiveIntegerField
 from django.db.models.base import ModelBase
 from rest_framework import permissions
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -11,6 +11,7 @@ from common.admin import BaseModelAdmin
 from common.models import County, Locality
 from common.models import BaseModel
 from common.utils import get_upload_path
+from offers.choices import Currencies, Sector
 
 
 def remove_agent_field_from(fieldsets):
@@ -29,13 +30,16 @@ class BaseOfferModel(BaseModel):
                         null=True, verbose_name='judeţ')
     locality = ForeignKey(Locality, related_name='%(class)ss', related_query_name='%(class)s', on_delete=SET_NULL,
                           null=True, verbose_name='localitate')
+    sector = CharField('sectorul', max_length=2, blank=True, default=None, choices=Sector.choices)
+    hide_exact_location_on_imobiliare = BooleanField('ascunde localizarea exactă pe imobiliare.ro', default=False)
+    postal_code = CharField('cod poştal', max_length=50, blank=True, default=True)
+    neighborhood = CharField('vicinătăţi', max_length=100, blank=True, default=None)
 
     class Meta:
         abstract = True
 
 
 class WithPrice(Model):
-    price = CharField('preţ', max_length=15, blank=True, default=None)
     not_include_vat = BooleanField('nu include TVA', default=False)
     price_details = TextField('alte detalii preţ', blank=True, default=None)
     zero_commission = BooleanField('comision 0%', default=False)
@@ -45,11 +49,41 @@ class WithPrice(Model):
         abstract = True
 
 
+class WithSellingPrice(WithPrice, Model):
+    total_price = PositiveIntegerField('preţ total', blank=True, default=None)
+    total_price_currency = CharField('', max_length=4, choices=Currencies.choices, default=Currencies.EUR)
+    util_price = PositiveIntegerField('preţ / mp util', blank=True, default=None)
+    util_price_currency = CharField('', max_length=4, choices=Currencies.choices, default=Currencies.EUR)
+
+    class Meta:
+        abstract = True
+
+
+class WithRentPrice(WithPrice, Model):
+    rent = CharField('chirie / lună', max_length=15, blank=True, default=None)
+    rent_currency = CharField('', max_length=4, choices=Currencies.choices, default=Currencies.EUR)
+
+    class Meta:
+        abstract = True
+
+
+class WithExclusivity(Model):
+    has_exclusivity = BooleanField('exclusivitate', default=False)
+    contract = CharField(max_length=200, blank=True, default=None)
+    validity_from = DateTimeField('valabilitate de la', blank=True, default=None)
+    validity_up_to = DateTimeField('până la', blank=True, default=None)
+
+    class Meta:
+        abstract = True
+
+
 class BaseOfferAdmin(BaseModelAdmin):
     basic_info_fieldsets = (None, {'fields': ('name', 'slug', 'agent',)})
     location_fieldsets = (
         'Localizare şi poziţionare pe hartă',
-        {'fields': ('county', 'locality', 'hide_address_on_imobiliare', 'address')})
+        {'fields': (
+            'county', 'locality', 'sector', 'hide_address_on_imobiliare', 'address',
+            'hide_exact_location_on_imobiliare', 'postal_code', 'neighborhood')})
     autocomplete_fields = ('agent', 'county', 'locality')
 
     def get_queryset(self, request):

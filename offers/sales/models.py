@@ -1,15 +1,13 @@
-from ckeditor_uploader.fields import RichTextUploadingField
 from django.db.models import BooleanField, URLField, CharField, PositiveIntegerField, TextField, DateTimeField
-
 from offers.choices import ApartmentType, PartitioningType, Level, Comfort, BuildingType, BuildingPeriod, \
-    ResistanceStructure
-from offers.models import OfferImages, BaseOfferModel, WithPrice
+    ResistanceStructure, Currencies
+from offers.models import OfferImages, BaseOfferModel, WithPrice, WithExclusivity, WithSellingPrice
 
 
 #######################################
 # Base classes
 class SaleOfferModel(BaseOfferModel):
-    content = RichTextUploadingField('conţinut', default=None, blank=True)
+    description = TextField('descriere emoţională', default=None, blank=True)
 
     class Meta:
         abstract = True
@@ -19,20 +17,21 @@ class SaleOfferModel(BaseOfferModel):
 
 #######################################
 # Model classes
-class ApartmentSale(SaleOfferModel, WithPrice):
+class ApartmentSale(SaleOfferModel, WithSellingPrice, WithExclusivity):
     is_residential_complex = BooleanField('ansamblu rezidenţial', default=False)
     residential_complex_link = URLField(verbose_name="link", blank=True, null=True,
                                         help_text='pagina detalii ansamblu rezidenţial promovat pe imobiliare.ro')
-    hotel_regime = BooleanField('Regim hotelier', default=False)
+
     apartment_type = CharField('tip locuinţă', max_length=11, choices=ApartmentType.choices,
                                default=ApartmentType.APARTAMENT)
     partitioning_type = CharField('tip compartimentare', max_length=15, choices=PartitioningType.choices, default=None,
                                   blank=True)
     level = CharField('etaj', max_length=17, choices=Level.choices, default=None, blank=True)
     comfort = CharField('confort', max_length=3, choices=Comfort.choices, default=None, blank=True)
-    util_surface = CharField('suprafaţa utilă', max_length=50, default=None, blank=True)
-    total_util_surface = CharField('suprafaţa utilă totală', max_length=50, default=None, blank=True)
-    constructed_surface = CharField('suprafaţa construită', max_length=50, default=None, blank=True)
+    util_surface = PositiveIntegerField('suprafaţa utilă (mp)', default=None, blank=True)
+    total_util_surface = PositiveIntegerField('suprafaţa utilă totală (mp)', default=None, blank=True)
+    constructed_surface = PositiveIntegerField('suprafaţa construită (mp)', default=None, blank=True)
+
     rooms_nr = PositiveIntegerField('nr. camere', default=None)
     kitchens_nr = PositiveIntegerField('nr. bucătării', blank=True, default=None)
     bathrooms_nr = PositiveIntegerField('nr. băi', blank=True, default=None)
@@ -40,13 +39,14 @@ class ApartmentSale(SaleOfferModel, WithPrice):
     closed_balconies_nr = PositiveIntegerField('din care închise', blank=True, default=None)
     garages_nr = PositiveIntegerField('nr. garaje', blank=True, default=None)
     parking_lots_nr = PositiveIntegerField('nr. locuri parcare', blank=True, default=None)
+
     building_type = CharField('tip imobil', max_length=20, choices=BuildingType.choices,
                               default=BuildingType.APARTMENTS_BUILDING)
     has_basement = BooleanField('are subsol', default=False)
     has_semi_basement = BooleanField('Are demisol', default=False)
-    ground_floor = BooleanField('parter', default=False)
+    has_ground_floor = BooleanField('parter', default=True)
     levels_nr = PositiveIntegerField('nr. niveluri', blank=True, default=None)
-    mansard = BooleanField('mansardă', default=False)
+    has_mansard = BooleanField('mansardă', default=False)
     building_year = PositiveIntegerField('an finalizare construcţie', blank=True, default=None)
     building_period = CharField('perioada construire', max_length=10, choices=BuildingPeriod.choices, blank=True,
                                 default=None)
@@ -62,8 +62,6 @@ class ApartmentSale(SaleOfferModel, WithPrice):
     is_comercial = BooleanField('comercial', default=False)
     for_offices = BooleanField('birouri', default=False)
     for_vacation = BooleanField('de vacanţă', default=False)
-
-    has_exclusivity = BooleanField('exclusivitate', default=False)
 
     asphalted_street = BooleanField('asfaltate', default=False)
     concreted_street = BooleanField('betonate', default=False)
@@ -94,7 +92,7 @@ class ApartmentSale(SaleOfferModel, WithPrice):
 
     has_wired_net = BooleanField('cablu', default=False)
     has_fiber = BooleanField('fibră optică', default=False)
-    is_wireless = BooleanField('wireless', default=False)
+    has_wireless = BooleanField('wireless', default=False)
     has_dial_up = BooleanField('dial-up', default=False)
 
     is_renovated = BooleanField('renovat', default=False)
@@ -111,6 +109,105 @@ class ApartmentSale(SaleOfferModel, WithPrice):
     has_pvc_rolls = BooleanField('PVC', default=False)
     has_wood_rolls = BooleanField('lemn', default=False)
     has_aluminium_rolls = BooleanField('aluminiu', default=False)
+
+    has_pal_entrance_door = BooleanField('pal', default=False)
+    has_wood_entrance_door = BooleanField('lemn', default=False)
+    has_metal_entrance_door = BooleanField('metal', default=False)
+    has_pvc_entrance_door = BooleanField('PVC', default=False)
+    has_parquet_entrance_door = BooleanField('parchet', default=False)
+
+    has_indoor_heat_isolation = BooleanField('interior', default=False)
+    has_outdoor_heat_isolation = BooleanField('exterior', default=False)
+
+    has_linoleum_floor = BooleanField('linoleum', default=False)
+    has_carpet_floor = BooleanField('mochetă', default=False)
+    has_parquet_floor = BooleanField('parchet', default=False)
+    has_tiles_floor = BooleanField('gresie', default=False)
+    has_decking_floor = BooleanField('duşumea', default=False)
+    has_marble_floor = BooleanField('marmură', default=False)
+
+    has_cellular_interior_door = BooleanField('celulare', default=False)
+    has_wood_interior_door = BooleanField('lemn', default=False)
+    has_panel_interior_door = BooleanField('panel', default=False)
+    has_pvc_interior_door = BooleanField('PVC', default=False)
+    has_glass_interior_door = BooleanField('sticlă', default=False)
+
+    has_chalk_walls = BooleanField('var', default=False)
+    has_vinarom_walls = BooleanField('vinarom', default=False)
+    has_washable_paint_walls = BooleanField('vopsea lavabilă', default=False)
+    has_faience_walls = BooleanField('faianţă', default=False)
+    has_wainscot_walls = BooleanField('lambriu', default=False)
+    has_wallpaper_walls = BooleanField('tapet', default=False)
+    has_clay_walls = BooleanField('humă', default=False)
+
+    has_terrace = BooleanField('terasă', default=False)
+    has_service_wc = BooleanField('WC serviciu', default=False)
+    has_basement_box = BooleanField('boxă la subsol', default=False)
+    has_storage_closet = BooleanField('debara', default=False)
+
+    has_furnished_kitchen = BooleanField('mobilată', default=False)
+    has_half_furnished_kitchen = BooleanField('parţial mobilată', default=False)
+    has_equipped_kitchen = BooleanField('utilată', default=False)
+    has_half_equipped_kitchen = BooleanField('parţial utilată', default=False)
+
+    has_gas_counter = BooleanField('contor gaz', default=False)
+    has_water_counter = BooleanField('apometre', default=False)
+    has_heat_counter = BooleanField('contor căldură', default=False)
+
+    is_not_furnished = BooleanField('nemobilat', default=False)
+    is_half_furnished = BooleanField('parţial', default=False)
+    is_full_furnished = BooleanField('complet', default=False)
+    is_lux_furnished = BooleanField('lux', default=False)
+
+    has_iron = BooleanField('fier de călcat', default=False)
+    has_dishwasher = BooleanField('maşină de spălat vase', default=False)
+    has_coffee_maker = BooleanField('cafetieră', default=False)
+    has_wash_machine = BooleanField('maşină de spălat haine', default=False)
+    has_toaster = BooleanField('toaster', default=False)
+    has_fridge = BooleanField('frigider', default=False)
+    has_oven = BooleanField('cuptor cu microunde', default=False)
+    has_gas_cooker = BooleanField('aragaz', default=False)
+    has_hood = BooleanField('hotă', default=False)
+    has_kitchen_robot = BooleanField('robot bucătărie', default=False)
+    has_hairdryer = BooleanField('uscător de păr', default=False)
+    has_sandwich_maker = BooleanField('sandwich-maker', default=False)
+    has_hi_fi = BooleanField('Hi-Fi', default=False)
+    has_tv = BooleanField('tv', default=False)
+    has_vacuum_cleaner = BooleanField('aspirator', default=False)
+    has_dvd = BooleanField('DVD', default=False)
+
+    has_smoke_sensor = BooleanField('senzor de fum', default=False)
+    has_alarm_system = BooleanField('sistem de alarmă', default=False)
+    has_fireplace = BooleanField('şemineu', default=False)
+    has_jacuzzi = BooleanField('jacuzzi', default=False)
+    has_garage_remote = BooleanField('telecomandă poartă garaj', default=False)
+    has_auto_access_remote = BooleanField('telecomandă poartă access auto', default=False)
+    has_interior_stairway = BooleanField('scară interioară', default=False)
+
+    has_recreation_spaces = BooleanField('spaţii de agrement', default=False)
+    has_video_intercom = BooleanField('video interfon', default=False)
+    has_interior_pool = BooleanField('piscină interioară', default=False)
+    has_sauna = BooleanField('saună', default=False)
+    has_roof = BooleanField('acoperiş', default=False)
+    has_yard = BooleanField('curte', default=False)
+    has_common_yard = BooleanField('curte comună', default=False)
+    has_garden = BooleanField('grădină', default=False)
+    has_intercom = BooleanField('interfon', default=False)
+    has_elevator = BooleanField('lift', default=False)
+    has_exterior_pool = BooleanField('piscină exterioară', default=False)
+    has_dryer = BooleanField('uscătorie', default=False)
+    has_spa = BooleanField('SPA', default=False)
+
+    has_administration = BooleanField('administrare', default=False)
+    has_housekeeping = BooleanField('menaj', default=False)
+    has_security = BooleanField('pază', default=False)
+    has_video_security = BooleanField('supraveghere video', default=False)
+
+    has_cleaning = BooleanField('curăţenie', default=False)
+    has_bed_sheets = BooleanField('lenjerie de pat', default=False)
+    has_towels = BooleanField('prosoape', default=False)
+    has_station_transfer = BooleanField('transfer aeroport/gară', default=False)
+    has_city_tour = BooleanField('tur oraş', default=False)
 
     class Meta:
         verbose_name = 'apartament'

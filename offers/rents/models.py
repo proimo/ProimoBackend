@@ -2,7 +2,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from django.db.models import PositiveIntegerField, CharField, BooleanField, TextField
 
 from offers.choices import Currencies, Level, Comfort, BuildingType, PartitioningType
-from offers.models import OfferImages, BaseOfferModel
+from offers.models import OfferImages, BaseOfferModel, WithRentPrice
 
 
 #######################################
@@ -18,11 +18,13 @@ class RentOfferModel(BaseOfferModel):
 
 #######################################
 # Model classes
-class ApartmentRent(RentOfferModel):
-    rent_cost = PositiveIntegerField('chirie/lună', blank=True, default=None)
-    rent_currency = CharField('', max_length=4, choices=Currencies.choices, default=Currencies.EUR)
+class ApartmentRent(RentOfferModel, WithRentPrice):
     zero_commission = BooleanField('Comision 0%', default=False)
     buyer_commission = TextField('Comision cumpărător', blank=True, default=None)
+
+    hotel_regime = BooleanField('regim hotelier', default=False)
+    hotel_regime_price = CharField('chirie / zi', max_length=15, blank=True, default=None)
+    hotel_regime_currency = CharField('', max_length=4, choices=Currencies.choices, default=Currencies.EUR)
 
     rooms_nr = PositiveIntegerField('nr. camere', default=0)
     util_surface = CharField('suprafaţa utilă', max_length=50, default=None, blank=True)
