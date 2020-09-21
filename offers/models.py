@@ -1,22 +1,12 @@
-import admin_thumbnails
-from django.contrib.admin import TabularInline
 from django.contrib.gis.db.models import PointField, ForeignKey, CharField, BooleanField, SET_NULL, ImageField, CASCADE, \
     Model, TextField, DateTimeField, PositiveIntegerField
 from django.db.models.base import ModelBase
-from rest_framework import permissions
-from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from administration.models import UserProfile
-from common.admin import BaseModelAdmin
 from common.models import County, Locality
 from common.models import BaseModel
 from common.utils import get_upload_path
-from offers.choices import Currencies, Sector
-
-
-def remove_agent_field_from(fieldsets):
-    for fieldset in fieldsets:
-        fieldset[1]['fields'] = [field for field in fieldset[1]['fields'] if not field.__eq__('agent')]
+from offers.choices import Currencies, Sector, BuildingPeriod, ResistanceStructure
 
 
 #######################################
@@ -77,34 +67,218 @@ class WithExclusivity(Model):
         abstract = True
 
 
-class BaseOfferAdmin(BaseModelAdmin):
-    basic_info_fieldsets = (None, {'fields': ('name', 'slug', 'agent',)})
-    location_fieldsets = (
-        'Localizare şi poziţionare pe hartă',
-        {'fields': (
-            'county', 'locality', 'sector', 'hide_address_on_imobiliare', 'address',
-            'hide_exact_location_on_imobiliare', 'postal_code', 'neighborhood')})
-    autocomplete_fields = ('agent', 'county', 'locality')
+class WithRoomsAndAnnexes(Model):
+    rooms_nr = PositiveIntegerField('nr. camere', default=None)
+    kitchens_nr = PositiveIntegerField('nr. bucătării', blank=True, default=None)
+    bathrooms_nr = PositiveIntegerField('nr. băi', blank=True, default=None)
+    balconies_nr = PositiveIntegerField('nr. balcoane', blank=True, default=None)
+    closed_balconies_nr = PositiveIntegerField('din care închise', blank=True, default=None)
+    garages_nr = PositiveIntegerField('nr. garaje', blank=True, default=None)
+    parking_lots_nr = PositiveIntegerField('nr. locuri parcare', blank=True, default=None)
 
-    def get_queryset(self, request):
-        """if it's not superuser get only current agent's offers"""
-        queryset = super(BaseOfferAdmin, self).get_queryset(request)
-        if request.user.is_superuser:
-            return queryset
-        user_profile = UserProfile.objects.get(user=request.user)
-        return queryset.filter(agent=user_profile)
+    class Meta:
+        abstract = True
 
-    def get_fieldsets(self, request, obj=None):
-        """if it's not superuser remove 'agent' field"""
-        fieldsets = super(BaseOfferAdmin, self).get_fieldsets(request, obj)
-        if request.user.is_superuser is not True:
-            remove_agent_field_from(fieldsets)
-        return fieldsets
 
-    def save_model(self, request, obj, form, change):
-        if obj.agent is None:
-            obj.agent = UserProfile.objects.get(user=request.user)
-        super(BaseOfferAdmin, self).save_model(request, obj, form, change)
+class WithBuildingInfo(Model):
+    has_basement = BooleanField('are subsol', default=False)
+    has_semi_basement = BooleanField('are demisol', default=False)
+    has_ground_floor = BooleanField('parter', default=True)
+    levels_nr = PositiveIntegerField('nr. niveluri', blank=True, default=None)
+    has_mansard = BooleanField('mansardă', default=False)
+    building_year = PositiveIntegerField('an finalizare construcţie', blank=True, default=None)
+    building_period = CharField('perioada construire', max_length=10, choices=BuildingPeriod.choices, blank=True,
+                                default=None)
+    resistance_structure = CharField('structura de rezistenţă', max_length=10, choices=ResistanceStructure.choices,
+                                     blank=True, default=None)
+
+    class Meta:
+        abstract = True
+
+
+class WithOtherDetails(Model):
+    other_details = TextField('alte detalii', max_length=500, blank=True, default=None)
+    vices = TextField('vicii', max_length=500, blank=True, default=None)
+    display_expiry_date = DateTimeField('dată expirare afişare', blank=True, default=None)
+    disponibility = TextField('disponibilitate proprietate', blank=True, default=None)
+
+    class Meta:
+        abstract = True
+
+
+class WithDestination(Model):
+    is_residential = BooleanField('rezidenţial', default=False)
+    is_comercial = BooleanField('comercial', default=False)
+    for_offices = BooleanField('birouri', default=False)
+    for_vacation = BooleanField('de vacanţă', default=False)
+
+    class Meta:
+        abstract = True
+
+
+class WithOtherZoneDetails(Model):
+    asphalted_street = BooleanField('asfaltate', default=False)
+    concreted_street = BooleanField('betonate', default=False)
+    paved_street = BooleanField('pietruite', default=False)
+    soil_street = BooleanField('de pământ', default=False)
+    undeveloped_street = BooleanField('neamenajate', default=False)
+    has_illuminated_street = BooleanField('iluminat stradal', default=False)
+    public_transport = BooleanField('mijloace de transport în comun', default=False)
+
+    class Meta:
+        abstract = True
+
+
+class WithHeatingSystem(Model):
+    has_heating = BooleanField('termoficare', default=False)
+    has_own_boiler = BooleanField('centrală proprie', default=False)
+    has_building_boiler = BooleanField('centrală imobil', default=False)
+    has_fireplace_or_terracotta = BooleanField('sobă/teracotă', default=False)
+    has_radiator = BooleanField('calorifere', default=False)
+    has_flooring_heating = BooleanField('încălzire prin pardoseală', default=False)
+
+    class Meta:
+        abstract = True
+
+
+class WithConditioning(Model):
+    has_air_conditioning = BooleanField('aer condiţionat', default=False)
+    has_fan = BooleanField('ventiloconvectoare', default=False)
+    has_air_heater = BooleanField('aeroterme', default=False)
+
+    class Meta:
+        abstract = True
+
+
+class WithFinishes(Model):
+    is_renovated = BooleanField('renovat', default=False)
+    is_good = BooleanField('bună', default=False)
+    need_renovation = BooleanField('necesită renovare', default=False)
+
+    has_aluminium_windows = BooleanField('aluminiu', default=False)
+    has_wood_windows = BooleanField('lemn', default=False)
+    has_pvc_windows = BooleanField('PVC', default=False)
+
+    has_horizontal_louver = BooleanField('orizontale', default=False)
+    has_vertical_louver = BooleanField('verticale', default=False)
+
+    has_pvc_rolls = BooleanField('PVC', default=False)
+    has_wood_rolls = BooleanField('lemn', default=False)
+    has_aluminium_rolls = BooleanField('aluminiu', default=False)
+
+    has_pal_entrance_door = BooleanField('pal', default=False)
+    has_wood_entrance_door = BooleanField('lemn', default=False)
+    has_metal_entrance_door = BooleanField('metal', default=False)
+    has_pvc_entrance_door = BooleanField('PVC', default=False)
+    has_parquet_entrance_door = BooleanField('parchet', default=False)
+
+    has_indoor_heat_isolation = BooleanField('interior', default=False)
+    has_outdoor_heat_isolation = BooleanField('exterior', default=False)
+
+    has_linoleum_floor = BooleanField('linoleum', default=False)
+    has_carpet_floor = BooleanField('mochetă', default=False)
+    has_parquet_floor = BooleanField('parchet', default=False)
+    has_tiles_floor = BooleanField('gresie', default=False)
+    has_decking_floor = BooleanField('duşumea', default=False)
+    has_marble_floor = BooleanField('marmură', default=False)
+
+    has_cellular_interior_door = BooleanField('celulare', default=False)
+    has_wood_interior_door = BooleanField('lemn', default=False)
+    has_panel_interior_door = BooleanField('panel', default=False)
+    has_pvc_interior_door = BooleanField('PVC', default=False)
+    has_glass_interior_door = BooleanField('sticlă', default=False)
+
+    has_chalk_walls = BooleanField('var', default=False)
+    has_vinarom_walls = BooleanField('vinarom', default=False)
+    has_washable_paint_walls = BooleanField('vopsea lavabilă', default=False)
+    has_faience_walls = BooleanField('faianţă', default=False)
+    has_wainscot_walls = BooleanField('lambriu', default=False)
+    has_wallpaper_walls = BooleanField('tapet', default=False)
+    has_clay_walls = BooleanField('humă', default=False)
+
+    class Meta:
+        abstract = True
+
+
+class WithFeatures(Model):
+    has_furnished_kitchen = BooleanField('mobilată', default=False)
+    has_half_furnished_kitchen = BooleanField('parţial mobilată', default=False)
+    has_equipped_kitchen = BooleanField('utilată', default=False)
+    has_half_equipped_kitchen = BooleanField('parţial utilată', default=False)
+
+    has_gas_counter = BooleanField('contor gaz', default=False)
+    has_water_counter = BooleanField('apometre', default=False)
+    has_heat_counter = BooleanField('contor căldură', default=False)
+
+    is_not_furnished = BooleanField('nemobilat', default=False)
+    is_half_furnished = BooleanField('parţial', default=False)
+    is_full_furnished = BooleanField('complet', default=False)
+    is_lux_furnished = BooleanField('lux', default=False)
+
+    has_iron = BooleanField('fier de călcat', default=False)
+    has_dishwasher = BooleanField('maşină de spălat vase', default=False)
+    has_coffee_maker = BooleanField('cafetieră', default=False)
+    has_wash_machine = BooleanField('maşină de spălat haine', default=False)
+    has_toaster = BooleanField('toaster', default=False)
+    has_fridge = BooleanField('frigider', default=False)
+    has_oven = BooleanField('cuptor cu microunde', default=False)
+    has_gas_cooker = BooleanField('aragaz', default=False)
+    has_hood = BooleanField('hotă', default=False)
+    has_kitchen_robot = BooleanField('robot bucătărie', default=False)
+    has_hairdryer = BooleanField('uscător de păr', default=False)
+    has_sandwich_maker = BooleanField('sandwich-maker', default=False)
+    has_hi_fi = BooleanField('Hi-Fi', default=False)
+    has_tv = BooleanField('tv', default=False)
+    has_vacuum_cleaner = BooleanField('aspirator', default=False)
+    has_dvd = BooleanField('DVD', default=False)
+
+    has_smoke_sensor = BooleanField('senzor de fum', default=False)
+    has_alarm_system = BooleanField('sistem de alarmă', default=False)
+    has_fireplace = BooleanField('şemineu', default=False)
+    has_jacuzzi = BooleanField('jacuzzi', default=False)
+    has_garage_remote = BooleanField('telecomandă poartă garaj', default=False)
+    has_auto_access_remote = BooleanField('telecomandă poartă access auto', default=False)
+    has_interior_stairway = BooleanField('scară interioară', default=False)
+
+    has_recreation_spaces = BooleanField('spaţii de agrement', default=False)
+    has_video_intercom = BooleanField('video interfon', default=False)
+    has_interior_pool = BooleanField('piscină interioară', default=False)
+    has_sauna = BooleanField('saună', default=False)
+    has_roof = BooleanField('acoperiş', default=False)
+    has_yard = BooleanField('curte', default=False)
+    has_common_yard = BooleanField('curte comună', default=False)
+    has_garden = BooleanField('grădină', default=False)
+    has_intercom = BooleanField('interfon', default=False)
+    has_elevator = BooleanField('lift', default=False)
+    has_exterior_pool = BooleanField('piscină exterioară', default=False)
+    has_dryer = BooleanField('uscătorie', default=False)
+    has_spa = BooleanField('SPA', default=False)
+
+    class Meta:
+        abstract = True
+
+
+class WithServices(Model):
+    has_administration = BooleanField('administrare', default=False)
+    has_housekeeping = BooleanField('menaj', default=False)
+    has_security = BooleanField('pază', default=False)
+    has_video_security = BooleanField('supraveghere video', default=False)
+
+    has_cleaning = BooleanField('curăţenie', default=False)
+    has_bed_sheets = BooleanField('lenjerie de pat', default=False)
+    has_towels = BooleanField('prosoape', default=False)
+    has_station_transfer = BooleanField('transfer aeroport/gară', default=False)
+    has_city_tour = BooleanField('tur oraş', default=False)
+
+    class Meta:
+        abstract = True
+
+
+class WithInternetAccess(Model):
+    has_wired_net = BooleanField('cablu', default=False)
+    has_fiber = BooleanField('fibră optică', default=False)
+    has_wireless = BooleanField('wireless', default=False)
+    has_dial_up = BooleanField('dial-up', default=False)
 
     class Meta:
         abstract = True
@@ -138,27 +312,3 @@ class OfferImages(Model, metaclass=OfferImagesMetaclass):
         abstract = True
         verbose_name = 'imagine'
         verbose_name_plural = 'imagini'
-
-
-#######################################
-# Offer images admin register with thumbnails
-@admin_thumbnails.thumbnail('image', background=True)
-class OfferImageInline(TabularInline):
-    extra = 0
-
-    class Meta:
-        abstract = True
-
-
-#######################################
-# Base serializers class
-class BaseReadOnlyOfferViewSet(ReadOnlyModelViewSet):
-    """
-        retrieve:
-            Return an offer instance.
-
-        list:
-            Return all offers, ordered by most recently add.
-    """
-
-    permission_classes = [permissions.AllowAny]

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.gis.db.models import PointField
 from mapwidgets import GooglePointFieldInlineWidget
 
-from offers.models import OfferImageInline, BaseOfferAdmin
+from offers.admin import BaseOfferAdmin, OfferImageInline
 from offers.rents.models import ApartmentRent, HouseRent, LandRent, CommercialSpaceRent, OfficeRent, \
     SpecialPropertyRent, IndustrialSpaceRent, ApartmentRentImages, HouseRentImages, LandRentImages, \
     CommercialSpaceRentImages, OfficeRentImages, SpecialPropertyRentImages, IndustrialSpaceRentImages

@@ -60,6 +60,12 @@ class Sector(TextChoices):
     SIX = '6', '6'
 
 
+class RoofCover(TextChoices):
+    BOARD = 'tabla', 'tablă'
+    TILE = 'tigla', 'ţiglă'
+    SHINGLE = 'sindrila', 'şindrilă'
+
+
 class Level(TextChoices):
     DEMISOL = 'demisol'
     PARTER = 'parter'

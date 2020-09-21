@@ -1,8 +1,8 @@
-from offers.models import BaseReadOnlyOfferViewSet
 from offers.sales.models import ApartmentSale, HouseSale, LandSale, CommercialSpaceSale, OfficeSale, \
     SpecialPropertySale, IndustrialSpaceSale
 from offers.sales.serializers import ApartmentSaleSerializer, HouseSaleSerializer, LandSaleSerializer, \
     CommercialSpaceSaleSerializer, OfficeSaleSerializer, SpecialPropertySaleSerializer, IndustrialSpaceSaleSerializer
+from offers.views import BaseReadOnlyOfferViewSet
 
 
 class ApartmentSaleViewSet(BaseReadOnlyOfferViewSet):
