@@ -6,7 +6,7 @@ from administration.models import UserProfile
 from common.models import County, Locality
 from common.models import BaseModel
 from common.utils import get_upload_path
-from offers.choices import Currencies, Sector, BuildingPeriod, ResistanceStructure
+from offers.choices import Currencies, Sector, BuildingPeriod, ResistanceStructure, BUILDING_STATE, BUILDING_STAGE
 
 
 #######################################
@@ -44,6 +44,44 @@ class WithSellingPrice(WithPrice, Model):
     total_price_currency = CharField('', max_length=4, choices=Currencies.choices, default=Currencies.EUR)
     util_price = PositiveIntegerField('preţ / mp util sau UM', blank=True, default=None)
     util_price_currency = CharField('', max_length=4, choices=Currencies.choices, default=Currencies.EUR)
+
+    class Meta:
+        abstract = True
+
+
+class WithSpaceSellingPrice(WithPrice, Model):
+    price = PositiveIntegerField('preţ cerut', default=None)
+    price_currency = CharField('', max_length=4, choices=Currencies.choices, default=Currencies.EUR)
+    hide_price = BooleanField('nu doresc să fie afişat vizitatorilor site-ului', default=False)
+
+    class Meta:
+        abstract = True
+
+
+class WithPropertyInfo(Model):
+    property_name = CharField('nume proprietate', max_length=100, default=None, blank=True)
+    property_description = TextField('descriere proprietate', max_length=100, default=None, blank=True)
+    total_surface = PositiveIntegerField('suprafaţă totală (mp)', default=None)
+    terrain_surface = PositiveIntegerField('suprafaţă teren (mp)', default=None, blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class WithAdditionalSpaceInfo(Model):
+    building_year = PositiveIntegerField('an finalizare construcţie', blank=True, default=None)
+    building_stage = CharField('stadiu construcţie', max_length=15, choices=BUILDING_STAGE, default=None, blank=True)
+    occupation_degree = PositiveIntegerField('grad ocupare clădire (%)', default=None, blank=True)
+    underground_levels_nr = PositiveIntegerField('nr. niveluri subterane', default=None, blank=True)
+    levels_nr = PositiveIntegerField('nr. niveluri', default=None, blank=True)
+    has_semi_basement = BooleanField('demisol', default=False)
+    has_ground_floor = BooleanField('parter', default=True)
+    has_mansard = BooleanField('mansardă', default=False)
+    has_terrace = BooleanField('terasă', default=False)
+    has_entresol = BooleanField('mezanin', default=False)
+    has_parking_possibility = BooleanField('posibilitate parcare', default=False)
+    parking_spaces_nr = PositiveIntegerField('nr. locuri parcare', default=None, blank=True)
+    building_state = CharField('stare imobil', max_length=15, choices=BUILDING_STATE, default=None, blank=True)
 
     class Meta:
         abstract = True

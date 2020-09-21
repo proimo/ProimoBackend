@@ -100,6 +100,16 @@ OFFICE_BUILDING_TYPE = [
     ('Clădire mixtă', 'Clădire mixtă')
 ]
 
+COMMERCIAL_BUILDING_TYPE = [
+    ('Casă/vilă', 'Casă/vilă'),
+    ('Bloc de apartamente', 'Bloc de apartamente'),
+    ('Mall', 'Mall'),
+    ('Terasă', 'Terasă'),
+    ('Spaţiu stradal', 'Spaţiu stradal'),
+    ('Centru comercial', 'Centru comercial'),
+    ('Showroom', 'Showroom'),
+]
+
 PURPOSE_RECOMMENDATION = [
     ('pentru investiţie', 'pentru investiţie'),
     ('pentru utilizare proprie', 'pentru utilizare proprie'),

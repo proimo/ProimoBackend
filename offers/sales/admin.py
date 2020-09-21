@@ -71,6 +71,10 @@ price_fieldsets = ('Preţ', {'fields': (
     ('total_price', 'total_price_currency'), ('util_price', 'util_price_currency'),
     'not_include_vat', 'price_details', 'zero_commission', 'buyer_commission'
 )})
+space_price_fieldsets = ('Preţ', {
+    'fields': (('price', 'price_currency'), 'hide_price', 'not_include_vat', 'price_details', 'zero_commission',
+               'buyer_commission'
+               )})
 rooms_fieldsets = ('Încăperi şi anexe', {'fields': (('rooms_nr', 'garages_nr'), ('kitchens_nr', 'parking_lots_nr'),
                                                     ('balconies_nr', 'closed_balconies_nr'), 'bathrooms_nr')})
 other_fieldsets = ('Alte detalii', {'fields': ('other_details', 'vices', 'display_expiry_date', 'disponibility')})
@@ -128,6 +132,10 @@ building_services_fieldsets = ('Servicii imobil', {'fields': (
     ('has_administration', 'has_housekeeping', 'has_security', 'has_video_security'),)})
 hotel_services_fieldsets = ('Servicii hoteliere', {
     'fields': (('has_cleaning', 'has_bed_sheets', 'has_towels', 'has_station_transfer', 'has_city_tour'),)})
+space_other_fieldsets = ('Câmpuri suplimentare', {'fields': (
+    'building_year', 'building_stage', 'occupation_degree', ('underground_levels_nr', 'levels_nr'),
+    ('has_semi_basement', 'has_ground_floor', 'has_mansard', 'has_terrace', 'has_entresol'),
+    'has_parking_possibility', 'parking_spaces_nr', 'building_state')})
 
 
 #######################################
@@ -277,27 +285,37 @@ class LandSaleAdmin(SaleOfferAdmin):
 @admin.register(CommercialSpaceSale)
 class CommercialSpaceSaleAdmin(SaleOfferAdmin):
     inlines = (CommercialSpaceSaleImagesInline,)
-
-
-@admin.register(OfficeSale)
-class OfficeSaleAdmin(SaleOfferAdmin):
-    inlines = (OfficeSaleImagesInline,)
-    price_fieldsets = ('Preţ', {
-        'fields': (('price', 'price_currency'), 'hide_price', 'not_include_vat', 'price_details', 'zero_commission',
-                   'buyer_commission'
-                   )})
     property_info_fieldsets = ('Informaţii proprietate', {
-        'fields': ('property_name', 'property_description', 'total_surface', 'office_class', 'terrain_surface')})
-    other_fieldsets = ('Câmpuri suplimentare', {'fields': (
-        'building_year', 'building_stage', 'occupation_degree', ('underground_levels_nr', 'levels_nr'),
-        ('has_semi_basement', 'has_ground_floor', 'has_mansard', 'has_terrace', 'has_entresol'),
-        'has_parking_possibility', 'parking_spaces_nr', 'building_state')})
+        'fields': ('property_name', 'property_description', 'total_surface', 'terrain_surface', 'space_height',
+                   'has_show_window')})
+    utilities_fieldsets = ('Utilităţi', {
+        'fields': (('has_water', 'has_sewerage', 'has_current', 'has_gas', 'has_heating', 'has_conditioning'),)})
 
     readonly_fields = ['has_ground_floor']
     fieldsets = (
         BaseOfferAdmin.basic_info_fieldsets,
         SaleOfferAdmin.location_fieldsets,
-        price_fieldsets,
+        space_price_fieldsets,
+        property_info_fieldsets,
+        space_other_fieldsets,
+        utilities_fieldsets,
+        exclusivity_fieldsets,
+        BaseOfferAdmin.time_fieldsets,
+        (None, {'fields': ('is_published',)})
+    )
+
+
+@admin.register(OfficeSale)
+class OfficeSaleAdmin(SaleOfferAdmin):
+    inlines = (OfficeSaleImagesInline,)
+    property_info_fieldsets = ('Informaţii proprietate', {
+        'fields': ('property_name', 'property_description', 'total_surface', 'office_class', 'terrain_surface')})
+
+    readonly_fields = ['has_ground_floor']
+    fieldsets = (
+        BaseOfferAdmin.basic_info_fieldsets,
+        SaleOfferAdmin.location_fieldsets,
+        space_price_fieldsets,
         property_info_fieldsets,
         other_fieldsets,
         exclusivity_fieldsets,

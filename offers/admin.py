@@ -22,11 +22,9 @@ class OfferImageInline(TabularInline):
 
 class BaseOfferAdmin(BaseModelAdmin):
     basic_info_fieldsets = (None, {'fields': ('name', 'slug', 'agent', 'description')})
-    location_fieldsets = (
-        'Localizare şi poziţionare pe hartă',
-        {'fields': (
-            'county', 'locality', 'sector', 'hide_address_on_imobiliare', 'address',
-            'hide_exact_location_on_imobiliare', 'postal_code', 'neighborhood')})
+    location_fieldsets = ('Localizare şi poziţionare pe hartă', {'fields': (
+        'county', 'locality', 'sector', 'hide_address_on_imobiliare', 'address',
+        'hide_exact_location_on_imobiliare', 'postal_code', 'neighborhood')})
     autocomplete_fields = ('agent', 'county', 'locality')
 
     def get_queryset(self, request):
