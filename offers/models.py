@@ -42,7 +42,7 @@ class WithPrice(Model):
 class WithSellingPrice(WithPrice, Model):
     total_price = PositiveIntegerField('preţ total', blank=True, default=None)
     total_price_currency = CharField('', max_length=4, choices=Currencies.choices, default=Currencies.EUR)
-    util_price = PositiveIntegerField('preţ / mp util', blank=True, default=None)
+    util_price = PositiveIntegerField('preţ / mp util sau UM', blank=True, default=None)
     util_price_currency = CharField('', max_length=4, choices=Currencies.choices, default=Currencies.EUR)
 
     class Meta:

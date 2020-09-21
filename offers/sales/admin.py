@@ -243,6 +243,32 @@ class HouseSaleAdmin(SaleOfferAdmin):
 @admin.register(LandSale)
 class LandSaleAdmin(SaleOfferAdmin):
     inlines = (LandSaleImagesInline,)
+    terrain_characteristics_fieldsets = ('Caracteristici teren', {'fields': (
+        ('land_type', 'street_fronts_nr'), ('classification', 'street_front'),
+        ('terrain_surface', 'terrain_surface_type'), 'terrain_angle', ('pot', 'cut'),
+        ('height_regime', 'urban_coefficients_source'), ('constructed_surface', 'access_road_width'),
+        'terrain_construction', 'description', 'documents', 'plots_lot', 'plots_lot_name')})
+    utilities_fieldsets = ('Utilităţi', {'fields': (('has_water', 'has_current', 'has_three_phase_current',
+                                                     'has_sewerage', 'has_irrigation_system', 'has_gas',
+                                                     'has_utilities_nearby'),)})
+    other_characteristics_fieldsets = ('Alte caracteristici', {'fields': (('has_investment_opportunity',
+                                                                           'can_be_demolished', 'can_be_splitted',
+                                                                           'is_near_road', 'has_auto_access',
+                                                                           'is_surrounded_terrain'),)})
+
+    fieldsets = (
+        BaseOfferAdmin.basic_info_fieldsets,
+        SaleOfferAdmin.location_fieldsets,
+        terrain_characteristics_fieldsets,
+        SaleOfferAdmin.price_fieldsets,
+        other_fieldsets,
+        destination_fieldsets,
+        exclusivity_fieldsets,
+        utilities_fieldsets,
+        other_zone_details_fieldsets,
+        other_characteristics_fieldsets,
+        BaseOfferAdmin.time_fieldsets
+    )
 
 
 @admin.register(CommercialSpaceSale)

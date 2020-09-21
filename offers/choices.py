@@ -66,6 +66,34 @@ class RoofCover(TextChoices):
     SHINGLE = 'sindrila', 'şindrilă'
 
 
+class LandType(TextChoices):
+    CONSTRUCTII = 'Construcţii'
+    AGRICOL = 'Agricol'
+    PADURE = 'Pădure'
+    LIVADA = 'Livadă'
+    PASUNE = 'Păşune'
+    FANEATA = 'Fâneaţă'
+    HELESTEU = 'Heleşteu'
+
+
+class LandClassification(TextChoices):
+    INTRAVILAN = 'Intravilan'
+    EXTRAVILAN = 'Extravilan'
+
+
+class SurfaceType(TextChoices):
+    M = 'm'
+    HA = 'ha'
+
+
+URBAN_COEFF_SOURCES = [
+    ('P.U.G', 'P.U.G'),
+    ('Certificat de urbanism', 'Certificat de urbanism'),
+    ('P.U.Z', 'P.U.Z'),
+    ('P.U.D', 'P.U.D'),
+]
+
+
 class Level(TextChoices):
     DEMISOL = 'demisol'
     PARTER = 'parter'
