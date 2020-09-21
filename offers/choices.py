@@ -93,6 +93,38 @@ URBAN_COEFF_SOURCES = [
     ('P.U.D', 'P.U.D'),
 ]
 
+OFFICE_BUILDING_TYPE = [
+    ('Clădire de birouri', 'Clădire de birouri'),
+    ('Casă/vilă', 'Casă/vilă'),
+    ('Bloc de apartamente', 'Bloc de apartamente'),
+    ('Clădire mixtă', 'Clădire mixtă')
+]
+
+PURPOSE_RECOMMENDATION = [
+    ('pentru investiţie', 'pentru investiţie'),
+    ('pentru utilizare proprie', 'pentru utilizare proprie'),
+    ('există şi produce venituri', 'există şi produce venituri')
+]
+
+OFFICE_CLASS = [
+    ('A', 'A'),
+    ('B', 'B'),
+    ('B+', 'B+'),
+    ('C', 'C'),
+    ('C+', 'C+')
+]
+
+BUILDING_STAGE = [
+    ('Există', 'Există'),
+    ('În construcţie', 'În construcţie'),
+    ('Proiect', 'Proiect')
+]
+
+BUILDING_STATE = [
+    ('Modernizat', 'Modernizat'),
+    ('Nemodernizat', 'Nemodernizat')
+]
+
 
 class Level(TextChoices):
     DEMISOL = 'demisol'

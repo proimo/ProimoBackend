@@ -1,6 +1,7 @@
 from django.db.models import BooleanField, URLField, CharField, PositiveIntegerField, TextField, IntegerField
 from offers.choices import ApartmentType, PartitioningType, Level, Comfort, BuildingType, RoofCover, LandType, \
-    LandClassification, SurfaceType, URBAN_COEFF_SOURCES
+    LandClassification, SurfaceType, URBAN_COEFF_SOURCES, OFFICE_BUILDING_TYPE, PURPOSE_RECOMMENDATION, Currencies, \
+    OFFICE_CLASS, BUILDING_STAGE, BUILDING_STATE
 from offers.models import OfferImages, BaseOfferModel, WithPrice, WithExclusivity, WithSellingPrice, \
     WithRoomsAndAnnexes, WithBuildingInfo, WithOtherDetails, WithDestination, WithOtherZoneDetails, WithHeatingSystem, \
     WithConditioning, WithInternetAccess, WithFinishes, WithFeatures, WithServices
@@ -141,7 +142,35 @@ class CommercialSpaceSale(SaleOfferModel):
         verbose_name_plural = 'spaţii comerciale'
 
 
-class OfficeSale(SaleOfferModel):
+class OfficeSale(SaleOfferModel, WithPrice, WithExclusivity):
+    building_type = CharField('tip imobil', max_length=20, choices=OFFICE_BUILDING_TYPE, default=None)
+    purpose_recommendation = CharField('recomandare utilizare proprietate', max_length=30,
+                                       choices=PURPOSE_RECOMMENDATION, default=None, blank=True)
+
+    price = PositiveIntegerField('preţ cerut', default=None)
+    price_currency = CharField('', max_length=4, choices=Currencies.choices, default=Currencies.EUR)
+    hide_price = BooleanField('nu doresc să fie afişat vizitatorilor site-ului', default=False)
+
+    property_name = CharField('nume proprietate', max_length=100, default=None, blank=True)
+    property_description = TextField('descriere proprietate', max_length=100, default=None, blank=True)
+    total_surface = PositiveIntegerField('suprafaţă totală (mp)', default=None)
+    office_class = CharField('clasă birouri', max_length=2, choices=OFFICE_CLASS, default=None, blank=True)
+    terrain_surface = PositiveIntegerField('suprafaţă teren (mp)', default=None, blank=True)
+
+    building_year = PositiveIntegerField('an finalizare construcţie', blank=True, default=None)
+    building_stage = CharField('stadiu construcţie', max_length=15, choices=BUILDING_STAGE, default=None, blank=True)
+    occupation_degree = PositiveIntegerField('grad ocupare clădire (%)', default=None, blank=True)
+    underground_levels_nr = PositiveIntegerField('nr. niveluri subterane', default=None, blank=True)
+    levels_nr = PositiveIntegerField('nr. niveluri', default=None, blank=True)
+    has_semi_basement = BooleanField('demisol', default=False)
+    has_ground_floor = BooleanField('parter', default=True)
+    has_mansard = BooleanField('mansardă', default=False)
+    has_terrace = BooleanField('terasă', default=False)
+    has_entresol = BooleanField('mezanin', default=False)
+    has_parking_possibility = BooleanField('posibilitate parcare', default=False)
+    parking_spaces_nr = PositiveIntegerField('nr. locuri parcare', default=None, blank=True)
+    building_state = CharField('stare imobil', max_length=15, choices=BUILDING_STATE, default=None, blank=True)
+
     class Meta:
         verbose_name = 'birou'
         verbose_name_plural = 'birouri'

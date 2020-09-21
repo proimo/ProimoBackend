@@ -21,7 +21,7 @@ class OfferImageInline(TabularInline):
 
 
 class BaseOfferAdmin(BaseModelAdmin):
-    basic_info_fieldsets = (None, {'fields': ('name', 'slug', 'agent',)})
+    basic_info_fieldsets = (None, {'fields': ('name', 'slug', 'agent', 'description')})
     location_fieldsets = (
         'Localizare şi poziţionare pe hartă',
         {'fields': (
