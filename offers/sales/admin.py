@@ -148,7 +148,6 @@ class ApartmentSaleAdmin(SaleOfferAdmin):
     readonly_fields = ['has_ground_floor']
     fieldsets = (
         SaleOfferAdmin.basic_info_fieldsets,
-        (None, {'fields': ('is_residential_complex', 'residential_complex_link')}),
         SaleOfferAdmin.location_fieldsets,
         SaleOfferAdmin.price_fieldsets,
         apartment_characteristics_fieldsets,

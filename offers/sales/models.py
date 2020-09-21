@@ -1,6 +1,5 @@
-from django.db.models import BooleanField, URLField, CharField, PositiveIntegerField, TextField, DateTimeField
-from offers.choices import ApartmentType, PartitioningType, Level, Comfort, BuildingType, BuildingPeriod, \
-    ResistanceStructure, Currencies, RoofCover
+from django.db.models import BooleanField, URLField, CharField, PositiveIntegerField, TextField
+from offers.choices import ApartmentType, PartitioningType, Level, Comfort, BuildingType, RoofCover
 from offers.models import OfferImages, BaseOfferModel, WithPrice, WithExclusivity, WithSellingPrice, \
     WithRoomsAndAnnexes, WithBuildingInfo, WithOtherDetails, WithDestination, WithOtherZoneDetails, WithHeatingSystem, \
     WithConditioning, WithInternetAccess, WithFinishes, WithFeatures, WithServices
@@ -22,10 +21,6 @@ class SaleOfferModel(BaseOfferModel):
 class ApartmentSale(SaleOfferModel, WithSellingPrice, WithExclusivity, WithRoomsAndAnnexes, WithBuildingInfo,
                     WithOtherDetails, WithDestination, WithOtherZoneDetails, WithHeatingSystem, WithConditioning,
                     WithInternetAccess, WithFinishes, WithFeatures, WithServices):
-    is_residential_complex = BooleanField('ansamblu rezidenţial', default=False)
-    residential_complex_link = URLField(verbose_name="link", blank=True, null=True,
-                                        help_text='pagina detalii ansamblu rezidenţial promovat pe imobiliare.ro')
-
     apartment_type = CharField('tip locuinţă', max_length=11, choices=ApartmentType.choices,
                                default=ApartmentType.APARTAMENT)
     partitioning_type = CharField('tip compartimentare', max_length=15, choices=PartitioningType.choices, default=None,
