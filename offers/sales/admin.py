@@ -136,6 +136,7 @@ space_other_fieldsets = ('Câmpuri suplimentare', {'fields': (
     'building_year', 'building_stage', 'occupation_degree', ('underground_levels_nr', 'levels_nr'),
     ('has_semi_basement', 'has_ground_floor', 'has_mansard', 'has_terrace', 'has_entresol'),
     'has_parking_possibility', 'parking_spaces_nr', 'building_state')})
+space_type_fieldsets = ('Tip spaţiu', {'fields': ('building_type', 'purpose_recommendation')})
 
 
 #######################################
@@ -292,9 +293,11 @@ class CommercialSpaceSaleAdmin(SaleOfferAdmin):
         'fields': (('has_water', 'has_sewerage', 'has_current', 'has_gas', 'has_heating', 'has_conditioning'),)})
 
     readonly_fields = ['has_ground_floor']
+    radio_fields = {'purpose_recommendation': admin.HORIZONTAL}
     fieldsets = (
         BaseOfferAdmin.basic_info_fieldsets,
         SaleOfferAdmin.location_fieldsets,
+        space_type_fieldsets,
         space_price_fieldsets,
         property_info_fieldsets,
         space_other_fieldsets,
@@ -312,9 +315,12 @@ class OfficeSaleAdmin(SaleOfferAdmin):
         'fields': ('property_name', 'property_description', 'total_surface', 'office_class', 'terrain_surface')})
 
     readonly_fields = ['has_ground_floor']
+    radio_fields = {'purpose_recommendation': admin.HORIZONTAL}
+
     fieldsets = (
         BaseOfferAdmin.basic_info_fieldsets,
         SaleOfferAdmin.location_fieldsets,
+        space_type_fieldsets,
         space_price_fieldsets,
         property_info_fieldsets,
         other_fieldsets,
@@ -332,3 +338,29 @@ class SpecialPropertySaleAdmin(SaleOfferAdmin):
 @admin.register(IndustrialSpaceSale)
 class IndustrialSpaceSaleAdmin(SaleOfferAdmin):
     inlines = (IndustrialSpaceSaleImagesInline,)
+    property_info_fieldsets = ('Informaţii proprietate', {
+        'fields': ('property_name', 'property_description', 'total_surface', 'terrain_surface', 'space_height')})
+    space_other_fieldsets = ('Câmpuri suplimentare', {'fields': (
+        'building_year', 'building_stage', 'occupation_degree', 'levels_nr', 'min_divisible_surface',
+        'previous_purpose', 'offices_surface', 'flooring_type', 'resistance_structure', 'platform_surface')})
+    utility_fieldsets = ('Utilităţi', {'fields': (('has_water', 'has_gas', 'has_current'),)})
+    access_fieldsets = ('Acces', {'fields': (('has_railway', 'has_tir_access', 'has_roads'),)})
+    features_fieldsets = ('Dotări', {'fields': (('has_ramp', 'has_slide_bridge', 'has_elevator', 'has_crane',
+                                                 'has_heating_installation', 'has_air_conditioning', 'has_windows',
+                                                 'has_lighting'),)})
+
+    radio_fields = {'purpose_recommendation': admin.HORIZONTAL}
+    fieldsets = (
+        BaseOfferAdmin.basic_info_fieldsets,
+        SaleOfferAdmin.location_fieldsets,
+        space_type_fieldsets,
+        space_price_fieldsets,
+        property_info_fieldsets,
+        space_other_fieldsets,
+        utility_fieldsets,
+        access_fieldsets,
+        features_fieldsets,
+        exclusivity_fieldsets,
+        BaseOfferAdmin.time_fieldsets,
+        (None, {'fields': ('is_published',)})
+    )

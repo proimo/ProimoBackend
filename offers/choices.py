@@ -110,6 +110,12 @@ COMMERCIAL_BUILDING_TYPE = [
     ('Showroom', 'Showroom'),
 ]
 
+INDUSTRIAL_BUILDING_TYPE = [
+    ('Producţie/servicii', 'Producţie/servicii'),
+    ('Depozitare', 'Depozitare'),
+    ('Logistică', 'Logistică'),
+]
+
 PURPOSE_RECOMMENDATION = [
     ('pentru investiţie', 'pentru investiţie'),
     ('pentru utilizare proprie', 'pentru utilizare proprie'),
@@ -133,6 +139,28 @@ BUILDING_STAGE = [
 BUILDING_STATE = [
     ('Modernizat', 'Modernizat'),
     ('Nemodernizat', 'Nemodernizat')
+]
+
+FLOORING_TYPE = [
+    ('Mochetă dale', 'Mochetă dale'),
+    ('Pardoseli pe bază de răşini poliuretan', 'Pardoseli pe bază de răşini poliuretan'),
+    ('Pardoseli supraînălţate', 'Pardoseli supraînălţate'),
+    ('Pardoseli pe bază de răşini epoxidice', 'Pardoseli pe bază de răşini epoxidice'),
+    ('Covor PVC', 'Covor PVC'),
+    ('Covoare PVC omogene', 'Covoare PVC omogene'),
+    ('Covoare PVC eterogene', 'Covoare PVC eterogene'),
+    ('Mochetă role', 'Mochetă role'),
+    ('Parchet', 'Parchet'),
+    ('Podea de lemn', 'Podea de lemn'),
+]
+
+INDUSTRIAL_RESISTANCE_STRUCTURE = [
+    ('Beton', 'Beton'),
+    ('Zidărie', 'Zidărie'),
+    ('Pereţi sandwich', 'Pereţi sandwich'),
+    ('Metalică', 'Metalică'),
+    ('Lemn', 'Lemn'),
+    ('Prefabricate', 'Prefabricate'),
 ]
 
 

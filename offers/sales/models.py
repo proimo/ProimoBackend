@@ -2,11 +2,12 @@ from django.db.models import BooleanField, URLField, CharField, PositiveIntegerF
     DecimalField
 from offers.choices import ApartmentType, PartitioningType, Level, Comfort, BuildingType, RoofCover, LandType, \
     LandClassification, SurfaceType, URBAN_COEFF_SOURCES, OFFICE_BUILDING_TYPE, PURPOSE_RECOMMENDATION, Currencies, \
-    OFFICE_CLASS, BUILDING_STAGE, BUILDING_STATE, COMMERCIAL_BUILDING_TYPE
+    OFFICE_CLASS, BUILDING_STAGE, BUILDING_STATE, COMMERCIAL_BUILDING_TYPE, INDUSTRIAL_BUILDING_TYPE, FLOORING_TYPE, \
+    INDUSTRIAL_RESISTANCE_STRUCTURE
 from offers.models import OfferImages, BaseOfferModel, WithPrice, WithExclusivity, WithSellingPrice, \
     WithRoomsAndAnnexes, WithBuildingInfo, WithOtherDetails, WithDestination, WithOtherZoneDetails, WithHeatingSystem, \
     WithConditioning, WithInternetAccess, WithFinishes, WithFeatures, WithServices, WithSpaceSellingPrice, \
-    WithPropertyInfo, WithAdditionalSpaceInfo
+    WithPropertyInfo, WithAdditionalSpaceInfo, WithRecommendation
 
 
 #######################################
@@ -139,10 +140,8 @@ class LandSale(SaleOfferModel, WithSellingPrice, WithOtherDetails, WithDestinati
 
 
 class CommercialSpaceSale(SaleOfferModel, WithExclusivity, WithSpaceSellingPrice, WithPropertyInfo,
-                          WithAdditionalSpaceInfo):
+                          WithAdditionalSpaceInfo, WithRecommendation):
     building_type = CharField('tip imobil', max_length=20, choices=COMMERCIAL_BUILDING_TYPE, default=None)
-    purpose_recommendation = CharField('recomandare utilizare proprietate', max_length=30,
-                                       choices=PURPOSE_RECOMMENDATION, default=None, blank=True)
 
     space_height = DecimalField('înalţime spaţiu', max_digits=4, decimal_places=2, default=None, blank=True)
     has_show_window = BooleanField('vitrină', default=False)
@@ -159,11 +158,9 @@ class CommercialSpaceSale(SaleOfferModel, WithExclusivity, WithSpaceSellingPrice
         verbose_name_plural = 'spaţii comerciale'
 
 
-class OfficeSale(SaleOfferModel, WithSpaceSellingPrice, WithExclusivity, WithPropertyInfo, WithAdditionalSpaceInfo):
+class OfficeSale(SaleOfferModel, WithSpaceSellingPrice, WithExclusivity, WithPropertyInfo, WithAdditionalSpaceInfo,
+                 WithRecommendation):
     building_type = CharField('tip imobil', max_length=20, choices=OFFICE_BUILDING_TYPE, default=None)
-    purpose_recommendation = CharField('recomandare utilizare proprietate', max_length=30,
-                                       choices=PURPOSE_RECOMMENDATION, default=None, blank=True)
-
     office_class = CharField('clasă birouri', max_length=2, choices=OFFICE_CLASS, default=None, blank=True)
 
     class Meta:
@@ -177,7 +174,42 @@ class SpecialPropertySale(SaleOfferModel):
         verbose_name_plural = 'proprietăţi speciale'
 
 
-class IndustrialSpaceSale(SaleOfferModel):
+class IndustrialSpaceSale(SaleOfferModel, WithRecommendation, WithSpaceSellingPrice, WithPropertyInfo, WithExclusivity):
+    building_type = CharField('tip imobil', max_length=20, choices=INDUSTRIAL_BUILDING_TYPE, default=None)
+
+    space_height = DecimalField('înalţime spaţiu', max_digits=4, decimal_places=2, default=None, blank=True)
+
+    building_year = PositiveIntegerField('an finalizare construcţie', blank=True, default=None)
+    building_stage = CharField('stadiu construcţie', max_length=15, choices=BUILDING_STAGE, default=None, blank=True)
+    occupation_degree = PositiveIntegerField('grad ocupare clădire (%)', default=None, blank=True)
+    levels_nr = PositiveIntegerField('nr. niveluri', default=None, blank=True)
+    min_divisible_surface = DecimalField('suprafaţă minimă divizabilă (mp)', max_digits=7, decimal_places=2,
+                                         default=None, blank=True)
+    previous_purpose = CharField('destinaţie anterioară', max_length=100, default=None, blank=True)
+    offices_surface = DecimalField('suprafaţă birouri', max_digits=6, decimal_places=2, default=None, blank=True)
+    flooring_type = CharField('tip pardoseală', max_length=40, choices=FLOORING_TYPE, default=None, blank=True)
+    resistance_structure = CharField('structură rezistenţă', max_length=40, choices=INDUSTRIAL_RESISTANCE_STRUCTURE,
+                                     default=None, blank=True)
+    platform_surface = DecimalField('suprafaţă platformă (mp)', max_digits=6, decimal_places=2, default=None,
+                                    blank=True)
+
+    has_water = BooleanField('apă', default=False)
+    has_gas = BooleanField('gaz', default=False)
+    has_current = BooleanField('curent', default=False)
+
+    has_railway = BooleanField('cale ferată', default=False)
+    has_tir_access = BooleanField('acces tir', default=False)
+    has_roads = BooleanField('cale rutieră', default=False)
+
+    has_ramp = BooleanField('rampă', default=False)
+    has_slide_bridge = BooleanField('pod rulant', default=False)
+    has_elevator = BooleanField('lift', default=False)
+    has_crane = BooleanField('macara', default=False)
+    has_heating_installation = BooleanField('instalaţie încălzire', default=False)
+    has_air_conditioning = BooleanField('climatizare', default=False)
+    has_windows = BooleanField('ferestre/luminatoare', default=False)
+    has_lighting = BooleanField('iluminat', default=False)
+
     class Meta:
         verbose_name = 'spaţiu industrial'
         verbose_name_plural = 'spaţii industriale'

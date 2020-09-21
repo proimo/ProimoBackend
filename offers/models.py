@@ -6,7 +6,8 @@ from administration.models import UserProfile
 from common.models import County, Locality
 from common.models import BaseModel
 from common.utils import get_upload_path
-from offers.choices import Currencies, Sector, BuildingPeriod, ResistanceStructure, BUILDING_STATE, BUILDING_STAGE
+from offers.choices import Currencies, Sector, BuildingPeriod, ResistanceStructure, BUILDING_STATE, BUILDING_STAGE, \
+    PURPOSE_RECOMMENDATION
 
 
 #######################################
@@ -82,6 +83,14 @@ class WithAdditionalSpaceInfo(Model):
     has_parking_possibility = BooleanField('posibilitate parcare', default=False)
     parking_spaces_nr = PositiveIntegerField('nr. locuri parcare', default=None, blank=True)
     building_state = CharField('stare imobil', max_length=15, choices=BUILDING_STATE, default=None, blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class WithRecommendation(Model):
+    purpose_recommendation = CharField('recomandare utilizare proprietate', max_length=30,
+                                       choices=PURPOSE_RECOMMENDATION, default=None, blank=True)
 
     class Meta:
         abstract = True
