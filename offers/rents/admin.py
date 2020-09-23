@@ -11,8 +11,6 @@ from offers.rents.models import ApartmentRent, HouseRent, LandRent, CommercialSp
 #######################################
 # Model's base admin inline / model
 class RentOfferAdmin(BaseOfferAdmin):
-    other_fieldsets = (None, {'fields': ('content',)})
-
     formfield_overrides = {
         PointField: {'widget': GooglePointFieldInlineWidget},
     }
@@ -20,7 +18,6 @@ class RentOfferAdmin(BaseOfferAdmin):
     fieldsets = (
         BaseOfferAdmin.basic_info_fieldsets,
         BaseOfferAdmin.location_fieldsets,
-        other_fieldsets,
         BaseOfferAdmin.time_fieldsets
     )
     list_display = ('name', 'slug', 'address')

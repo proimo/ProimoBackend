@@ -1,4 +1,3 @@
-from ckeditor_uploader.fields import RichTextUploadingField
 from django.db.models import PositiveIntegerField, CharField, BooleanField, TextField
 
 from offers.choices import Currencies, Level, Comfort, BuildingType, PartitioningType
@@ -6,19 +5,8 @@ from offers.models import OfferImages, BaseOfferModel, WithRentPrice
 
 
 #######################################
-# Base classes
-class RentOfferModel(BaseOfferModel):
-    content = RichTextUploadingField('conţinut', default=None, blank=True)
-
-    class Meta:
-        abstract = True
-        verbose_name = 'ofertă închiriere'
-        verbose_name_plural = 'oferte închiriere'
-
-
-#######################################
 # Model classes
-class ApartmentRent(RentOfferModel, WithRentPrice):
+class ApartmentRent(BaseOfferModel, WithRentPrice):
     zero_commission = BooleanField('Comision 0%', default=False)
     buyer_commission = TextField('Comision cumpărător', blank=True, default=None)
 
@@ -45,37 +33,37 @@ class ApartmentRent(RentOfferModel, WithRentPrice):
         verbose_name_plural = 'apartamente'
 
 
-class HouseRent(RentOfferModel):
+class HouseRent(BaseOfferModel):
     class Meta:
         verbose_name = 'casă'
         verbose_name_plural = 'case'
 
 
-class LandRent(RentOfferModel):
+class LandRent(BaseOfferModel):
     class Meta:
         verbose_name = 'teren'
         verbose_name_plural = 'terenuri'
 
 
-class CommercialSpaceRent(RentOfferModel):
+class CommercialSpaceRent(BaseOfferModel):
     class Meta:
         verbose_name = 'spaţiu comercial'
         verbose_name_plural = 'spaţii comerciale'
 
 
-class OfficeRent(RentOfferModel):
+class OfficeRent(BaseOfferModel):
     class Meta:
         verbose_name = 'birou'
         verbose_name_plural = 'birouri'
 
 
-class SpecialPropertyRent(RentOfferModel):
+class SpecialPropertyRent(BaseOfferModel):
     class Meta:
         verbose_name = 'proprietate specială'
         verbose_name_plural = 'proprietăţi speciale'
 
 
-class IndustrialSpaceRent(RentOfferModel):
+class IndustrialSpaceRent(BaseOfferModel):
     class Meta:
         verbose_name = 'spaţiu industrial'
         verbose_name_plural = 'spaţii industriale'

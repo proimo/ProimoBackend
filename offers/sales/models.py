@@ -11,19 +11,8 @@ from offers.models import OfferImages, BaseOfferModel, WithPrice, WithExclusivit
 
 
 #######################################
-# Base classes
-class SaleOfferModel(BaseOfferModel):
-    description = TextField('descriere emoţională', default=None, blank=True)
-
-    class Meta:
-        abstract = True
-        verbose_name = 'ofertă vânzare'
-        verbose_name_plural = 'oferte vânzare'
-
-
-#######################################
 # Model classes
-class ApartmentSale(SaleOfferModel, WithSellingPrice, WithExclusivity, WithRoomsAndAnnexes, WithBuildingInfo,
+class ApartmentSale(BaseOfferModel, WithSellingPrice, WithExclusivity, WithRoomsAndAnnexes, WithBuildingInfo,
                     WithOtherDetails, WithDestination, WithOtherZoneDetails, WithHeatingSystem, WithConditioning,
                     WithInternetAccess, WithFinishes, WithFeatures, WithServices):
     apartment_type = CharField('tip locuinţă', max_length=11, choices=ApartmentType.choices,
@@ -57,7 +46,7 @@ class ApartmentSale(SaleOfferModel, WithSellingPrice, WithExclusivity, WithRooms
         verbose_name_plural = 'apartamente'
 
 
-class HouseSale(SaleOfferModel, WithSellingPrice, WithRoomsAndAnnexes, WithBuildingInfo, WithOtherDetails,
+class HouseSale(BaseOfferModel, WithSellingPrice, WithRoomsAndAnnexes, WithBuildingInfo, WithOtherDetails,
                 WithDestination, WithExclusivity, WithOtherZoneDetails, WithHeatingSystem, WithConditioning,
                 WithInternetAccess, WithFinishes, WithFeatures, WithServices):
     util_surface = PositiveIntegerField('suprafaţa utilă (mp)', default=None, blank=True)
@@ -95,7 +84,7 @@ class HouseSale(SaleOfferModel, WithSellingPrice, WithRoomsAndAnnexes, WithBuild
         verbose_name_plural = 'case'
 
 
-class LandSale(SaleOfferModel, WithSellingPrice, WithOtherDetails, WithDestination, WithExclusivity,
+class LandSale(BaseOfferModel, WithSellingPrice, WithOtherDetails, WithDestination, WithExclusivity,
                WithOtherZoneDetails):
     land_type = CharField('tip teren', max_length=12, choices=LandType.choices, default=LandType.CONSTRUCTII)
     street_fronts_nr = PositiveIntegerField('nr. fronturi stradale', default=None, blank=True)
@@ -139,7 +128,7 @@ class LandSale(SaleOfferModel, WithSellingPrice, WithOtherDetails, WithDestinati
         verbose_name_plural = 'terenuri'
 
 
-class CommercialSpaceSale(SaleOfferModel, WithExclusivity, WithSpaceSellingPrice, WithPropertyInfo,
+class CommercialSpaceSale(BaseOfferModel, WithExclusivity, WithSpaceSellingPrice, WithPropertyInfo,
                           WithAdditionalSpaceInfo, WithRecommendation, WithSpaceUtilities):
     building_type = CharField('tip imobil', max_length=20, choices=COMMERCIAL_BUILDING_TYPE, default=None)
 
@@ -151,7 +140,7 @@ class CommercialSpaceSale(SaleOfferModel, WithExclusivity, WithSpaceSellingPrice
         verbose_name_plural = 'spaţii comerciale'
 
 
-class OfficeSale(SaleOfferModel, WithSpaceSellingPrice, WithExclusivity, WithPropertyInfo, WithAdditionalSpaceInfo,
+class OfficeSale(BaseOfferModel, WithSpaceSellingPrice, WithExclusivity, WithPropertyInfo, WithAdditionalSpaceInfo,
                  WithRecommendation):
     building_type = CharField('tip imobil', max_length=20, choices=OFFICE_BUILDING_TYPE, default=None)
     office_class = CharField('clasă birouri', max_length=2, choices=OFFICE_CLASS, default=None, blank=True)
@@ -161,7 +150,7 @@ class OfficeSale(SaleOfferModel, WithSpaceSellingPrice, WithExclusivity, WithPro
         verbose_name_plural = 'birouri'
 
 
-class SpecialPropertySale(SaleOfferModel, WithRecommendation, WithSpaceSellingPrice, WithPropertyInfo,
+class SpecialPropertySale(BaseOfferModel, WithRecommendation, WithSpaceSellingPrice, WithPropertyInfo,
                           WithAdditionalSpaceInfo, WithSpaceUtilities, WithExclusivity):
     building_type = CharField('tip imobil', max_length=100, default=None)
 
@@ -172,7 +161,7 @@ class SpecialPropertySale(SaleOfferModel, WithRecommendation, WithSpaceSellingPr
         verbose_name_plural = 'proprietăţi speciale'
 
 
-class IndustrialSpaceSale(SaleOfferModel, WithRecommendation, WithSpaceSellingPrice, WithPropertyInfo, WithExclusivity):
+class IndustrialSpaceSale(BaseOfferModel, WithRecommendation, WithSpaceSellingPrice, WithPropertyInfo, WithExclusivity):
     building_type = CharField('tip imobil', max_length=20, choices=INDUSTRIAL_BUILDING_TYPE, default=None)
 
     space_height = DecimalField('înalţime spaţiu', max_digits=4, decimal_places=2, default=None, blank=True)

@@ -25,6 +25,7 @@ class BaseOfferModel(BaseModel):
     hide_exact_location_on_imobiliare = BooleanField('ascunde localizarea exactă pe imobiliare.ro', default=False)
     postal_code = CharField('cod poştal', max_length=50, blank=True, default=True)
     neighborhood = CharField('vicinătăţi', max_length=100, blank=True, default=None)
+    description = TextField('descriere emoţională', default=None, blank=True)
 
     class Meta:
         abstract = True
@@ -109,7 +110,7 @@ class WithRecommendation(Model):
 
 
 class WithRentPrice(WithPrice, Model):
-    rent = CharField('chirie / lună', max_length=15, blank=True, default=None)
+    rent_cost = CharField('chirie / lună', max_length=15, blank=True, default=None)
     rent_currency = CharField('', max_length=4, choices=Currencies.choices, default=Currencies.EUR)
 
     class Meta:
