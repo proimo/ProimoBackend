@@ -88,6 +88,18 @@ class WithAdditionalSpaceInfo(Model):
         abstract = True
 
 
+class WithSpaceUtilities(Model):
+    has_current = BooleanField('curent', default=False)
+    has_water = BooleanField('apă', default=False)
+    has_sewerage = BooleanField('canalizare', default=False)
+    has_gas = BooleanField('gaz', default=False)
+    has_heating = BooleanField('căldură', default=False)
+    has_conditioning = BooleanField('climă', default=False)
+
+    class Meta:
+        abstract = True
+
+
 class WithRecommendation(Model):
     purpose_recommendation = CharField('recomandare utilizare proprietate', max_length=30,
                                        choices=PURPOSE_RECOMMENDATION, default=None, blank=True)

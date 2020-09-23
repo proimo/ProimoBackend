@@ -7,7 +7,7 @@ from offers.choices import ApartmentType, PartitioningType, Level, Comfort, Buil
 from offers.models import OfferImages, BaseOfferModel, WithPrice, WithExclusivity, WithSellingPrice, \
     WithRoomsAndAnnexes, WithBuildingInfo, WithOtherDetails, WithDestination, WithOtherZoneDetails, WithHeatingSystem, \
     WithConditioning, WithInternetAccess, WithFinishes, WithFeatures, WithServices, WithSpaceSellingPrice, \
-    WithPropertyInfo, WithAdditionalSpaceInfo, WithRecommendation
+    WithPropertyInfo, WithAdditionalSpaceInfo, WithRecommendation, WithSpaceUtilities
 
 
 #######################################
@@ -140,18 +140,11 @@ class LandSale(SaleOfferModel, WithSellingPrice, WithOtherDetails, WithDestinati
 
 
 class CommercialSpaceSale(SaleOfferModel, WithExclusivity, WithSpaceSellingPrice, WithPropertyInfo,
-                          WithAdditionalSpaceInfo, WithRecommendation):
+                          WithAdditionalSpaceInfo, WithRecommendation, WithSpaceUtilities):
     building_type = CharField('tip imobil', max_length=20, choices=COMMERCIAL_BUILDING_TYPE, default=None)
 
     space_height = DecimalField('înalţime spaţiu', max_digits=4, decimal_places=2, default=None, blank=True)
     has_show_window = BooleanField('vitrină', default=False)
-
-    has_current = BooleanField('curent', default=False)
-    has_water = BooleanField('apă', default=False)
-    has_sewerage = BooleanField('canalizare', default=False)
-    has_gas = BooleanField('gaz', default=False)
-    has_heating = BooleanField('căldură', default=False)
-    has_conditioning = BooleanField('climă', default=False)
 
     class Meta:
         verbose_name = 'spaţiu comercial'
@@ -168,7 +161,12 @@ class OfficeSale(SaleOfferModel, WithSpaceSellingPrice, WithExclusivity, WithPro
         verbose_name_plural = 'birouri'
 
 
-class SpecialPropertySale(SaleOfferModel):
+class SpecialPropertySale(SaleOfferModel, WithRecommendation, WithSpaceSellingPrice, WithPropertyInfo,
+                          WithAdditionalSpaceInfo, WithSpaceUtilities, WithExclusivity):
+    building_type = CharField('tip imobil', max_length=100, default=None)
+
+    space_height = DecimalField('înalţime spaţiu', max_digits=4, decimal_places=2, default=None, blank=True)
+
     class Meta:
         verbose_name = 'proprietate specială'
         verbose_name_plural = 'proprietăţi speciale'

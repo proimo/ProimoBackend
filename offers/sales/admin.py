@@ -137,6 +137,8 @@ space_other_fieldsets = ('Câmpuri suplimentare', {'fields': (
     ('has_semi_basement', 'has_ground_floor', 'has_mansard', 'has_terrace', 'has_entresol'),
     'has_parking_possibility', 'parking_spaces_nr', 'building_state')})
 space_type_fieldsets = ('Tip spaţiu', {'fields': ('building_type', 'purpose_recommendation')})
+space_utilities_fieldsets = ('Utilităţi', {
+    'fields': (('has_water', 'has_sewerage', 'has_current', 'has_gas', 'has_heating', 'has_conditioning'),)})
 
 
 #######################################
@@ -289,8 +291,6 @@ class CommercialSpaceSaleAdmin(SaleOfferAdmin):
     property_info_fieldsets = ('Informaţii proprietate', {
         'fields': ('property_name', 'property_description', 'total_surface', 'terrain_surface', 'space_height',
                    'has_show_window')})
-    utilities_fieldsets = ('Utilităţi', {
-        'fields': (('has_water', 'has_sewerage', 'has_current', 'has_gas', 'has_heating', 'has_conditioning'),)})
 
     readonly_fields = ['has_ground_floor']
     radio_fields = {'purpose_recommendation': admin.HORIZONTAL}
@@ -301,7 +301,7 @@ class CommercialSpaceSaleAdmin(SaleOfferAdmin):
         space_price_fieldsets,
         property_info_fieldsets,
         space_other_fieldsets,
-        utilities_fieldsets,
+        space_utilities_fieldsets,
         exclusivity_fieldsets,
         BaseOfferAdmin.time_fieldsets,
         (None, {'fields': ('is_published',)})
@@ -333,6 +333,23 @@ class OfficeSaleAdmin(SaleOfferAdmin):
 @admin.register(SpecialPropertySale)
 class SpecialPropertySaleAdmin(SaleOfferAdmin):
     inlines = (SpecialPropertySaleImagesInline,)
+    property_info_fieldsets = ('Informaţii proprietate', {
+        'fields': ('property_name', 'property_description', 'total_surface', 'terrain_surface', 'space_height')})
+
+    readonly_fields = ['has_ground_floor']
+    radio_fields = {'purpose_recommendation': admin.HORIZONTAL}
+    fieldsets = (
+        BaseOfferAdmin.basic_info_fieldsets,
+        SaleOfferAdmin.location_fieldsets,
+        space_type_fieldsets,
+        space_price_fieldsets,
+        property_info_fieldsets,
+        space_other_fieldsets,
+        space_utilities_fieldsets,
+        exclusivity_fieldsets,
+        BaseOfferAdmin.time_fieldsets,
+        (None, {'fields': ('is_published',)})
+    )
 
 
 @admin.register(IndustrialSpaceSale)
