@@ -10,6 +10,7 @@ DEFAULT_SEARCH_FIELDS = ('name', 'slug')
 class BaseModelAdmin(ModelAdmin):
     basic_info_fieldsets = (None, {'fields': ('name', 'slug')})
     time_fieldsets = ('Creat/Modificat', {'classes': ('collapse',), 'fields': ('created', 'updated',)})
+    location_fieldsets = ('Localizare', {'fields': ('county', 'locality', 'address',)})
     prepopulated_fields = DEFAULT_PREPOPULATED_SLUG
     search_fields = DEFAULT_SEARCH_FIELDS
     date_hierarchy = 'created'

@@ -1,8 +1,7 @@
 from django.contrib import admin
-from django.contrib.gis.db.models import PointField
-from mapwidgets import GooglePointFieldInlineWidget
 
-from offers.admin import BaseOfferAdmin, OfferImageInline
+from offers.admin import BaseOfferAdmin, OfferImageInline, HouseBaseAdmin
+from offers.fieldsets import rent_price_fieldsets
 from offers.rents.models import ApartmentRent, HouseRent, LandRent, CommercialSpaceRent, OfficeRent, \
     SpecialPropertyRent, IndustrialSpaceRent, ApartmentRentImages, HouseRentImages, LandRentImages, \
     CommercialSpaceRentImages, OfficeRentImages, SpecialPropertyRentImages, IndustrialSpaceRentImages
@@ -11,10 +10,6 @@ from offers.rents.models import ApartmentRent, HouseRent, LandRent, CommercialSp
 #######################################
 # Model's base admin inline / model
 class RentOfferAdmin(BaseOfferAdmin):
-    formfield_overrides = {
-        PointField: {'widget': GooglePointFieldInlineWidget},
-    }
-
     fieldsets = (
         BaseOfferAdmin.basic_info_fieldsets,
         BaseOfferAdmin.location_fieldsets,
@@ -76,8 +71,9 @@ class ApartmentRentAdmin(RentOfferAdmin):
 
 
 @admin.register(HouseRent)
-class HouseRentAdmin(RentOfferAdmin):
+class HouseRentAdmin(HouseBaseAdmin):
     inlines = (HouseRentImagesInline,)
+    fieldsets = HouseBaseAdmin.fieldsets[:2] + (rent_price_fieldsets,) + HouseBaseAdmin.fieldsets[2:]
 
 
 @admin.register(LandRent)

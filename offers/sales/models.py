@@ -1,13 +1,13 @@
-from django.db.models import BooleanField, URLField, CharField, PositiveIntegerField, TextField, IntegerField, \
+from django.db.models import BooleanField, CharField, PositiveIntegerField, TextField, IntegerField, \
     DecimalField
-from offers.choices import ApartmentType, PartitioningType, Level, Comfort, BuildingType, RoofCover, LandType, \
-    LandClassification, SurfaceType, URBAN_COEFF_SOURCES, OFFICE_BUILDING_TYPE, PURPOSE_RECOMMENDATION, Currencies, \
-    OFFICE_CLASS, BUILDING_STAGE, BUILDING_STATE, COMMERCIAL_BUILDING_TYPE, INDUSTRIAL_BUILDING_TYPE, FLOORING_TYPE, \
+from offers.choices import ApartmentType, PartitioningType, Level, Comfort, BuildingType, LandType, \
+    LandClassification, SurfaceType, URBAN_COEFF_SOURCES, OFFICE_BUILDING_TYPE, \
+    OFFICE_CLASS, BUILDING_STAGE, COMMERCIAL_BUILDING_TYPE, INDUSTRIAL_BUILDING_TYPE, FLOORING_TYPE, \
     INDUSTRIAL_RESISTANCE_STRUCTURE
 from offers.models import OfferImages, BaseOfferModel, WithPrice, WithExclusivity, WithSellingPrice, \
     WithRoomsAndAnnexes, WithBuildingInfo, WithOtherDetails, WithDestination, WithOtherZoneDetails, WithHeatingSystem, \
     WithConditioning, WithInternetAccess, WithFinishes, WithFeatures, WithServices, WithSpaceSellingPrice, \
-    WithPropertyInfo, WithAdditionalSpaceInfo, WithRecommendation, WithSpaceUtilities
+    WithPropertyInfo, WithAdditionalSpaceInfo, WithRecommendation, WithSpaceUtilities, WithHouseSurfaces, HouseBaseModel
 
 
 #######################################
@@ -46,39 +46,7 @@ class ApartmentSale(BaseOfferModel, WithSellingPrice, WithExclusivity, WithRooms
         verbose_name_plural = 'apartamente'
 
 
-class HouseSale(BaseOfferModel, WithSellingPrice, WithRoomsAndAnnexes, WithBuildingInfo, WithOtherDetails,
-                WithDestination, WithExclusivity, WithOtherZoneDetails, WithHeatingSystem, WithConditioning,
-                WithInternetAccess, WithFinishes, WithFeatures, WithServices):
-    util_surface = PositiveIntegerField('suprafaţa utilă (mp)', default=None, blank=True)
-    constructed_surface = PositiveIntegerField('suprafaţa construită (amprentă la sol) (mp)', default=None, blank=True)
-    unfolded_surface = PositiveIntegerField('suprafaţă desfăşurată (mp)', default=None, blank=True)
-    terrain_surface = PositiveIntegerField('suprafaţă teren (mp)', default=None, blank=True)
-    street_fronts_nr = PositiveIntegerField('nr. fronturi stradale', default=None, blank=True)
-    street_front = PositiveIntegerField('front stradal (m)', default=None, blank=True)
-    terrace_nr = PositiveIntegerField('nr. terase', default=None, blank=True)
-    terrace_surface = PositiveIntegerField('suprafaţă terase (mp)', default=None, blank=True)
-
-    roof_cover = CharField('învelitoare acoperiş', max_length=10, choices=RoofCover.choices, default=None, blank=True)
-
-    has_current = BooleanField('curent', default=False)
-    has_three_phase_current = BooleanField('curent trifazic', default=False)
-    has_water = BooleanField('apă', default=False)
-    has_sewerage = BooleanField('canalizare', default=False)
-    has_septic_tank = BooleanField('fosă septică', default=False)
-    has_gas = BooleanField('gaz', default=False)
-    has_catv = BooleanField('CATV', default=False)
-    has_phone = BooleanField('telefon', default=False)
-    has_phone_station = BooleanField('centrală telefonică', default=False)
-    has_international_phone = BooleanField('telefon internaţional', default=False)
-
-    has_cellar = BooleanField('pivniţă', default=False)
-    has_wine_cellar = BooleanField('cramă', default=False)
-    has_service_wc = BooleanField('WC serviciu', default=False)
-    has_storage_space = BooleanField('spaţiu depozitare', default=False)
-    has_dressing = BooleanField('dressing', default=False)
-    has_annexes = BooleanField('anexe', default=False)
-    has_dependencies = BooleanField('dependinţe', default=False)
-
+class HouseSale(HouseBaseModel, WithSellingPrice):
     class Meta:
         verbose_name = 'casă'
         verbose_name_plural = 'case'

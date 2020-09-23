@@ -7,7 +7,7 @@ from common.models import County, Locality
 from common.models import BaseModel
 from common.utils import get_upload_path
 from offers.choices import Currencies, Sector, BuildingPeriod, ResistanceStructure, BUILDING_STATE, BUILDING_STAGE, \
-    PURPOSE_RECOMMENDATION
+    PURPOSE_RECOMMENDATION, RoofCover
 
 
 #######################################
@@ -23,8 +23,8 @@ class BaseOfferModel(BaseModel):
                           null=True, verbose_name='localitate')
     sector = CharField('sectorul', max_length=2, blank=True, default=None, choices=Sector.choices)
     hide_exact_location_on_imobiliare = BooleanField('ascunde localizarea exactă pe imobiliare.ro', default=False)
-    postal_code = CharField('cod poştal', max_length=50, blank=True, default=True)
-    neighborhood = CharField('vicinătăţi', max_length=100, blank=True, default=None)
+    postal_code = CharField('cod poştal', max_length=50, blank=True, default=None)
+    neighborhood = CharField('vecinătăţi', max_length=100, blank=True, default=None)
     description = TextField('descriere emoţională', default=None, blank=True)
 
     class Meta:
@@ -117,6 +117,15 @@ class WithRentPrice(WithPrice, Model):
         abstract = True
 
 
+class WithHotelRegime(WithRentPrice, Model):
+    hotel_regime = BooleanField('regim hotelier', default=False)
+    hotel_regime_price = CharField('chirie / zi', max_length=15, blank=True, default=None)
+    hotel_regime_currency = CharField('', max_length=4, choices=Currencies.choices, default=Currencies.EUR)
+
+    class Meta:
+        abstract = True
+
+
 class WithExclusivity(Model):
     has_exclusivity = BooleanField('exclusivitate', default=False)
     contract = CharField(max_length=200, blank=True, default=None)
@@ -135,6 +144,20 @@ class WithRoomsAndAnnexes(Model):
     closed_balconies_nr = PositiveIntegerField('din care închise', blank=True, default=None)
     garages_nr = PositiveIntegerField('nr. garaje', blank=True, default=None)
     parking_lots_nr = PositiveIntegerField('nr. locuri parcare', blank=True, default=None)
+
+    class Meta:
+        abstract = True
+
+
+class WithHouseSurfaces(Model):
+    util_surface = PositiveIntegerField('suprafaţa utilă (mp)', default=None, blank=True)
+    constructed_surface = PositiveIntegerField('suprafaţa construită (amprentă la sol) (mp)', default=None, blank=True)
+    unfolded_surface = PositiveIntegerField('suprafaţă desfăşurată (mp)', default=None, blank=True)
+    terrain_surface = PositiveIntegerField('suprafaţă teren (mp)', default=None, blank=True)
+    street_fronts_nr = PositiveIntegerField('nr. fronturi stradale', default=None, blank=True)
+    street_front = PositiveIntegerField('front stradal (m)', default=None, blank=True)
+    terrace_nr = PositiveIntegerField('nr. terase', default=None, blank=True)
+    terrace_surface = PositiveIntegerField('suprafaţă terase (mp)', default=None, blank=True)
 
     class Meta:
         abstract = True
@@ -372,3 +395,31 @@ class OfferImages(Model, metaclass=OfferImagesMetaclass):
         abstract = True
         verbose_name = 'imagine'
         verbose_name_plural = 'imagini'
+
+
+class HouseBaseModel(BaseOfferModel, WithRoomsAndAnnexes, WithBuildingInfo, WithOtherDetails,
+                     WithDestination, WithExclusivity, WithOtherZoneDetails, WithHeatingSystem, WithConditioning,
+                     WithInternetAccess, WithFinishes, WithFeatures, WithServices, WithHouseSurfaces):
+    roof_cover = CharField('învelitoare acoperiş', max_length=10, choices=RoofCover.choices, default=None, blank=True)
+
+    has_current = BooleanField('curent', default=False)
+    has_three_phase_current = BooleanField('curent trifazic', default=False)
+    has_water = BooleanField('apă', default=False)
+    has_sewerage = BooleanField('canalizare', default=False)
+    has_septic_tank = BooleanField('fosă septică', default=False)
+    has_gas = BooleanField('gaz', default=False)
+    has_catv = BooleanField('CATV', default=False)
+    has_phone = BooleanField('telefon', default=False)
+    has_phone_station = BooleanField('centrală telefonică', default=False)
+    has_international_phone = BooleanField('telefon internaţional', default=False)
+
+    has_cellar = BooleanField('pivniţă', default=False)
+    has_wine_cellar = BooleanField('cramă', default=False)
+    has_service_wc = BooleanField('WC serviciu', default=False)
+    has_storage_space = BooleanField('spaţiu depozitare', default=False)
+    has_dressing = BooleanField('dressing', default=False)
+    has_annexes = BooleanField('anexe', default=False)
+    has_dependencies = BooleanField('dependinţe', default=False)
+
+    class Meta:
+        abstract = True

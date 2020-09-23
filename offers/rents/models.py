@@ -1,19 +1,13 @@
-from django.db.models import PositiveIntegerField, CharField, BooleanField, TextField
+from django.db.models import PositiveIntegerField, CharField, TextField
 
-from offers.choices import Currencies, Level, Comfort, BuildingType, PartitioningType
-from offers.models import OfferImages, BaseOfferModel, WithRentPrice
+from offers.choices import Level, Comfort, BuildingType, PartitioningType
+from offers.models import OfferImages, BaseOfferModel, WithRentPrice, WithHotelRegime, WithRoomsAndAnnexes, \
+    WithHouseSurfaces, WithBuildingInfo, WithOtherDetails, WithDestination, WithExclusivity, HouseBaseModel
 
 
 #######################################
 # Model classes
-class ApartmentRent(BaseOfferModel, WithRentPrice):
-    zero_commission = BooleanField('Comision 0%', default=False)
-    buyer_commission = TextField('Comision cumpărător', blank=True, default=None)
-
-    hotel_regime = BooleanField('regim hotelier', default=False)
-    hotel_regime_price = CharField('chirie / zi', max_length=15, blank=True, default=None)
-    hotel_regime_currency = CharField('', max_length=4, choices=Currencies.choices, default=Currencies.EUR)
-
+class ApartmentRent(BaseOfferModel, WithHotelRegime):
     rooms_nr = PositiveIntegerField('nr. camere', default=0)
     util_surface = CharField('suprafaţa utilă', max_length=50, default=None, blank=True)
     constructed_surface = CharField('suprafaţa construită', max_length=50, default=None, blank=True)
@@ -33,7 +27,7 @@ class ApartmentRent(BaseOfferModel, WithRentPrice):
         verbose_name_plural = 'apartamente'
 
 
-class HouseRent(BaseOfferModel):
+class HouseRent(HouseBaseModel, WithHotelRegime):
     class Meta:
         verbose_name = 'casă'
         verbose_name_plural = 'case'
