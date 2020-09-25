@@ -1,5 +1,5 @@
 from django.contrib.gis.db.models import PointField, ForeignKey, CharField, BooleanField, SET_NULL, ImageField, CASCADE, \
-    Model, TextField, DateTimeField, PositiveIntegerField
+    Model, TextField, DateTimeField, PositiveIntegerField, IntegerField
 from django.db.models.base import ModelBase
 
 from administration.models import UserProfile
@@ -7,7 +7,7 @@ from common.models import County, Locality
 from common.models import BaseModel
 from common.utils import get_upload_path
 from offers.choices import Currencies, Sector, BuildingPeriod, ResistanceStructure, BUILDING_STATE, BUILDING_STAGE, \
-    PURPOSE_RECOMMENDATION, RoofCover
+    PURPOSE_RECOMMENDATION, RoofCover, LandType, LandClassification, SurfaceType, URBAN_COEFF_SOURCES
 
 
 #######################################
@@ -420,6 +420,48 @@ class HouseBaseModel(BaseOfferModel, WithRoomsAndAnnexes, WithBuildingInfo, With
     has_dressing = BooleanField('dressing', default=False)
     has_annexes = BooleanField('anexe', default=False)
     has_dependencies = BooleanField('dependinţe', default=False)
+
+    class Meta:
+        abstract = True
+
+
+class LandBaseModel(BaseOfferModel, WithOtherDetails, WithDestination, WithExclusivity, WithOtherZoneDetails):
+    land_type = CharField('tip teren', max_length=12, choices=LandType.choices, default=LandType.CONSTRUCTII)
+    street_fronts_nr = PositiveIntegerField('nr. fronturi stradale', default=None, blank=True)
+    classification = CharField('clasificare', max_length=12, choices=LandClassification.choices,
+                               default=LandClassification.INTRAVILAN)
+    street_front = PositiveIntegerField('front stradal (m)', default=None, blank=True)
+    terrain_surface = PositiveIntegerField('suprafaţă teren', default=None, blank=True)
+    terrain_surface_type = CharField('', max_length=3, choices=SurfaceType.choices, default=SurfaceType.M)
+    terrain_angle = IntegerField('înclinaţie teren (%)', default=None, blank=True)
+    pot = IntegerField('P.O.T (%)', default=None, blank=True,
+                       help_text='Procentajul de ocupare al terenului (suprafaţa ocupată/suprafaţa totală * 100')
+    cut = IntegerField('C.U.T (%)', default=None, blank=True,
+                       help_text='Coeficientul de utilizare al terenului (suma suprafeţelor desfăşurate/suprafaţa totală * 100')
+    height_regime = PositiveIntegerField('regim înălţime (m)', default=None, blank=True)
+    urban_coefficients_source = CharField('sursă informaţii coef. urbanistici', max_length=25,
+                                          choices=URBAN_COEFF_SOURCES, default=None, blank=True)
+    terrain_construction = BooleanField('construcţie pe teren', default=False)
+    constructed_surface = PositiveIntegerField('suprafaţă construită (mp)', default=None, blank=True)
+    access_road_width = PositiveIntegerField('lăţime drum de acces (m)', default=None, blank=True)
+    documents = TextField('acte/avize', default=None, blank=True)
+    plots_lot = BooleanField('lot parcele', default=False)
+    plots_lot_name = CharField('nume lot parcele', max_length=100, default=None, blank=True)
+
+    has_current = BooleanField('curent', default=False)
+    has_three_phase_current = BooleanField('curent trifazic', default=False)
+    has_water = BooleanField('apă', default=False)
+    has_sewerage = BooleanField('canalizare', default=False)
+    has_irrigation_system = BooleanField('sistem irigaţie', default=False)
+    has_gas = BooleanField('gaz', default=False)
+    has_utilities_nearby = BooleanField('utilităţi în zonă', default=False)
+
+    has_investment_opportunity = BooleanField('oportunitate de investiţie', default=False)
+    can_be_demolished = BooleanField('construcţie demolabilă', default=False)
+    can_be_splitted = BooleanField('parcelabil', default=False)
+    is_near_road = BooleanField('la şosea', default=False)
+    has_auto_access = BooleanField('acces auto', default=False)
+    is_surrounded_terrain = BooleanField('teren  împrejmuit', default=False)
 
     class Meta:
         abstract = True

@@ -2,7 +2,8 @@ from django.db.models import PositiveIntegerField, CharField, TextField
 
 from offers.choices import Level, Comfort, BuildingType, PartitioningType
 from offers.models import OfferImages, BaseOfferModel, WithRentPrice, WithHotelRegime, WithRoomsAndAnnexes, \
-    WithHouseSurfaces, WithBuildingInfo, WithOtherDetails, WithDestination, WithExclusivity, HouseBaseModel
+    WithHouseSurfaces, WithBuildingInfo, WithOtherDetails, WithDestination, WithExclusivity, HouseBaseModel, \
+    LandBaseModel
 
 
 #######################################
@@ -33,7 +34,7 @@ class HouseRent(HouseBaseModel, WithHotelRegime):
         verbose_name_plural = 'case'
 
 
-class LandRent(BaseOfferModel):
+class LandRent(LandBaseModel, WithRentPrice):
     class Meta:
         verbose_name = 'teren'
         verbose_name_plural = 'terenuri'

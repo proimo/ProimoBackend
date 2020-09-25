@@ -29,15 +29,25 @@ class OfferImageInline(TabularInline):
 
 
 class BaseOfferAdmin(BaseModelAdmin):
-    basic_info_fieldsets = (None, {'fields': ('name', 'slug', 'agent', 'description')})
-    location_fieldsets = ('Localizare şi poziţionare pe hartă', {'fields': (
-        'county', 'locality', 'sector', 'hide_address_on_imobiliare', 'address',
-        'hide_exact_location_on_imobiliare', 'postal_code', 'neighborhood')})
-    autocomplete_fields = ('agent', 'county', 'locality')
+    basic_info_fieldsets = (
+        None, {
+            'fields': ('name', 'slug', 'agent', 'description')})
+    location_fieldsets = (
+        'Localizare şi poziţionare pe hartă', {
+            'fields': ('county', 'locality', 'sector', 'hide_address_on_imobiliare', 'address',
+                       'hide_exact_location_on_imobiliare', 'postal_code', 'neighborhood')})
+    is_published_fieldsets = (
+        None, {
+            'fields': ('is_published',)})
 
+    autocomplete_fields = ('agent', 'county', 'locality')
     formfield_overrides = {
         PointField: {'widget': GooglePointFieldInlineWidget},
     }
+
+    list_display = ('name', 'slug', 'address')
+    list_filter = ['created', 'updated']
+    search_fields = ['name', 'slug', 'address']
 
     def get_queryset(self, request):
         """if it's not superuser get only current agent's offers"""
@@ -64,21 +74,22 @@ class BaseOfferAdmin(BaseModelAdmin):
 
 
 class HouseBaseAdmin(BaseOfferAdmin):
-    building_fieldsets = ('Imobil', {'fields': (
-        ('has_basement', 'has_semi_basement', 'has_ground_floor', 'levels_nr', 'has_mansard'),
-        'building_year', 'building_period', 'resistance_structure', 'roof_cover'
-    )})
-    surfaces_fieldsets = ('Suprafeţe', {'fields': (
-        'util_surface', 'constructed_surface', 'unfolded_surface', 'terrain_surface', 'street_fronts_nr',
-        'street_front', 'terrace_nr', 'terrace_surface')})
-    general_utilities_fieldsets = ('Utilităţi generale', {'fields': (('has_current', 'has_three_phase_current',
-                                                                      'has_water', 'has_sewerage', 'has_septic_tank',
-                                                                      'has_gas', 'has_catv', 'has_phone',
-                                                                      'has_phone_station',
-                                                                      'has_international_phone'),)})
-    other_util_spaces = ('Alte spaţii utile', {'fields': (('has_cellar', 'has_wine_cellar', 'has_service_wc',
-                                                           'has_storage_space', 'has_dressing', 'has_annexes',
-                                                           'has_dependencies'),)})
+    building_fieldsets = (
+        'Imobil', {
+            'fields': (('has_basement', 'has_semi_basement', 'has_ground_floor', 'levels_nr', 'has_mansard'),
+                       'building_year', 'building_period', 'resistance_structure', 'roof_cover')})
+    surfaces_fieldsets = (
+        'Suprafeţe', {
+            'fields': ('util_surface', 'constructed_surface', 'unfolded_surface', 'terrain_surface', 'street_fronts_nr',
+                       'street_front', 'terrace_nr', 'terrace_surface')})
+    general_utilities_fieldsets = (
+        'Utilităţi generale', {
+            'fields': (('has_current', 'has_three_phase_current', 'has_water', 'has_sewerage', 'has_septic_tank',
+                        'has_gas', 'has_catv', 'has_phone', 'has_phone_station', 'has_international_phone'),)})
+    other_util_spaces = (
+        'Alte spaţii utile', {
+            'fields': (('has_cellar', 'has_wine_cellar', 'has_service_wc', 'has_storage_space', 'has_dressing',
+                        'has_annexes', 'has_dependencies'),)})
 
     list_display = ('name', 'slug', 'address')
     list_filter = ['created', 'updated']
@@ -117,5 +128,35 @@ class HouseBaseAdmin(BaseOfferAdmin):
         building_features_fieldsets,
         building_services_fieldsets,
         hotel_services_fieldsets,
+        BaseOfferAdmin.time_fieldsets
+    )
+
+
+class LandBaseAdmin(BaseOfferAdmin):
+    terrain_characteristics_fieldsets = (
+        'Caracteristici teren', {
+            'fields': (('land_type', 'street_fronts_nr'), ('classification', 'street_front'),
+                       ('terrain_surface', 'terrain_surface_type'), 'terrain_angle', ('pot', 'cut'),
+                       ('height_regime', 'urban_coefficients_source'), ('constructed_surface', 'access_road_width'),
+                       'terrain_construction', 'documents', 'plots_lot', 'plots_lot_name')})
+    utilities_fieldsets = (
+        'Utilităţi', {
+            'fields': (('has_water', 'has_current', 'has_three_phase_current', 'has_sewerage', 'has_irrigation_system',
+                        'has_gas', 'has_utilities_nearby'),)})
+    other_characteristics_fieldsets = (
+        'Alte caracteristici', {
+            'fields': (('has_investment_opportunity', 'can_be_demolished', 'can_be_splitted', 'is_near_road',
+                        'has_auto_access', 'is_surrounded_terrain'),)})
+
+    fieldsets = (
+        BaseOfferAdmin.basic_info_fieldsets,
+        BaseOfferAdmin.location_fieldsets,
+        terrain_characteristics_fieldsets,
+        other_fieldsets,
+        destination_fieldsets,
+        exclusivity_fieldsets,
+        utilities_fieldsets,
+        other_zone_details_fieldsets,
+        other_characteristics_fieldsets,
         BaseOfferAdmin.time_fieldsets
     )

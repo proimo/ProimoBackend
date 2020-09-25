@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from offers.admin import BaseOfferAdmin, OfferImageInline, HouseBaseAdmin
+from offers.admin import BaseOfferAdmin, OfferImageInline, HouseBaseAdmin, LandBaseAdmin
 from offers.fieldsets import rent_price_fieldsets
 from offers.rents.models import ApartmentRent, HouseRent, LandRent, CommercialSpaceRent, OfficeRent, \
     SpecialPropertyRent, IndustrialSpaceRent, ApartmentRentImages, HouseRentImages, LandRentImages, \
@@ -77,8 +77,9 @@ class HouseRentAdmin(HouseBaseAdmin):
 
 
 @admin.register(LandRent)
-class LandRentAdmin(RentOfferAdmin):
+class LandSaleAdmin(LandBaseAdmin):
     inlines = (LandRentImagesInline,)
+    fieldsets = LandBaseAdmin.fieldsets[:2] + (rent_price_fieldsets,) + LandBaseAdmin.fieldsets[2:]
 
 
 @admin.register(CommercialSpaceRent)
