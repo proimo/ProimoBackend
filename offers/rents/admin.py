@@ -1,23 +1,11 @@
 from django.contrib import admin
+from django.contrib.contenttypes.admin import GenericStackedInline
 
 from offers.admin import BaseOfferAdmin, OfferImageInline, HouseBaseAdmin, LandBaseAdmin
-from offers.fieldsets import rent_price_fieldsets
+from offers.fieldsets import rent_price_fieldsets, property_info_fieldsets, exclusivity_fieldsets
 from offers.rents.models import ApartmentRent, HouseRent, LandRent, CommercialSpaceRent, OfficeRent, \
     SpecialPropertyRent, IndustrialSpaceRent, ApartmentRentImages, HouseRentImages, LandRentImages, \
-    CommercialSpaceRentImages, OfficeRentImages, SpecialPropertyRentImages, IndustrialSpaceRentImages
-
-
-#######################################
-# Model's base admin inline / model
-class RentOfferAdmin(BaseOfferAdmin):
-    fieldsets = (
-        BaseOfferAdmin.basic_info_fieldsets,
-        BaseOfferAdmin.location_fieldsets,
-        BaseOfferAdmin.time_fieldsets
-    )
-    list_display = ('name', 'slug', 'address')
-    list_filter = ['created', 'updated']
-    search_fields = ['name', 'slug', 'address']
+    CommercialSpaceRentImages, OfficeRentImages, SpecialPropertyRentImages, IndustrialSpaceRentImages, SpaceModel
 
 
 #######################################
@@ -50,23 +38,42 @@ class IndustrialSpaceRentImagesInline(OfferImageInline):
     model = IndustrialSpaceRentImages
 
 
+class SpaceInline(GenericStackedInline):
+    model = SpaceModel
+    extra = 1
+
+    fieldsets = (
+        (None, {
+            'fields': (
+                'name', 'surface', ('disponibility', 'disponibility_time'), ('rent_cost', 'rent_currency'),
+                ('hide_price', 'not_include_vat', 'has_maintenance', 'zero_commission'), 'rent_commission', 'level',
+                'divisible_space', 'description', 'has_parking')}),
+    )
+
+
 #######################################
 # Model's admin configs
 @admin.register(ApartmentRent)
-class ApartmentRentAdmin(RentOfferAdmin):
+class ApartmentRentAdmin(BaseOfferAdmin):
     inlines = (ApartmentRentImagesInline,)
-    rent_fieldset = ('Chirie', {'fields': (('rent_cost', 'rent_currency'), 'zero_commission', 'buyer_commission')})
-    characteristics_fieldset = ('Caracteristici principale', {'fields': (
-        'rooms_nr', 'util_surface', 'constructed_surface', 'level', 'levels_nr', 'building_type', 'bathrooms_nr',
-        'partitioning_type', 'comfort')})
-    other_details_fieldset = ('Detalii suplimentare', {'fields': ('other_details',)})
+    rent_fieldset = (
+        'Chirie', {
+            'fields': (('rent_cost', 'rent_currency'), 'zero_commission', 'buyer_commission')})
+    characteristics_fieldset = (
+        'Caracteristici principale', {
+            'fields': ('rooms_nr', 'util_surface', 'constructed_surface', 'level', 'levels_nr', 'building_type',
+                       'bathrooms_nr', 'partitioning_type', 'comfort')})
+    other_details_fieldset = (
+        'Detalii suplimentare', {
+            'fields': ('other_details',)})
+
     fieldsets = (
-        RentOfferAdmin.basic_info_fieldsets,
-        RentOfferAdmin.location_fieldsets,
+        BaseOfferAdmin.basic_info_fieldsets,
+        BaseOfferAdmin.location_fieldsets,
         rent_fieldset,
         characteristics_fieldset,
         other_details_fieldset,
-        RentOfferAdmin.time_fieldsets
+        BaseOfferAdmin.time_fieldsets
     )
 
 
@@ -83,20 +90,31 @@ class LandSaleAdmin(LandBaseAdmin):
 
 
 @admin.register(CommercialSpaceRent)
-class CommercialSpaceRentAdmin(RentOfferAdmin):
+class CommercialSpaceRentAdmin(BaseOfferAdmin):
     inlines = (CommercialSpaceRentImagesInline,)
 
 
 @admin.register(OfficeRent)
-class OfficeRentAdmin(RentOfferAdmin):
-    inlines = (OfficeRentImagesInline,)
+class OfficeRentAdmin(BaseOfferAdmin):
+    inlines = (SpaceInline, OfficeRentImagesInline)
+
+    fieldsets = (
+        BaseOfferAdmin.basic_info_fieldsets,
+        BaseOfferAdmin.location_fieldsets,
+        ('Tip spaţiu', {
+            'fields': ('building_type',)}),
+        property_info_fieldsets,
+        exclusivity_fieldsets,
+        BaseOfferAdmin.time_fieldsets,
+        BaseOfferAdmin.is_published_fieldsets
+    )
 
 
 @admin.register(SpecialPropertyRent)
-class SpecialPropertyRentAdmin(RentOfferAdmin):
+class SpecialPropertyRentAdmin(BaseOfferAdmin):
     inlines = (SpecialPropertyRentImagesInline,)
 
 
 @admin.register(IndustrialSpaceRent)
-class IndustrialSpaceRentAdmin(RentOfferAdmin):
+class IndustrialSpaceRentAdmin(BaseOfferAdmin):
     inlines = (IndustrialSpaceRentImagesInline,)

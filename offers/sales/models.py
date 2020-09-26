@@ -1,13 +1,11 @@
-from django.db.models import BooleanField, CharField, PositiveIntegerField, TextField, IntegerField, \
-    DecimalField
-from offers.choices import ApartmentType, PartitioningType, Level, Comfort, BuildingType, LandType, \
-    LandClassification, SurfaceType, URBAN_COEFF_SOURCES, OFFICE_BUILDING_TYPE, \
+from django.db.models import BooleanField, CharField, PositiveIntegerField, DecimalField
+from offers.choices import ApartmentType, PartitioningType, Level, Comfort, BuildingType, OFFICE_BUILDING_TYPE, \
     OFFICE_CLASS, BUILDING_STAGE, COMMERCIAL_BUILDING_TYPE, INDUSTRIAL_BUILDING_TYPE, FLOORING_TYPE, \
     INDUSTRIAL_RESISTANCE_STRUCTURE
 from offers.models import OfferImages, BaseOfferModel, WithPrice, WithExclusivity, WithSellingPrice, \
     WithRoomsAndAnnexes, WithBuildingInfo, WithOtherDetails, WithDestination, WithOtherZoneDetails, WithHeatingSystem, \
     WithConditioning, WithInternetAccess, WithFinishes, WithFeatures, WithServices, WithSpaceSellingPrice, \
-    WithPropertyInfo, WithAdditionalSpaceInfo, WithRecommendation, WithSpaceUtilities, WithHouseSurfaces, \
+    WithPropertyInfo, WithAdditionalPropertyInfo, WithRecommendation, WithSpaceUtilities, WithHouseSurfaces, \
     HouseBaseModel, LandBaseModel
 
 
@@ -60,8 +58,9 @@ class LandSale(LandBaseModel, WithSellingPrice):
 
 
 class CommercialSpaceSale(BaseOfferModel, WithExclusivity, WithSpaceSellingPrice, WithPropertyInfo,
-                          WithAdditionalSpaceInfo, WithRecommendation, WithSpaceUtilities):
+                          WithAdditionalPropertyInfo, WithRecommendation, WithSpaceUtilities):
     building_type = CharField('tip imobil', max_length=20, choices=COMMERCIAL_BUILDING_TYPE, default=None)
+    occupation_degree = PositiveIntegerField('grad ocupare clădire (%)', default=None, blank=True)
 
     space_height = DecimalField('înalţime spaţiu', max_digits=4, decimal_places=2, default=None, blank=True)
     has_show_window = BooleanField('vitrină', default=False)
@@ -71,9 +70,10 @@ class CommercialSpaceSale(BaseOfferModel, WithExclusivity, WithSpaceSellingPrice
         verbose_name_plural = 'spaţii comerciale'
 
 
-class OfficeSale(BaseOfferModel, WithSpaceSellingPrice, WithExclusivity, WithPropertyInfo, WithAdditionalSpaceInfo,
-                 WithRecommendation):
+class OfficeSale(BaseOfferModel, WithSpaceSellingPrice, WithOtherDetails, WithExclusivity, WithPropertyInfo,
+                 WithAdditionalPropertyInfo, WithRecommendation):
     building_type = CharField('tip imobil', max_length=20, choices=OFFICE_BUILDING_TYPE, default=None)
+    occupation_degree = PositiveIntegerField('grad ocupare clădire (%)', default=None, blank=True)
     office_class = CharField('clasă birouri', max_length=2, choices=OFFICE_CLASS, default=None, blank=True)
 
     class Meta:
@@ -82,9 +82,9 @@ class OfficeSale(BaseOfferModel, WithSpaceSellingPrice, WithExclusivity, WithPro
 
 
 class SpecialPropertySale(BaseOfferModel, WithRecommendation, WithSpaceSellingPrice, WithPropertyInfo,
-                          WithAdditionalSpaceInfo, WithSpaceUtilities, WithExclusivity):
+                          WithAdditionalPropertyInfo, WithSpaceUtilities, WithExclusivity):
     building_type = CharField('tip imobil', max_length=100, default=None)
-
+    occupation_degree = PositiveIntegerField('grad ocupare clădire (%)', default=None, blank=True)
     space_height = DecimalField('înalţime spaţiu', max_digits=4, decimal_places=2, default=None, blank=True)
 
     class Meta:

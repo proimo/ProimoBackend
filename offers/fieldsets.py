@@ -10,9 +10,19 @@ space_price_fieldsets = ('Preţ', {
     'fields': (('price', 'price_currency'), 'hide_price', 'not_include_vat', 'price_details', 'zero_commission',
                'buyer_commission'
                )})
-rooms_fieldsets = ('Încăperi şi anexe', {'fields': (('rooms_nr', 'garages_nr'), ('kitchens_nr', 'parking_lots_nr'),
+rooms_fieldsets = (
+    'Încăperi şi anexe', {
+        'fields': (('rooms_nr', 'garages_nr'), ('kitchens_nr', 'parking_lots_nr'),
                                                     ('balconies_nr', 'closed_balconies_nr'), 'bathrooms_nr')})
-other_fieldsets = ('Alte detalii', {'fields': ('other_details', 'vices', 'display_expiry_date', 'disponibility')})
+
+other_fieldsets = (
+    'Alte detalii', {
+        'fields': ('other_details', 'vices', 'display_expiry_date', 'disponibility')})
+
+property_info_fieldsets = (
+    'Informaţii proprietate', {
+        'fields': ('property_name', 'property_description', 'total_surface', 'office_class', 'terrain_surface')})
+
 destination_fieldsets = ('Destinaţie', {'fields': (('is_residential', 'is_comercial', 'for_offices', 'for_vacation'),)})
 exclusivity_fieldsets = ('Exclusivitate',
                          {'fields': ('has_exclusivity', 'contract', 'validity_from', 'validity_up_to'),
@@ -71,6 +81,10 @@ space_other_fieldsets = ('Câmpuri suplimentare', {'fields': (
     'building_year', 'building_stage', 'occupation_degree', ('underground_levels_nr', 'levels_nr'),
     ('has_semi_basement', 'has_ground_floor', 'has_mansard', 'has_terrace', 'has_entresol'),
     'has_parking_possibility', 'parking_spaces_nr', 'building_state')})
-space_type_fieldsets = ('Tip spaţiu', {'fields': ('building_type', 'purpose_recommendation')})
+
+space_type_fieldsets = (
+    'Tip spaţiu', {
+        'fields': ('building_type', 'purpose_recommendation')})
+
 space_utilities_fieldsets = ('Utilităţi', {
     'fields': (('has_water', 'has_sewerage', 'has_current', 'has_gas', 'has_heating', 'has_conditioning'),)})

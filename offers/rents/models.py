@@ -1,9 +1,44 @@
-from django.db.models import PositiveIntegerField, CharField, TextField
+from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
+from django.contrib.contenttypes.models import ContentType
+from django.db.models import PositiveIntegerField, CharField, TextField, Model, DecimalField, DateTimeField, \
+    BooleanField, CASCADE, ForeignKey
 
-from offers.choices import Level, Comfort, BuildingType, PartitioningType
+from offers.choices import Level, Comfort, BuildingType, PartitioningType, OFFICE_BUILDING_TYPE, SPACE_DISPONIBILITY, \
+    Currencies, OFFICE_CLASS
 from offers.models import OfferImages, BaseOfferModel, WithRentPrice, WithHotelRegime, WithRoomsAndAnnexes, \
     WithHouseSurfaces, WithBuildingInfo, WithOtherDetails, WithDestination, WithExclusivity, HouseBaseModel, \
-    LandBaseModel
+    LandBaseModel, WithAdditionalPropertyInfo, WithPropertyInfo
+
+
+class SpaceModel(Model):
+    name = CharField('denumire spaţiu', max_length=100, default=None, blank=True)
+    surface = DecimalField('suprafaţă disponibilă', max_digits=6, decimal_places=2, default=None, blank=True)
+    disponibility = CharField('disponibilitate spaţiu', choices=SPACE_DISPONIBILITY, max_length=20, default=None,
+                              blank=True)
+    disponibility_time = DateTimeField('dată disponibilitate/expirare', default=None, blank=True)
+    rent_cost = DecimalField('chirie netă/mp/lună', max_digits=6, decimal_places=2, default=None)
+    rent_currency = CharField('', max_length=4, choices=Currencies.choices, default=Currencies.EUR)
+    hide_price = BooleanField('nu doresc să fie afişat vizitatorilor site-ului', default=False)
+    not_include_vat = BooleanField('se adaugă TVA', default=False)
+    has_maintenance = BooleanField('se adaugă costuri cu utilităţi/mentenanţă', default=False)
+    zero_commission = BooleanField('comision 0%', default=False)
+    rent_commission = CharField('comision cerut la închiriere', max_length=50, blank=True, default=None)
+
+    # additional details
+    level = CharField('etaj', max_length=17, choices=Level.choices, default=None, blank=True)
+    divisible_space = DecimalField('suprafaţă minimă divizibilă', max_digits=6, decimal_places=2, default=None,
+                                   blank=True)
+    description = TextField('descriere', max_length=500, default=None, blank=True)
+    has_parking = BooleanField('posibilitate parcare', default=False)
+
+    # foreign key relations
+    content_type = ForeignKey(ContentType, on_delete=CASCADE)
+    object_id = PositiveIntegerField()
+    content_object = GenericForeignKey()
+
+    class Meta:
+        verbose_name = 'spaţiu'
+        verbose_name_plural = 'spaţii'
 
 
 #######################################
@@ -46,7 +81,11 @@ class CommercialSpaceRent(BaseOfferModel):
         verbose_name_plural = 'spaţii comerciale'
 
 
-class OfficeRent(BaseOfferModel):
+class OfficeRent(BaseOfferModel, WithPropertyInfo, WithAdditionalPropertyInfo, WithExclusivity):
+    building_type = CharField('tip imobil', max_length=20, choices=OFFICE_BUILDING_TYPE, default=None)
+    spaces = GenericRelation(SpaceModel)
+    office_class = CharField('clasă birouri', max_length=2, choices=OFFICE_CLASS, default=None, blank=True)
+
     class Meta:
         verbose_name = 'birou'
         verbose_name_plural = 'birouri'

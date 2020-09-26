@@ -70,10 +70,9 @@ class WithPropertyInfo(Model):
         abstract = True
 
 
-class WithAdditionalSpaceInfo(Model):
+class WithAdditionalPropertyInfo(Model):
     building_year = PositiveIntegerField('an finalizare construcţie', blank=True, default=None)
     building_stage = CharField('stadiu construcţie', max_length=15, choices=BUILDING_STAGE, default=None, blank=True)
-    occupation_degree = PositiveIntegerField('grad ocupare clădire (%)', default=None, blank=True)
     underground_levels_nr = PositiveIntegerField('nr. niveluri subterane', default=None, blank=True)
     levels_nr = PositiveIntegerField('nr. niveluri', default=None, blank=True)
     has_semi_basement = BooleanField('demisol', default=False)

@@ -163,6 +163,12 @@ INDUSTRIAL_RESISTANCE_STRUCTURE = [
     ('Prefabricate', 'Prefabricate'),
 ]
 
+SPACE_DISPONIBILITY = [
+    ('Imediat', 'Imediat'),
+    ('Închiriat', 'Închiriat'),
+    ('Imediat', 'Imediat')
+]
+
 
 class Level(TextChoices):
     DEMISOL = 'demisol'

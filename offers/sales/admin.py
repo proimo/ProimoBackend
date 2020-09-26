@@ -7,7 +7,7 @@ from offers.fieldsets import sale_price_fieldsets, rooms_fieldsets, other_fields
     building_features_fieldsets, diverse_fieldsets, appliances_fieldsets, furnished_fieldsets, counters_fieldsets, \
     kitchen_fieldsets, walls_fieldsets, interior_doors_fieldsets, floor_fieldsets, heat_isolation_fieldsets, \
     entrance_door_fieldsets, rolls_fieldsets, louver_fieldsets, windows_fieldsets, interior_state_fieldsets, \
-    internet_fieldsets, climate_fieldsets, heating_system_fieldsets
+    internet_fieldsets, climate_fieldsets, heating_system_fieldsets, property_info_fieldsets
 from offers.sales.models import ApartmentSale, HouseSale, LandSale, CommercialSpaceSale, OfficeSale, \
     SpecialPropertySale, IndustrialSpaceSale, ApartmentSaleImages, HouseSaleImages, LandSaleImages, \
     CommercialSpaceSaleImages, SpecialPropertySaleImages, IndustrialSpaceSaleImages, OfficeSaleImages
@@ -141,10 +141,6 @@ class CommercialSpaceSaleAdmin(BaseOfferAdmin):
 @admin.register(OfficeSale)
 class OfficeSaleAdmin(BaseOfferAdmin):
     inlines = (OfficeSaleImagesInline,)
-    property_info_fieldsets = (
-        'Informaţii proprietate', {
-            'fields': ('property_name', 'property_description', 'total_surface', 'office_class', 'terrain_surface')})
-
     readonly_fields = ['has_ground_floor']
     radio_fields = {'purpose_recommendation': admin.HORIZONTAL}
 
