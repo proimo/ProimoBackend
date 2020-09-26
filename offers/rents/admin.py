@@ -46,8 +46,8 @@ class SpaceInline(GenericStackedInline):
         (None, {
             'fields': (
                 'name', 'surface', ('disponibility', 'disponibility_time'), ('rent_cost', 'rent_currency'),
-                ('hide_price', 'not_include_vat', 'has_maintenance', 'zero_commission'), 'rent_commission', 'level',
-                'divisible_space', 'description', 'has_parking')}),
+                ('hide_price', 'not_include_vat', 'has_maintenance', 'zero_commission'), 'rent_commission',
+                'space_height', 'has_show_window', 'level', 'divisible_space', 'description', 'has_parking')}),
     )
 
 
@@ -91,7 +91,17 @@ class LandSaleAdmin(LandBaseAdmin):
 
 @admin.register(CommercialSpaceRent)
 class CommercialSpaceRentAdmin(BaseOfferAdmin):
-    inlines = (CommercialSpaceRentImagesInline,)
+    inlines = (SpaceInline, CommercialSpaceRentImagesInline,)
+    fieldsets = (
+        BaseOfferAdmin.basic_info_fieldsets,
+        BaseOfferAdmin.location_fieldsets,
+        ('Tip spaţiu', {
+            'fields': ('building_type',)}),
+        property_info_fieldsets,
+        exclusivity_fieldsets,
+        BaseOfferAdmin.time_fieldsets,
+        BaseOfferAdmin.is_published_fieldsets
+    )
 
 
 @admin.register(OfficeRent)

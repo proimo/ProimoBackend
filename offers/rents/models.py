@@ -4,10 +4,10 @@ from django.db.models import PositiveIntegerField, CharField, TextField, Model, 
     BooleanField, CASCADE, ForeignKey
 
 from offers.choices import Level, Comfort, BuildingType, PartitioningType, OFFICE_BUILDING_TYPE, SPACE_DISPONIBILITY, \
-    Currencies, OFFICE_CLASS
+    Currencies, OFFICE_CLASS, COMMERCIAL_BUILDING_TYPE, BUILDING_STATE
 from offers.models import OfferImages, BaseOfferModel, WithRentPrice, WithHotelRegime, WithRoomsAndAnnexes, \
     WithHouseSurfaces, WithBuildingInfo, WithOtherDetails, WithDestination, WithExclusivity, HouseBaseModel, \
-    LandBaseModel, WithAdditionalPropertyInfo, WithPropertyInfo
+    LandBaseModel, WithAdditionalPropertyInfo, WithPropertyInfo, WithSpaceUtilities
 
 
 class SpaceModel(Model):
@@ -23,6 +23,8 @@ class SpaceModel(Model):
     has_maintenance = BooleanField('se adaugă costuri cu utilităţi/mentenanţă', default=False)
     zero_commission = BooleanField('comision 0%', default=False)
     rent_commission = CharField('comision cerut la închiriere', max_length=50, blank=True, default=None)
+    space_height = DecimalField('înalţime spaţiu', max_digits=6, decimal_places=2, default=None, blank=True)
+    has_show_window = BooleanField('vitrină', default=False)
 
     # additional details
     level = CharField('etaj', max_length=17, choices=Level.choices, default=None, blank=True)
@@ -75,7 +77,13 @@ class LandRent(LandBaseModel, WithRentPrice):
         verbose_name_plural = 'terenuri'
 
 
-class CommercialSpaceRent(BaseOfferModel):
+class CommercialSpaceRent(BaseOfferModel, WithPropertyInfo, WithAdditionalPropertyInfo, WithSpaceUtilities,
+                          WithExclusivity):
+    building_type = CharField('tip imobil', max_length=20, choices=COMMERCIAL_BUILDING_TYPE, default=None)
+    spaces = GenericRelation(SpaceModel)
+    can_be_partitioned = BooleanField('posibilitate compartimentare', default=False)
+    building_state = CharField('stare imobil', max_length=15, choices=BUILDING_STATE, default=None, blank=True)
+
     class Meta:
         verbose_name = 'spaţiu comercial'
         verbose_name_plural = 'spaţii comerciale'
