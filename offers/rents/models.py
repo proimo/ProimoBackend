@@ -99,7 +99,12 @@ class OfficeRent(BaseOfferModel, WithPropertyInfo, WithAdditionalPropertyInfo, W
         verbose_name_plural = 'birouri'
 
 
-class SpecialPropertyRent(BaseOfferModel):
+class SpecialPropertyRent(BaseOfferModel, WithPropertyInfo, WithAdditionalPropertyInfo, WithSpaceUtilities,
+                          WithExclusivity):
+    building_type = CharField('tip proprietate/imobil', max_length=50, default=None)
+    building_state = CharField('stare imobil', max_length=15, choices=BUILDING_STATE, default=None, blank=True)
+    spaces = GenericRelation(SpaceModel)
+
     class Meta:
         verbose_name = 'proprietate specială'
         verbose_name_plural = 'proprietăţi speciale'

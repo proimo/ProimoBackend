@@ -135,7 +135,22 @@ class OfficeRentAdmin(BaseOfferAdmin):
 
 @admin.register(SpecialPropertyRent)
 class SpecialPropertyRentAdmin(BaseOfferAdmin):
-    inlines = (SpecialPropertyRentImagesInline,)
+    inlines = (SpaceInline, SpecialPropertyRentImagesInline)
+    commercial_property_fields = default_property_info_fields[:3] + default_property_info_fields[4:]
+    additional_property_info_fieldsets = default_additional_property_info_fields + space_utilities_fields
+
+    readonly_fields = ['has_ground_floor']
+    fieldsets = (
+        BaseOfferAdmin.basic_info_fieldsets,
+        BaseOfferAdmin.location_fieldsets,
+        ('Tip spaţiu', {
+            'fields': ('building_type',)}),
+        get_property_info_fieldsets(commercial_property_fields),
+        get_additional_property_info_fieldsets(collapsed=True, fields=additional_property_info_fieldsets),
+        exclusivity_fieldsets,
+        BaseOfferAdmin.time_fieldsets,
+        BaseOfferAdmin.is_published_fieldsets
+    )
 
 
 @admin.register(IndustrialSpaceRent)
