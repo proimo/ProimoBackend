@@ -2,7 +2,9 @@ from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericStackedInline
 
 from offers.admin import BaseOfferAdmin, OfferImageInline, HouseBaseAdmin, LandBaseAdmin
-from offers.fieldsets import rent_price_fieldsets, property_info_fieldsets, exclusivity_fieldsets
+from offers.fieldsets import rent_price_fieldsets, exclusivity_fieldsets, get_property_info_fieldsets, \
+    default_property_info_fields, get_additional_property_info_fieldsets, space_utilities_fields, \
+    default_additional_property_info_fields
 from offers.rents.models import ApartmentRent, HouseRent, LandRent, CommercialSpaceRent, OfficeRent, \
     SpecialPropertyRent, IndustrialSpaceRent, ApartmentRentImages, HouseRentImages, LandRentImages, \
     CommercialSpaceRentImages, OfficeRentImages, SpecialPropertyRentImages, IndustrialSpaceRentImages, SpaceModel
@@ -45,9 +47,15 @@ class SpaceInline(GenericStackedInline):
     fieldsets = (
         (None, {
             'fields': (
-                'name', 'surface', ('disponibility', 'disponibility_time'), ('rent_cost', 'rent_currency'),
-                ('hide_price', 'not_include_vat', 'has_maintenance', 'zero_commission'), 'rent_commission',
-                'space_height', 'has_show_window', 'level', 'divisible_space', 'description', 'has_parking')}),
+                'name', 'surface',
+                ('disponibility', 'disponibility_time'),
+                ('rent_cost', 'rent_currency', 'hide_price'),
+                ('not_include_vat', 'has_maintenance', 'zero_commission'),
+                'rent_commission', 'space_height', 'has_show_window')}),
+        ('Câmpuri suplimentare', {
+            'fields': ('level', 'divisible_space', 'description', 'has_parking'),
+            'classes': ('collapse',)
+        })
     )
 
 
@@ -92,12 +100,17 @@ class LandSaleAdmin(LandBaseAdmin):
 @admin.register(CommercialSpaceRent)
 class CommercialSpaceRentAdmin(BaseOfferAdmin):
     inlines = (SpaceInline, CommercialSpaceRentImagesInline,)
+    commercial_property_fields = default_property_info_fields[:3] + default_property_info_fields[4:]
+    additional_property_info_fieldsets = default_additional_property_info_fields + space_utilities_fields
+
+    readonly_fields = ['has_ground_floor']
     fieldsets = (
         BaseOfferAdmin.basic_info_fieldsets,
         BaseOfferAdmin.location_fieldsets,
         ('Tip spaţiu', {
             'fields': ('building_type',)}),
-        property_info_fieldsets,
+        get_property_info_fieldsets(commercial_property_fields),
+        get_additional_property_info_fieldsets(collapsed=True, fields=additional_property_info_fieldsets),
         exclusivity_fieldsets,
         BaseOfferAdmin.time_fieldsets,
         BaseOfferAdmin.is_published_fieldsets
@@ -113,7 +126,7 @@ class OfficeRentAdmin(BaseOfferAdmin):
         BaseOfferAdmin.location_fieldsets,
         ('Tip spaţiu', {
             'fields': ('building_type',)}),
-        property_info_fieldsets,
+        get_property_info_fieldsets(),
         exclusivity_fieldsets,
         BaseOfferAdmin.time_fieldsets,
         BaseOfferAdmin.is_published_fieldsets

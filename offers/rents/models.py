@@ -80,9 +80,9 @@ class LandRent(LandBaseModel, WithRentPrice):
 class CommercialSpaceRent(BaseOfferModel, WithPropertyInfo, WithAdditionalPropertyInfo, WithSpaceUtilities,
                           WithExclusivity):
     building_type = CharField('tip imobil', max_length=20, choices=COMMERCIAL_BUILDING_TYPE, default=None)
-    spaces = GenericRelation(SpaceModel)
     can_be_partitioned = BooleanField('posibilitate compartimentare', default=False)
     building_state = CharField('stare imobil', max_length=15, choices=BUILDING_STATE, default=None, blank=True)
+    spaces = GenericRelation(SpaceModel)
 
     class Meta:
         verbose_name = 'spaţiu comercial'

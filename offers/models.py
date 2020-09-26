@@ -1,5 +1,5 @@
 from django.contrib.gis.db.models import PointField, ForeignKey, CharField, BooleanField, SET_NULL, ImageField, CASCADE, \
-    Model, TextField, DateTimeField, PositiveIntegerField, IntegerField
+    Model, TextField, DateTimeField, PositiveIntegerField, IntegerField, DecimalField
 from django.db.models.base import ModelBase
 
 from administration.models import UserProfile
@@ -63,8 +63,8 @@ class WithSpaceSellingPrice(WithPrice, Model):
 class WithPropertyInfo(Model):
     property_name = CharField('nume proprietate', max_length=100, default=None, blank=True)
     property_description = TextField('descriere proprietate', max_length=100, default=None, blank=True)
-    total_surface = PositiveIntegerField('suprafaţă totală (mp)', default=None)
-    terrain_surface = PositiveIntegerField('suprafaţă teren (mp)', default=None, blank=True)
+    total_surface = DecimalField('suprafaţă totală (mp)', max_digits=6, decimal_places=2, default=None)
+    terrain_surface = DecimalField('suprafaţă teren (mp)', max_digits=6, decimal_places=2, default=None, blank=True)
 
     class Meta:
         abstract = True
@@ -109,7 +109,7 @@ class WithRecommendation(Model):
 
 
 class WithRentPrice(WithPrice, Model):
-    rent_cost = CharField('chirie / lună', max_length=15, blank=True, default=None)
+    rent_cost = DecimalField('chirie / lună', max_digits=6, decimal_places=2, blank=True, default=None)
     rent_currency = CharField('', max_length=4, choices=Currencies.choices, default=Currencies.EUR)
 
     class Meta:
@@ -118,7 +118,7 @@ class WithRentPrice(WithPrice, Model):
 
 class WithHotelRegime(WithRentPrice, Model):
     hotel_regime = BooleanField('regim hotelier', default=False)
-    hotel_regime_price = CharField('chirie / zi', max_length=15, blank=True, default=None)
+    hotel_regime_price = DecimalField('chirie / zi', max_digits=6, decimal_places=2, blank=True, default=None)
     hotel_regime_currency = CharField('', max_length=4, choices=Currencies.choices, default=Currencies.EUR)
 
     class Meta:
@@ -149,14 +149,16 @@ class WithRoomsAndAnnexes(Model):
 
 
 class WithHouseSurfaces(Model):
-    util_surface = PositiveIntegerField('suprafaţa utilă (mp)', default=None, blank=True)
-    constructed_surface = PositiveIntegerField('suprafaţa construită (amprentă la sol) (mp)', default=None, blank=True)
-    unfolded_surface = PositiveIntegerField('suprafaţă desfăşurată (mp)', default=None, blank=True)
-    terrain_surface = PositiveIntegerField('suprafaţă teren (mp)', default=None, blank=True)
+    util_surface = DecimalField('suprafaţa utilă (mp)', max_digits=7, decimal_places=2, default=None, blank=True)
+    constructed_surface = DecimalField('suprafaţa construită (amprentă la sol) (mp)', max_digits=7, decimal_places=2,
+                                       default=None, blank=True)
+    unfolded_surface = DecimalField('suprafaţă desfăşurată (mp)', max_digits=7, decimal_places=2, default=None,
+                                    blank=True)
+    terrain_surface = DecimalField('suprafaţă teren (mp)', max_digits=7, decimal_places=2, default=None, blank=True)
     street_fronts_nr = PositiveIntegerField('nr. fronturi stradale', default=None, blank=True)
-    street_front = PositiveIntegerField('front stradal (m)', default=None, blank=True)
+    street_front = DecimalField('front stradal (m)', max_digits=5, decimal_places=2, default=None, blank=True)
     terrace_nr = PositiveIntegerField('nr. terase', default=None, blank=True)
-    terrace_surface = PositiveIntegerField('suprafaţă terase (mp)', default=None, blank=True)
+    terrace_surface = DecimalField('suprafaţă terase (mp)', max_digits=6, decimal_places=2, default=None, blank=True)
 
     class Meta:
         abstract = True

@@ -3,11 +3,11 @@ from django.contrib import admin
 from offers.admin import BaseOfferAdmin, OfferImageInline, HouseBaseAdmin, LandBaseAdmin
 from offers.fieldsets import sale_price_fieldsets, rooms_fieldsets, other_fieldsets, destination_fieldsets, \
     exclusivity_fieldsets, space_price_fieldsets, space_type_fieldsets, space_utilities_fieldsets, \
-    space_other_fieldsets, other_zone_details_fieldsets, hotel_services_fieldsets, building_services_fieldsets, \
+    get_additional_property_info_fieldsets, other_zone_details_fieldsets, hotel_services_fieldsets, building_services_fieldsets, \
     building_features_fieldsets, diverse_fieldsets, appliances_fieldsets, furnished_fieldsets, counters_fieldsets, \
     kitchen_fieldsets, walls_fieldsets, interior_doors_fieldsets, floor_fieldsets, heat_isolation_fieldsets, \
     entrance_door_fieldsets, rolls_fieldsets, louver_fieldsets, windows_fieldsets, interior_state_fieldsets, \
-    internet_fieldsets, climate_fieldsets, heating_system_fieldsets, property_info_fieldsets
+    internet_fieldsets, climate_fieldsets, heating_system_fieldsets, get_property_info_fieldsets
 from offers.sales.models import ApartmentSale, HouseSale, LandSale, CommercialSpaceSale, OfficeSale, \
     SpecialPropertySale, IndustrialSpaceSale, ApartmentSaleImages, HouseSaleImages, LandSaleImages, \
     CommercialSpaceSaleImages, SpecialPropertySaleImages, IndustrialSpaceSaleImages, OfficeSaleImages
@@ -130,7 +130,7 @@ class CommercialSpaceSaleAdmin(BaseOfferAdmin):
         space_type_fieldsets,
         space_price_fieldsets,
         property_info_fieldsets,
-        space_other_fieldsets,
+        get_additional_property_info_fieldsets(collapsed=True),
         space_utilities_fieldsets,
         exclusivity_fieldsets,
         BaseOfferAdmin.time_fieldsets,
@@ -149,7 +149,7 @@ class OfficeSaleAdmin(BaseOfferAdmin):
         BaseOfferAdmin.location_fieldsets,
         space_type_fieldsets,
         space_price_fieldsets,
-        property_info_fieldsets,
+        get_property_info_fieldsets(),
         other_fieldsets,
         exclusivity_fieldsets,
         BaseOfferAdmin.time_fieldsets,
@@ -172,7 +172,7 @@ class SpecialPropertySaleAdmin(BaseOfferAdmin):
         space_type_fieldsets,
         space_price_fieldsets,
         property_info_fieldsets,
-        space_other_fieldsets,
+        get_additional_property_info_fieldsets(collapsed=True),
         space_utilities_fieldsets,
         exclusivity_fieldsets,
         BaseOfferAdmin.time_fieldsets,
