@@ -4,7 +4,8 @@ from django.db.models import PositiveIntegerField, CharField, TextField, Model, 
     BooleanField, CASCADE, ForeignKey
 
 from offers.choices import Level, Comfort, BuildingType, PartitioningType, OFFICE_BUILDING_TYPE, SPACE_DISPONIBILITY, \
-    Currencies, OFFICE_CLASS, COMMERCIAL_BUILDING_TYPE, BUILDING_STATE
+    Currencies, OFFICE_CLASS, COMMERCIAL_BUILDING_TYPE, BUILDING_STATE, INDUSTRIAL_BUILDING_TYPE, FLOORING_TYPE, \
+    INDUSTRIAL_RESISTANCE_STRUCTURE, BUILDING_STAGE
 from offers.models import OfferImages, BaseOfferModel, WithRentPrice, WithHotelRegime, WithRoomsAndAnnexes, \
     WithHouseSurfaces, WithBuildingInfo, WithOtherDetails, WithDestination, WithExclusivity, HouseBaseModel, \
     LandBaseModel, WithAdditionalPropertyInfo, WithPropertyInfo, WithSpaceUtilities
@@ -32,6 +33,13 @@ class SpaceModel(Model):
                                    blank=True)
     description = TextField('descriere', max_length=500, default=None, blank=True)
     has_parking = BooleanField('posibilitate parcare', default=False)
+    flooring_type = CharField('tip pardoseală', max_length=40, choices=FLOORING_TYPE, default=None, blank=True)
+    previous_purpose = CharField('destinaţie anterioară', max_length=100, default=None, blank=True)
+    offices_surface = DecimalField('suprafaţă birouri (mp)', max_digits=6, decimal_places=2, default=None, blank=True)
+    has_heating_system = BooleanField('instalaţie încălzire', default=False)
+    has_air_conditioning = BooleanField('climatizare', default=False)
+    has_windows = BooleanField('ferestre/luminatoare', default=False)
+    has_lighting = BooleanField('iluminat', default=False)
 
     # foreign key relations
     content_type = ForeignKey(ContentType, on_delete=CASCADE)
@@ -110,7 +118,32 @@ class SpecialPropertyRent(BaseOfferModel, WithPropertyInfo, WithAdditionalProper
         verbose_name_plural = 'proprietăţi speciale'
 
 
-class IndustrialSpaceRent(BaseOfferModel):
+class IndustrialSpaceRent(BaseOfferModel, WithPropertyInfo, WithExclusivity):
+    building_type = CharField('tip proprietate', max_length=50, choices=INDUSTRIAL_BUILDING_TYPE, default=None)
+    spaces = GenericRelation(SpaceModel)
+
+    building_year = PositiveIntegerField('an finalizare construcţie', blank=True, default=None)
+    building_stage = CharField('stadiu construcţie', max_length=15, choices=BUILDING_STAGE, default=None, blank=True)
+    occupation_degree = PositiveIntegerField('grad ocupare clădire (%)', default=None, blank=True)
+    levels_nr = PositiveIntegerField('nr. niveluri', default=None, blank=True)
+    resistance_structure = CharField('structură rezistenţă', max_length=40, choices=INDUSTRIAL_RESISTANCE_STRUCTURE,
+                                     default=None, blank=True)
+    platform_surface = DecimalField('suprafaţă platformă (mp)', max_digits=6, decimal_places=2, default=None,
+                                    blank=True)
+
+    has_water = BooleanField('apă', default=False)
+    has_gas = BooleanField('gaz', default=False)
+    has_current = BooleanField('curent', default=False)
+
+    has_railway = BooleanField('cale ferată', default=False)
+    has_tir_access = BooleanField('acces tir', default=False)
+    has_roads = BooleanField('cale rutieră', default=False)
+
+    has_ramp = BooleanField('rampă', default=False)
+    has_slide_bridge = BooleanField('pod rulant', default=False)
+    has_elevator = BooleanField('lift', default=False)
+    has_crane = BooleanField('macara', default=False)
+
     class Meta:
         verbose_name = 'spaţiu industrial'
         verbose_name_plural = 'spaţii industriale'

@@ -59,6 +59,26 @@ class SpaceInline(GenericStackedInline):
     )
 
 
+class IndustrialSpaceInline(GenericStackedInline):
+    model = SpaceModel
+    extra = 1
+
+    fieldsets = (
+        (None, {
+            'fields': (
+                'name', 'surface',
+                ('disponibility', 'disponibility_time'),
+                ('rent_cost', 'rent_currency', 'hide_price'),
+                ('not_include_vat', 'has_maintenance', 'zero_commission'),
+                'rent_commission', 'space_height')}),
+        ('Câmpuri suplimentare', {
+            'fields': ('divisible_space', 'flooring_type', 'description', 'previous_purpose', 'offices_surface',
+                       ('has_heating_system', 'has_air_conditioning', 'has_windows', 'has_lighting')),
+            'classes': ('collapse',)
+        })
+    )
+
+
 #######################################
 # Model's admin configs
 @admin.register(ApartmentRent)
@@ -155,4 +175,28 @@ class SpecialPropertyRentAdmin(BaseOfferAdmin):
 
 @admin.register(IndustrialSpaceRent)
 class IndustrialSpaceRentAdmin(BaseOfferAdmin):
-    inlines = (IndustrialSpaceRentImagesInline,)
+    inlines = (IndustrialSpaceInline, IndustrialSpaceRentImagesInline)
+    property_fields = default_property_info_fields[:3] + default_property_info_fields[4:]
+    additional_property_info_fieldsets = ('building_year', 'building_stage', 'occupation_degree', 'levels_nr',
+                                          'resistance_structure', 'platform_surface')
+
+    fieldsets = (
+        BaseOfferAdmin.basic_info_fieldsets,
+        BaseOfferAdmin.location_fieldsets,
+        ('Tip spaţiu', {
+            'fields': ('building_type',)}),
+        get_property_info_fieldsets(property_fields),
+        get_additional_property_info_fieldsets(fields=additional_property_info_fieldsets),
+        ('Utilităţi', {
+            'fields': (('has_water', 'has_gas', 'has_current'),)
+        }),
+        ('Acces', {
+            'fields': (('has_railway', 'has_tir_access', 'has_roads'),)
+        }),
+        ('Dotări', {
+            'fields': (('has_ramp', 'has_slide_bridge', 'has_elevator', 'has_crane'),)
+        }),
+        exclusivity_fieldsets,
+        BaseOfferAdmin.time_fieldsets,
+        BaseOfferAdmin.is_published_fieldsets
+    )
