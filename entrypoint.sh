@@ -8,7 +8,7 @@ python manage.py migrate --no-input
 APP_ROOT=/app
 chmod -R u=rwX,g=rX,o= ${APP_ROOT}/*
 chown -RL root:django ${APP_ROOT}
-chown -RL django:django ${APP_ROOT}/logs ${APP_ROOT}/media
+chown -RL django:django ${APP_ROOT}/media
 find /usr/src -type d -exec chmod g+s {} +
 
 export PORT=8000
