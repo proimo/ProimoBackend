@@ -24,6 +24,7 @@ RUN set -x && apk add --no-cache --virtual .build-deps \
     && pip install -U -r requirements.txt --no-cache-dir \
     && apk del .build-deps
 
+EXPOSE 8000
 ENV DEBUG=False
 ENV DJANGO_SETTINGS_MODULE=main.settings.production
 
