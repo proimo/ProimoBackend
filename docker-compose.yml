@@ -5,13 +5,18 @@ services:
     build: .
     container_name: proimo-backend
     volumes:
-      - ./static:/app/static
+      - ./static/media:/app/media
     environment:
+      - DB_NAME=proimo
+      - DB_USER=root
+      - DB_PASSWORD=parola01
       - DB_HOST=pdb
-    env_file:
-      - .env
+      - DB_PORT=5432
+      - SECRET_KEY=m!fl!0rvwary88^u2&74jhmd!!a^uvpwxz+l_u=(vtffkgf4$g
+      - DEBUG=False
+      - GMAPS_API_KEY=AIzaSyB2vnqQSzHpO4Zg1JgbJPpfvUjsuPDznW0
     ports:
-      - "8008:8008"
+      - "8000:8000"
     networks:
       postgresdb:
       internal-net:
