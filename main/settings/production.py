@@ -1,3 +1,5 @@
+from urllib.parse import urlparse
+
 from .base import *
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -17,3 +19,9 @@ SILENCED_SYSTEM_CHECKS = [
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MIDDLEWARE.insert(0, 'whitenoise.middleware.WhiteNoiseMiddleware')
+
+USE_X_FORWARDED_PORT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+EXTERNAL_URL = config('EXTERNAL_URL')
+SESSION_COOKIE_SECURE = urlparse(EXTERNAL_URL).scheme == 'https'
+CSRF_COOKIE_SECURE = urlparse(EXTERNAL_URL).scheme == 'https'
