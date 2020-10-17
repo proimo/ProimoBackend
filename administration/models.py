@@ -1,11 +1,19 @@
 from django.contrib.auth.models import AbstractUser, Group as BaseGroup
 from django.db import models
+from django.db.models import SlugField, BooleanField, TextField, CharField, ForeignKey, SET_NULL, TextChoices, Index, Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from phonenumber_field.modelfields import PhoneNumberField
 
+from common.base_models import OrderableModel, WithImageField
 from common.models import BaseModel
 from common.utils import get_upload_path
+
+
+class MenuItemType(TextChoices):
+    INTERNAL_LINK = 'InternalLink', 'Internal Link'
+    EXTERNAL_LINK = 'ExternalLink', 'External Link'
+    SCROLL_TO = 'ScrollTo', 'Scroll To'
 
 
 def get_default_profile_pic():
@@ -77,3 +85,29 @@ class Setting(BaseModel):
     class Meta:
         verbose_name = 'setare'
         verbose_name_plural = 'setări'
+
+
+class MenuItem(BaseModel, OrderableModel, WithImageField):
+    slug = SlugField(max_length=300, db_index=True, blank=True, default=None)
+    is_long = BooleanField(default=False)
+    description = TextField(default=None, blank=True, null=True)
+    link = CharField(max_length=200, default=None, blank=True)
+    type = CharField(max_length=12, choices=MenuItemType.choices, default=MenuItemType.INTERNAL_LINK)
+    parent = ForeignKey('self', on_delete=SET_NULL, null=True, blank=True, related_name='children')
+    is_published = BooleanField(default=False)
+
+    # https://medium.com/@tnesztler/recursive-queries-as-querysets-for-parent-child-relationships-self-manytomany-in-django-671696dfe47
+    def get_children(self, include_self=True):
+        return MenuItem.objects.filter(self.get_children_filter(include_self))
+
+    def get_children_filter(self, include_self=True):
+        filters = Q(pk=0)
+        if include_self:
+            filters |= Q(pk=self.pk)
+        for item in MenuItem.objects.filter(parent=self):
+            if children_filter := item.get_children_filter(include_self=True):
+                filters |= children_filter
+        return filters
+
+    class Meta(OrderableModel.Meta):
+        indexes = [Index(fields=['id', 'slug', 'is_published', 'order_index'])]

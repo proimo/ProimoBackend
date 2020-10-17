@@ -1,9 +1,16 @@
 import uuid
 
+from adminsortable2.admin import SortableAdminMixin
 from django.contrib import messages
 
-
 # noinspection PyProtectedMember
+from django.contrib.admin import ModelAdmin
+
+IMAGE_WITH_PREVIEW = ('image', 'image_thumbnail')
+NAME_SLUG = ('name', 'slug')
+CREATED_UPDATED = ('Created/Updated', {'classes': ('collapse',), 'fields': (('created', 'updated',),)})
+
+
 def get_upload_path(instance, file_name):
     """
     Takes filename and creates new one with random string at the end
@@ -28,3 +35,23 @@ def message_info(request, message):
 
 def message_error(request, message):
     messages.add_message(request, messages.ERROR, message)
+
+
+# this function is meant to override default get_max_order if object is newly created
+# noinspection PyUnusedLocal
+def get_max_order(request, obj, *args, **kwargs):
+    return 0
+
+
+class SortableModelAdmin(SortableAdminMixin, ModelAdmin):
+    def save_model(self, request, obj, form, change):
+        if not change:
+            for item in self.model.objects.all():
+                item.order_index += 1
+                item.save()
+            SortableAdminMixin.get_max_order = get_max_order
+        super().save_model(request, obj, form, change)
+
+
+class PrepopulatedSlugAdmin(ModelAdmin):
+    prepopulated_fields = {'slug': ('name',)}

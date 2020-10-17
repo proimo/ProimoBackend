@@ -6,6 +6,7 @@ from administration.views import FaviconView
 
 router = routers.DefaultRouter()
 router.register('settings', views.SettingViewSet)
+router.register('menu-items', views.MenuItemViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

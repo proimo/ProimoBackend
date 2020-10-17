@@ -1,0 +1,14 @@
+{% spaceless %}
+    <style media="screen and (min-width: 900px)">
+        .padding {
+            padding-left: 175px;
+        }
+    </style>
+    <div class="padding">
+        {% for widget in widget.subwidgets %}
+            <div class="col-xs-6">
+                {% include widget.template_name %}
+            </div>
+        {% endfor %}
+    </div>
+{% endspaceless %}

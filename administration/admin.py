@@ -1,12 +1,16 @@
 from typing import Tuple
 
+import admin_thumbnails
+from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
-from django.contrib.admin import StackedInline, ModelAdmin, site
+from django.contrib.admin import StackedInline, ModelAdmin, site, TabularInline, EmptyFieldListFilter, SimpleListFilter
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin, GroupAdmin, Group as BaseGroup
+from django.db.models import QuerySet, Q
 from django.shortcuts import redirect
 from django.utils.translation import gettext as _
 
-from administration.models import User, UserProfile, Group, Setting
+from administration.models import User, UserProfile, Group, Setting, MenuItem
+from common.utils import SortableModelAdmin, NAME_SLUG, IMAGE_WITH_PREVIEW, CREATED_UPDATED, PrepopulatedSlugAdmin
 
 
 def remove_user_model(app):
@@ -102,3 +106,46 @@ class UserAdmin(BaseUserAdmin):
 site.unregister(BaseGroup)
 site.register(Group, GroupAdmin)
 site.register(User, UserAdmin)
+
+
+class MenuItemsParentFilter(SimpleListFilter):
+    title = 'parent'
+    parameter_name = 'parent'
+
+    def lookups(self, request, model_admin):
+        queryset: QuerySet[MenuItem] = model_admin.get_queryset(request)
+        return [(item.id, item.name) for item in queryset if not item.parent]
+
+    def get_children_filter(self):
+        filters = Q(pk=0)
+        for item in MenuItem.objects.filter(parent__id=self.value()):
+            if children_filter := item.get_children_filter(include_self=True):
+                filters |= children_filter
+        return filters
+
+    def queryset(self, request, queryset: QuerySet[MenuItem]):
+        if self.value():
+            return queryset.filter(self.get_children_filter())
+
+
+@admin_thumbnails.thumbnail('image', background=True)
+class MenuItemInline(SortableInlineAdminMixin, TabularInline):
+    model = MenuItem
+    fields = ('name', 'slug', 'link', 'image', 'type', 'parent', 'is_published', 'is_long')
+    extra = 0
+    verbose_name = 'Child'
+    verbose_name_plural = 'Children'
+
+
+@admin.register(MenuItem)
+@admin_thumbnails.thumbnail('image', background=True)
+class MenuItemAdmin(SortableModelAdmin, PrepopulatedSlugAdmin):
+    inlines = (MenuItemInline, )
+    fieldsets = ((None, {'fields': (NAME_SLUG, 'link', 'description', IMAGE_WITH_PREVIEW, 'type', 'parent',
+                                    ('is_published', 'is_long',),)}), CREATED_UPDATED)
+    autocomplete_fields = ('parent',)
+    search_fields = ('name',)
+
+    list_display = ('name', 'slug', 'parent', 'type', 'is_published', 'image_thumbnail', 'order_index')
+    list_editable = ('parent', 'is_published', 'type')
+    list_filter = (MenuItemsParentFilter, ('parent', EmptyFieldListFilter), 'type')

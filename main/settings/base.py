@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'crm.apps.CrmConfig',
     'common.apps.CommonConfig',
 
+    'adminsortable2',
     'phonenumber_field',
     'rest_framework',
     'rest_framework_gis',

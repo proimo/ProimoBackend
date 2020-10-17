@@ -1,3 +1,4 @@
+from django.db.models import QuerySet
 from django.http import HttpResponseRedirect, Http404, HttpResponseBadRequest
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import renderers, permissions
@@ -9,8 +10,8 @@ from django.http import HttpResponse, HttpRequest
 from django.shortcuts import redirect
 
 from common.utils import message_info, message_error
-from administration.models import Setting
-from administration.serializers import SettingSerializer
+from administration.models import Setting, MenuItem
+from administration.serializers import SettingSerializer, MenuItemSerializer
 
 
 class SettingViewSet(ReadOnlyModelViewSet):
@@ -51,6 +52,18 @@ class FaviconView(APIView):
             pass
 
         raise Http404()
+
+
+class MenuItemViewSet(ReadOnlyModelViewSet):
+    queryset: QuerySet[MenuItem] = MenuItem.objects.filter(is_published=True, parent__exact=None)
+    serializer_class = MenuItemSerializer
+    lookup_field = 'slug'
+
+    def get_object(self):
+        obj: MenuItem = super(MenuItemViewSet, self).get_object()
+        if obj.parent:
+            raise Http404
+        return obj
 
 
 def generate_seed(request: HttpRequest):
